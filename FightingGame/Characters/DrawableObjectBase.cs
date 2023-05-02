@@ -25,7 +25,10 @@ namespace FightingGame
         {
             spriteBatch.Draw(Texture, new Rectangle((int)Position.X, (int)Position.Y, (int)Dimentions.X, (int)Dimentions.Y), Color);
         }
-
+        public virtual void DrawFrame(SpriteBatch spriteBatch, Rectangle sourceRectangle)
+        {
+            spriteBatch.Draw(Texture, Position, sourceRectangle, Color);
+        }
         public Rectangle HitBox
         {
             get

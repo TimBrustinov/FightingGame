@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BunchaInts = System.Collections.Generic.List<int>;
 using Content = Microsoft.Xna.Framework.Content.ContentManager;
 
 namespace FightingGame
@@ -24,7 +23,6 @@ namespace FightingGame
 
         public void LoadContent(Content content)
         {
-            BunchaInts bob = new List<int>();
             CharacterSprites.Add(CharacterName.CaptainFalcon, content.Load<Texture2D>("Captain Falcon"));
         }
     }

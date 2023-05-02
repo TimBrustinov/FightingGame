@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 
 namespace FightingGame.Characters
 {
-    public class Character : AnimationSprite
+    public class Character : DrawableObjectBase
     {
-        public int Health;
+        public int Health = 100;
         //public Dictionary<AnimationType, List<Rectangle>> Attacks;
         public CharacterName CharacterName;
-        protected Character(CharacterName name, Texture2D texture, Vector2 position, Vector2 dimentions, Color color, int health, Dictionary<AnimationType, List<Rectangle>> attacks) : base(texture, position, dimentions, color)
+
+        private AnimationSprite animation;
+        public Character(CharacterName name, Texture2D texture) : base(texture, default, new Vector2(texture.Width, texture.Height), Color.White)
         {
-            Health = health;
-            //Attacks = attacks;
             CharacterName = name;
+        }
+        public void Update()
+        {
+
         }
     }
 }

@@ -44,7 +44,7 @@ namespace FightingGame
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            CaptainFalcon = new Character();
+            //CaptainFalcon = new Character();
             ContentManager.Instance.LoadContent(Content);
             #region Start Menu
             PlayGame = Content.Load<Texture2D>("button_play-game");
@@ -73,6 +73,7 @@ namespace FightingGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            Globals.Update(gameTime);
 
             ScreenManager<Screenum>.Instance.Update(graphics);
             base.Update(gameTime);
