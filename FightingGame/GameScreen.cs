@@ -15,6 +15,12 @@ namespace FightingGame
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
+        Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
+        {
+            [Keys.Space] = AnimationType.Jump, 
+            [Keys.A] = AnimationType.Run,
+            [Keys.D] = AnimationType.Run,
+        };
 
         private Dictionary<CharacterName, Character> characterPool = new Dictionary<CharacterName, Character>();
         #region DrawableObjects
@@ -26,7 +32,8 @@ namespace FightingGame
             GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1500, 700), Color.White);
             StageTile = new DrawableObject(textures[Texture.StageTile], new Vector2(GameScreenBackground.Dimentions.X / 2 - 500 /2 , GameScreenBackground.Dimentions.Y / 2 ), new Vector2(500, 80), Color.White);
             Texture2D thing = ContentManager.Instance.CharacterSprites[CharacterName.CaptainFalcon];
-            Character CaptainFalcon = new Character(CharacterName.CaptainFalcon, thing, new Vector2(300, 300), new Vector2(thing.Width, thing.Height), Color.White, 100);
+            Character CaptainFalcon = new Character(CharacterName.CaptainFalcon, thing);
+            characterPool.Add(CharacterName.CaptainFalcon, CaptainFalcon);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
@@ -36,10 +43,21 @@ namespace FightingGame
         }
         public override void Initialize()
         {
-            
+                        
         }
         public override Screenum Update(MouseState ms)
         {
+            Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
+
+            //foreach (Keys key in keysPressed)
+            //{
+            //    if (KeysToDirection.ContainsKey(key))
+            //    {
+            //        currentDirection = KeysToDirection[key];
+            //        pacmanRotation = DirectionToRotation[currentDirection];
+            //    }
+            //}
+
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)

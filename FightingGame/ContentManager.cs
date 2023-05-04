@@ -13,7 +13,7 @@ namespace FightingGame
     public class ContentManager
     {
         public Dictionary<CharacterName, Texture2D> CharacterSprites = new Dictionary<CharacterName, Texture2D>();
-        public Dictionary<AnimationType, Rectangle> Animations = new Dictionary<AnimationType, Rectangle>();
+        public Dictionary<CharacterName, Dictionary<AnimationType, List<Rectangle>>> Animations = new Dictionary<CharacterName, Dictionary<AnimationType, List<Rectangle>>>();
         private ContentManager()
         {
 
@@ -23,7 +23,19 @@ namespace FightingGame
 
         public void LoadContent(Content content)
         {
+            #region Captain Falcon animations
             CharacterSprites.Add(CharacterName.CaptainFalcon, content.Load<Texture2D>("Captain Falcon"));
+            
+            Dictionary<AnimationType, List<Rectangle>> captainFalcon = new Dictionary<AnimationType, List<Rectangle>>();
+            List<Rectangle> CaptainFalconRun = new List<Rectangle>();
+            CaptainFalconRun.Add(new Rectangle(309, 118, 69, 50));
+            CaptainFalconRun.Add(new Rectangle(386, 117, 70, 51));
+            CaptainFalconRun.Add(new Rectangle(467, 114, 47, 54));
+            captainFalcon.Add(AnimationType., CaptainFalconRun);
+            
+            
+            Animations.Add(CharacterName.CaptainFalcon, captainFalcon);
+            #endregion
         }
     }
 }

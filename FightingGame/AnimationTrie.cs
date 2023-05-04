@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FightingGame.Characters
+namespace FightingGame
 {
-    internal class Swordsman
+    internal class AnimationTrie
     {
     }
 }

@@ -8,20 +8,21 @@ using System.Threading.Tasks;
 
 namespace FightingGame
 {
-    public abstract class AnimationSprite 
+    public class Animation
     {
         public List<Rectangle> AnimationFrames;
         public Texture2D Texture;
         public Rectangle CurrerntFrame => AnimationFrames[animationFramesIndex];
         private int animationFramesIndex = 0;
         private int numFrames;
-        private int frameTime;
+        private float frameTime;
         private bool active = true;
-        public AnimationSprite(Texture2D texture, int frametime, List<Rectangle> sourceRectangles)
+        public Animation(Texture2D texture, float frametime, List<Rectangle> sourceRectangles)
         {
             Texture = texture;
             AnimationFrames = new List<Rectangle>();
             frameTime = frametime;
+            new TimeSpan();
             foreach (var frame in sourceRectangles)
             {
                 AnimationFrames.Add(frame);

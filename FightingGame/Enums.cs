@@ -27,20 +27,29 @@ namespace FightingGame
         GameScreenBackground,
         StageTile,
     }
+    [Flags]
     public enum AnimationType
     {
-        NeutralAttack,
-        SideAttack,
-        DownAttack,
-        UpAttack,
-        NeutralSpecial,
-        SideSpecial,
-        DownSpecial,
-        UpSpecial,
         Jump,
-        Run,
+        LeftRun,
+        RightRun,
+        Down,
+        Fall,
         Dodge,
         Stand,
+        Attack,
+        Special,
+
+        NeutralAttack = Stand | Attack,
+        LeftAttack = LeftRun | Attack,
+        RightAttack = RightRun | Attack,
+        DownAttack = Down | Attack,
+
+        NeutralSpecial = Stand | Special,
+        LeftSpecial = LeftRun | Special,
+        RightSpecial = RightRun | Special,
+        DownSpecial = Down | Special,
+        UpSpecial = Jump | Special,
     }
     public enum CharacterName
     {

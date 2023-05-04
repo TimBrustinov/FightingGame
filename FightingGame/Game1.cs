@@ -74,7 +74,6 @@ namespace FightingGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             Globals.Update(gameTime);
-
             ScreenManager<Screenum>.Instance.Update(graphics);
             base.Update(gameTime);
         }
