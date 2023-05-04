@@ -27,8 +27,8 @@ namespace FightingGame
         GameScreenBackground,
         StageTile,
     }
-    [Flags]
-    public enum AnimationType
+   
+    [Flags] public enum AnimationType
     {
         Jump,
         LeftRun,

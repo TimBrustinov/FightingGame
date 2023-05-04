@@ -31,7 +31,7 @@ namespace FightingGame
             CaptainFalconRun.Add(new Rectangle(309, 118, 69, 50));
             CaptainFalconRun.Add(new Rectangle(386, 117, 70, 51));
             CaptainFalconRun.Add(new Rectangle(467, 114, 47, 54));
-            captainFalcon.Add(AnimationType., CaptainFalconRun);
+           // captainFalcon.Add(AnimationType, CaptainFalconRun);
             
             
             Animations.Add(CharacterName.CaptainFalcon, captainFalcon);
