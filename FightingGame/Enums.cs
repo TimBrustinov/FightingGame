@@ -31,8 +31,7 @@ namespace FightingGame
     [Flags] public enum AnimationType
     {
         Jump,
-        LeftRun,
-        RightRun,
+        Run,
         Down,
         Fall,
         Dodge,
@@ -41,18 +40,23 @@ namespace FightingGame
         Special,
 
         NeutralAttack = Stand | Attack,
-        LeftAttack = LeftRun | Attack,
-        RightAttack = RightRun | Attack,
+        DirectionalAttack = Run | Attack,
         DownAttack = Down | Attack,
+        UpAttack = Jump | Attack,
 
         NeutralSpecial = Stand | Special,
-        LeftSpecial = LeftRun | Special,
-        RightSpecial = RightRun | Special,
+        DirectionalSpecial = Run | Special,
         DownSpecial = Down | Special,
         UpSpecial = Jump | Special,
+
     }
     public enum CharacterName
     {
         CaptainFalcon,
+    }
+    public enum CharacterDirection
+    {
+        Left,
+        Right,
     }
 }

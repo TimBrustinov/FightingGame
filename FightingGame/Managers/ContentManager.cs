@@ -26,15 +26,18 @@ namespace FightingGame
             #region Captain Falcon animations
             CharacterSprites.Add(CharacterName.CaptainFalcon, content.Load<Texture2D>("Captain Falcon"));
             
-            Dictionary<AnimationType, List<Rectangle>> captainFalcon = new Dictionary<AnimationType, List<Rectangle>>();
+            Dictionary<AnimationType, List<Rectangle>> CaptainFalcon = new Dictionary<AnimationType, List<Rectangle>>();
             List<Rectangle> CaptainFalconRun = new List<Rectangle>();
             CaptainFalconRun.Add(new Rectangle(309, 118, 69, 50));
             CaptainFalconRun.Add(new Rectangle(386, 117, 70, 51));
             CaptainFalconRun.Add(new Rectangle(467, 114, 47, 54));
-           // captainFalcon.Add(AnimationType, CaptainFalconRun);
-            
-            
-            Animations.Add(CharacterName.CaptainFalcon, captainFalcon);
+            CaptainFalcon.Add(AnimationType.Run, CaptainFalconRun);
+
+            List<Rectangle> CaptainFalconStand = new List<Rectangle>();
+            CaptainFalconStand.Add(new Rectangle(41, 24, 42, 57));
+            CaptainFalcon.Add(AnimationType.Stand, CaptainFalconStand);
+
+            Animations.Add(CharacterName.CaptainFalcon, CaptainFalcon);
             #endregion
         }
     }

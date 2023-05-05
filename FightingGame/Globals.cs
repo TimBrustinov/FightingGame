@@ -10,11 +10,11 @@ namespace FightingGame
     {
         public static SpriteBatch SpriteBatch {get; set;}
         public static Content Content {get; set;}
-        public static TimeSpan GameSeconds {get; set;}
+        public static TimeSpan CurrentTime {get; set;}
 
         public static void Update(GameTime gameTime)
         {
-            GameSeconds = gameTime.ElapsedGameTime;
+            CurrentTime = gameTime.ElapsedGameTime;
         }
     }
 }

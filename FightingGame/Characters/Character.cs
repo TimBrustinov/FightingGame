@@ -16,9 +16,10 @@ namespace FightingGame.Characters
         public CharacterName CharacterName;
         public bool IsActive = false;
 
+        public CharacterDirection CurrentDirection;
         private AnimationManager animationManager;
         private AnimationType currentAnimation;
-        public Character(CharacterName name, Texture2D texture) : base(texture, default, new Vector2(texture.Width, texture.Height), Color.White)
+        public Character(CharacterName name, Texture2D texture) : base(texture, new Vector2(100, 100), new Vector2(texture.Width, texture.Height), Color.White)
         {
             CharacterName = name;
             animationManager = new AnimationManager();
@@ -30,6 +31,7 @@ namespace FightingGame.Characters
         public void Update(AnimationType animation)
         {
             currentAnimation = animation;
+            Position += Vector2.Normalize(InputManager.Direction);
             animationManager.Update(currentAnimation);
         }
         public void Draw()

@@ -45,6 +45,7 @@ namespace FightingGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //CaptainFalcon = new Character();
+            Globals.SpriteBatch = spriteBatch;
             ContentManager.Instance.LoadContent(Content);
             #region Start Menu
             PlayGame = Content.Load<Texture2D>("button_play-game");

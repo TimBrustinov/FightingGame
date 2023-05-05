@@ -15,13 +15,17 @@ namespace FightingGame
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
+
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
-            [Keys.Space] = AnimationType.Jump, 
+            [Keys.Space] = AnimationType.Jump,
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
+            [Keys.S] = AnimationType.Fall,
+            [Keys.K] = AnimationType.Attack,
+            [Keys.L] = AnimationType.Special,
         };
-
+        AnimationType currentAnimation = AnimationType.Stand;
         private Dictionary<CharacterName, Character> characterPool = new Dictionary<CharacterName, Character>();
         #region DrawableObjects
         DrawableObject GameScreenBackground;
@@ -47,16 +51,16 @@ namespace FightingGame
         }
         public override Screenum Update(MouseState ms)
         {
+            InputManager.Update();
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
-
-            //foreach (Keys key in keysPressed)
-            //{
-            //    if (KeysToDirection.ContainsKey(key))
-            //    {
-            //        currentDirection = KeysToDirection[key];
-            //        pacmanRotation = DirectionToRotation[currentDirection];
-            //    }
-            //}
+            foreach (Keys key in keysPressed)
+            {
+                if (KeysToAnimation.ContainsKey(key))
+                {
+                    currentAnimation |= KeysToAnimation[key];
+                    characterPool[0].Update(currentAnimation);
+                }
+            }
 
             return Screenum.GameScreen;
         }
@@ -64,6 +68,7 @@ namespace FightingGame
         {
             GameScreenBackground.Draw(spriteBatch);
             StageTile.Draw(spriteBatch);
+            characterPool[0].Draw();
         }
 
     }
