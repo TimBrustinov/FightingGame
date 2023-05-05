@@ -14,15 +14,14 @@ namespace FightingGame
         public Texture2D Texture;
         public Rectangle CurrerntFrame => AnimationFrames[animationFramesIndex];
         private int animationFramesIndex = 0;
-        private int numFrames;
         private float frameTime;
         private bool active = true;
+        private float frameTimer = 0;
         public Animation(Texture2D texture, float frametime, List<Rectangle> sourceRectangles)
         {
             Texture = texture;
             AnimationFrames = new List<Rectangle>();
             frameTime = frametime;
-            new TimeSpan();
             foreach (var frame in sourceRectangles)
             {
                 AnimationFrames.Add(frame);
@@ -37,20 +36,28 @@ namespace FightingGame
         {
             active = false;
         }
+        public void Restart()
+        {
+            animationFramesIndex = 0;
+            frameTimer = frameTime;
+        }
 
         public void Update()
         {
-            if(active)
+            if (active)
             {
-                while (animationFramesIndex < AnimationFrames.Count)
+                frameTimer += (float)Globals.CurrentTime.ElapsedGameTime.TotalSeconds;
+
+                if (frameTimer >= frameTime)
                 {
-                    animationFramesIndex++;
+                    animationFramesIndex = (animationFramesIndex + 1) % AnimationFrames.Count;
+                    frameTimer = 0;
                 }
             }
         }
         public void Draw(Vector2 position)
         {
-            Globals.SpriteBatch.Draw(Texture, position, CurrerntFrame, Color.White);
+            Globals.SpriteBatch.Draw(Texture, position, AnimationFrames[animationFramesIndex], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
         }
     }
 }

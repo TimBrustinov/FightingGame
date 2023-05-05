@@ -35,6 +35,7 @@ namespace FightingGame
             else
             {
                 Animations[lastAnimation].Stop();
+                Animations[lastAnimation].Restart();
             }
         }
         public void Draw(Vector2 position)

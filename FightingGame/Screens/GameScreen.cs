@@ -53,13 +53,18 @@ namespace FightingGame
         {
             InputManager.Update();
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
+
             foreach (Keys key in keysPressed)
             {
                 if (KeysToAnimation.ContainsKey(key))
                 {
-                    currentAnimation |= KeysToAnimation[key];
-                    characterPool[0].Update(currentAnimation);
+                    currentAnimation = KeysToAnimation[key];
                 }
+                else
+                {
+                    currentAnimation = AnimationType.Stand;
+                }
+                characterPool[0].Update(currentAnimation);
             }
 
             return Screenum.GameScreen;

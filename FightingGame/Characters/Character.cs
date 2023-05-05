@@ -25,7 +25,7 @@ namespace FightingGame.Characters
             animationManager = new AnimationManager();
             foreach(var animation in ContentManager.Instance.Animations[CharacterName])
             {
-                animationManager.AddAnimation(animation.Key, texture, animation.Value, 0.1f);
+                animationManager.AddAnimation(animation.Key, texture, animation.Value, 0.5f);
             }
         }
         public void Update(AnimationType animation)

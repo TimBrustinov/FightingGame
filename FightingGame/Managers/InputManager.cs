@@ -23,8 +23,9 @@ namespace FightingGame
             {
                 if (keyboardState.IsKeyDown(Keys.A)) direction.X--;
                 if (keyboardState.IsKeyDown(Keys.D)) direction.X++;
-                if (keyboardState.IsKeyDown(Keys.W)) direction.Y--;
+                if (keyboardState.IsKeyDown(Keys.Space)) direction.Y--;
                 if (keyboardState.IsKeyDown(Keys.S)) direction.Y++;
+                if (keyboardState.IsKeyDown(Keys.W)) direction = Vector2.Zero;
             }
         }
     }
