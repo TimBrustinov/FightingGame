@@ -12,8 +12,9 @@ namespace FightingGame
     {
         public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
 
-        private AnimationType lastAnimation;
+        public bool IsAnimationDone;
 
+        private AnimationType lastAnimation;
         public void AddAnimation(AnimationType animation, Texture2D texture, List<Rectangle> sourceRectangles, float timePerFrame)
         {
             if(Animations.ContainsKey(animation))
@@ -26,11 +27,17 @@ namespace FightingGame
         }
         public void Update(AnimationType animationType)
         {
+            IsAnimationDone = Animations[lastAnimation].IsAnimationDone;
             if (Animations.ContainsKey(animationType))
             {
-                Animations[animationType].Start();
-                Animations[animationType].Update();
-                lastAnimation = animationType;
+                if(animationType != lastAnimation && IsAnimationDone)
+                {
+                    Animations[lastAnimation].Restart();
+                    lastAnimation = animationType;
+                }
+
+                Animations[lastAnimation].Start();
+                Animations[lastAnimation].Update();
             }
             else
             {

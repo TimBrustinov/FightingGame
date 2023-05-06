@@ -59,14 +59,14 @@ namespace FightingGame
                 if (KeysToAnimation.ContainsKey(key))
                 {
                     currentAnimation = KeysToAnimation[key];
+                    characterPool[0].Update(currentAnimation);
                 }
-                else
-                {
-                    currentAnimation = AnimationType.Stand;
-                }
+            }
+            if (characterPool[0].animationManager.IsAnimationDone && InputManager.Direction == Vector2.Zero)
+            {
+                currentAnimation = AnimationType.Stand;
                 characterPool[0].Update(currentAnimation);
             }
-
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)

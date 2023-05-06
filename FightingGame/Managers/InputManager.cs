@@ -14,6 +14,8 @@ namespace FightingGame
         public static Vector2 Direction => direction;
         public static bool Moving => direction != Vector2.Zero;
 
+        public static bool IsMovingLeft = false;
+
         public static void Update()
         {
             direction = Vector2.Zero;
@@ -21,11 +23,28 @@ namespace FightingGame
 
             if (keyboardState.GetPressedKeyCount() > 0)
             {
-                if (keyboardState.IsKeyDown(Keys.A)) direction.X--;
-                if (keyboardState.IsKeyDown(Keys.D)) direction.X++;
-                if (keyboardState.IsKeyDown(Keys.Space)) direction.Y--;
-                if (keyboardState.IsKeyDown(Keys.S)) direction.Y++;
-                if (keyboardState.IsKeyDown(Keys.W)) direction = Vector2.Zero;
+                if (keyboardState.IsKeyDown(Keys.A))
+                {
+                    direction.X--;
+                    IsMovingLeft = true;
+                }
+                if (keyboardState.IsKeyDown(Keys.D))
+                {
+                    direction.X++;
+                    IsMovingLeft = false;
+                }
+                if (keyboardState.IsKeyDown(Keys.Space))
+                {
+                    direction.Y--;
+                }
+                if (keyboardState.IsKeyDown(Keys.S))
+                {
+                    direction.Y++;
+                }
+                if (keyboardState.IsKeyDown(Keys.W)) 
+                {
+                    direction = Vector2.Zero;
+                }           
             }
         }
     }
