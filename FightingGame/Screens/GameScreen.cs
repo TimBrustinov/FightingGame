@@ -62,7 +62,7 @@ namespace FightingGame
                     characterPool[0].Update(currentAnimation);
                 }
             }
-            if (characterPool[0].animationManager.IsAnimationDone && InputManager.Direction == Vector2.Zero)
+            if (InputManager.Direction == Vector2.Zero)
             {
                 currentAnimation = AnimationType.Stand;
                 characterPool[0].Update(currentAnimation);

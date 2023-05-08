@@ -30,8 +30,8 @@ namespace FightingGame
             IsAnimationDone = Animations[lastAnimation].IsAnimationDone;
             if (Animations.ContainsKey(animationType))
             {
-                if(animationType != lastAnimation && IsAnimationDone)
-                {
+                if(animationType != lastAnimation)
+                { 
                     Animations[lastAnimation].Restart();
                     lastAnimation = animationType;
                 }

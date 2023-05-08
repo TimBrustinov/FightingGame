@@ -25,7 +25,7 @@ namespace FightingGame.Characters
             animationManager = new AnimationManager();
             foreach(var animation in ContentManager.Instance.Animations[CharacterName])
             {
-                animationManager.AddAnimation(animation.Key, texture, animation.Value, 0.3f);
+                animationManager.AddAnimation(animation.Key, texture, animation.Value, 0.17f);
             }
         }
         public void Update(AnimationType animation)
@@ -37,7 +37,7 @@ namespace FightingGame.Characters
             }
             else
             {
-                Position += Vector2.Normalize(InputManager.Direction);
+                Position += Vector2.Normalize(InputManager.Direction) * 5 ;
             }
             animationManager.Update(currentAnimation);
         }
