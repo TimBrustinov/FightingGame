@@ -16,34 +16,34 @@ namespace FightingGame
 
         public static bool IsMovingLeft = false;
 
-        public static void Update()
+        public static void Update(List<Keys> forbiddenDirections)
         {
             direction = Vector2.Zero;
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.GetPressedKeyCount() > 0)
             {
-                if (keyboardState.IsKeyDown(Keys.A))
+                if (keyboardState.IsKeyDown(Keys.A) && !forbiddenDirections.Contains(Keys.A))
                 {
                     direction.X--;
                     IsMovingLeft = true;
                 }
-                if (keyboardState.IsKeyDown(Keys.D))
+                if (keyboardState.IsKeyDown(Keys.D) && !forbiddenDirections.Contains(Keys.D))
                 {
                     direction.X++;
                     IsMovingLeft = false;
                 }
-                if (keyboardState.IsKeyDown(Keys.Space))
+                if (keyboardState.IsKeyDown(Keys.Space) && !forbiddenDirections.Contains(Keys.Space))
                 {
                     direction.Y--;
                 }
-                if (keyboardState.IsKeyDown(Keys.S))
+                if (keyboardState.IsKeyDown(Keys.S) && !forbiddenDirections.Contains(Keys.S))
                 {
                     direction.Y++;
                 }
-                if (keyboardState.IsKeyDown(Keys.W)) 
+                if (keyboardState.IsKeyDown(Keys.W) && !forbiddenDirections.Contains(Keys.W)) 
                 {
-                    direction = Vector2.Zero;
+                    direction.Y--;
                 }           
             }
         }

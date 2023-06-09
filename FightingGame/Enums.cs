@@ -39,7 +39,7 @@ namespace FightingGame
         Attack,
         Special,
 
-        NeutralAttack = Stand | Attack,
+        NeutralAttack,
         DirectionalAttack = Run | Attack,
         DownAttack = Down | Attack,
         UpAttack = Jump | Attack,
@@ -58,5 +58,13 @@ namespace FightingGame
     {
         Left,
         Right,
+    }
+    public enum SideHit
+    {
+        Left,
+        Right,
+        Top,
+        Bottom,
+        None,
     }
 }

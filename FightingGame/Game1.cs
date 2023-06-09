@@ -44,6 +44,8 @@ namespace FightingGame
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            ContentManager.Instance.Pixel = new Texture2D(GraphicsDevice, 1, 1);
+            ContentManager.Instance.Pixel.SetData(new[] { Color.White });
             //CaptainFalcon = new Character();
             Globals.SpriteBatch = spriteBatch;
             ContentManager.Instance.LoadContent(Content);

@@ -12,16 +12,20 @@ namespace FightingGame
     {
         public List<Rectangle> AnimationFrames;
         public Texture2D Texture;
+        public Rectangle PreviousFrame;
         public Rectangle CurrerntFrame => AnimationFrames[animationFramesIndex];
         public bool IsAnimationDone;
+        public bool CanBeCanceled = true;
+
         private int animationFramesIndex = 0;
         private float frameTime;
         private bool active = true;
         private float frameTimer = 0;
 
-        public Animation(Texture2D texture, float frametime, List<Rectangle> sourceRectangles)
+        public Animation(Texture2D texture, bool canBeCanceled, float frametime, List<Rectangle> sourceRectangles)
         {
             Texture = texture;
+            CanBeCanceled = canBeCanceled;
             AnimationFrames = new List<Rectangle>();
             frameTime = frametime;
             foreach (var frame in sourceRectangles)
@@ -49,6 +53,7 @@ namespace FightingGame
         {
             if (active)
             {
+                PreviousFrame = CurrerntFrame;
                 frameTimer += (float)Globals.CurrentTime.ElapsedGameTime.TotalSeconds;
 
                 if (frameTimer >= frameTime)

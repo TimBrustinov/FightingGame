@@ -11,33 +11,43 @@ namespace FightingGame
     public class AnimationManager
     {
         public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
-
+        public Animation CurrentAnimation;
+        public Rectangle CurrentFrame;
+        public Rectangle PreviousFrame;
         public bool IsAnimationDone;
 
         private AnimationType lastAnimation;
-        public void AddAnimation(AnimationType animation, Texture2D texture, List<Rectangle> sourceRectangles, float timePerFrame)
+        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<Rectangle> sourceRectangles, float timePerFrame)
         {
             if(Animations.ContainsKey(animation))
             {
                 return;
             }
-            Animation animationSprite = new Animation(texture, timePerFrame, sourceRectangles);
+            Animation animationSprite = new Animation(texture, canBeCanceled, timePerFrame, sourceRectangles);
             Animations.Add(animation, animationSprite);
             lastAnimation = animation;
         }
         public void Update(AnimationType animationType)
         {
-            IsAnimationDone = Animations[lastAnimation].IsAnimationDone;
+            CurrentAnimation = Animations[lastAnimation];
             if (Animations.ContainsKey(animationType))
             {
+                //if animation is not the same, and the current animation can be canceled or has finished, then we change animation
                 if(animationType != lastAnimation)
                 { 
-                    Animations[lastAnimation].Restart();
-                    lastAnimation = animationType;
+                    if(CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone)
+                    {
+                        //resets the last animation from frame 0
+                        Animations[lastAnimation].Restart();
+                        lastAnimation = animationType;
+                        CurrentAnimation = Animations[lastAnimation];
+                    }
                 }
-
+                // always starts the animation and updates
                 Animations[lastAnimation].Start();
                 Animations[lastAnimation].Update();
+                CurrentFrame = Animations[lastAnimation].CurrerntFrame;
+                PreviousFrame = Animations[lastAnimation].PreviousFrame;
             }
             else
             {
