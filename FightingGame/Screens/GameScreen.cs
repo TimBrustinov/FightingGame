@@ -57,12 +57,10 @@ namespace FightingGame
         }
         public override Screenum Update(MouseState ms)
         {
-            CaptainFalcon.count = 0;
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
             // Hitbox Detection, if side is hit, prevent keys from being pressed. 
             if (CaptainFalcon.HitBox.Intersects(StageTile.HitBox))
             {
-                CaptainFalcon.HasHit = true;
                 // Calculates what side was hit
                 SideHit side = SideIntersected(StageTile.HitBox, CaptainFalcon.HitBox, out int offset);
                 
@@ -100,41 +98,49 @@ namespace FightingGame
                 forbiddenDirections = new List<Keys>();
             }
 
-            //updates input manager, key pressed equals a forbidden direction, the direction vector is unchanged aka (0,0)
+            //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
             InputManager.Update(forbiddenDirections);
 
-            if (InputManager.Direction == Vector2.Zero)
+            foreach(Keys key in keysPressed)
             {
-                if (CaptainFalcon.animationManager.CurrentAnimation != null && !CaptainFalcon.animationManager.CurrentAnimation.CanBeCanceled && savedKey != Keys.None)
+                if(KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
                 {
-                    currentAnimation = KeysToAnimation[savedKey];
-                }
-                else
-                {
-                    currentAnimation = AnimationType.Stand;
+                    currentAnimation = KeysToAnimation[key];
                 }
             }
 
-            // loops thru all keys pressed, if a key is forbidden that key isnt registered
-            foreach (Keys key in keysPressed)
-            {
-                if (KeysToAnimation.ContainsKey(key) && !forbiddenDirections.Contains(key))
-                {
-                    if(key == Keys.W && CaptainFalcon.JumpCount < 1)
-                    {
-                        CaptainFalcon.IsGrounded = false;
-                    }
-                    if(CaptainFalcon.animationManager.CurrentAnimation.CanBeCanceled)
-                    {
-                        currentAnimation = KeysToAnimation[key];
-                        savedKey = key;
-                    }
-                    else if(KeysToAnimation.ContainsKey(savedKey))
-                    {
-                        currentAnimation = KeysToAnimation[savedKey];
-                    }
-                }
-            }
+            //if (InputManager.Direction == Vector2.Zero)
+            //{
+            //    if (CaptainFalcon.animationManager.CurrentAnimation != null && !CaptainFalcon.animationManager.CurrentAnimation.CanBeCanceled && savedKey != Keys.None)
+            //    {
+            //        currentAnimation = KeysToAnimation[savedKey];
+            //    }
+            //    else
+            //    {
+            //        currentAnimation = AnimationType.Stand;
+            //    }
+            //}
+
+            //// loops thru all keys pressed, if a key is forbidden that key isnt registered
+            //foreach (Keys key in keysPressed)
+            //{
+            //    if (KeysToAnimation.ContainsKey(key) && !forbiddenDirections.Contains(key))
+            //    {
+            //        if(key == Keys.W && CaptainFalcon.JumpCount < 1)
+            //        {
+            //            CaptainFalcon.IsGrounded = false;
+            //        }
+            //        if(CaptainFalcon.animationManager.CurrentAnimation.CanBeCanceled)
+            //        {
+            //            currentAnimation = KeysToAnimation[key];
+            //            savedKey = key;
+            //        }
+            //        else if(KeysToAnimation.ContainsKey(savedKey))
+            //        {
+            //            currentAnimation = KeysToAnimation[savedKey];
+            //        }
+            //    }
+            //}
             CaptainFalcon.Update(currentAnimation, InputManager.Direction);
 
             return Screenum.GameScreen;
