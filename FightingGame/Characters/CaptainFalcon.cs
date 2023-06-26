@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,12 +26,34 @@ namespace FightingGame.Characters
         }
         protected override void NeutralAttack()
         {
-
+            savedAnimaton = AnimationType.NeutralAttack;
+            if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
+            {
+                savedAnimaton = AnimationType.None;
+            }
         }
 
         protected override void DirectionalAttack()
         {
-            throw new NotImplementedException();
+            savedAnimaton = AnimationType.DirectionalAttack;
+            if(InputManager.IsMovingLeft)
+            {
+                Position = new Vector2(Position.X - 6, Position.Y);
+            }
+            else
+            {
+                Position = new Vector2(Position.X + 6, Position.Y);
+            }
+
+            if(animationManager.PreviousFrame == new Rectangle(206, 297, 41, 70))
+            {
+                Position = new Vector2(Position.X, Position.Y - 2);
+            }
+
+            if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
+            {
+                savedAnimaton = AnimationType.None;
+            }
         }
 
         protected override void DownAttack()

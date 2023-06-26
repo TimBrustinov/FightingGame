@@ -42,7 +42,7 @@ namespace FightingGame
             GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1500, 700), Color.White);
             StageTile = new DrawableObject(textures[Texture.StageTile], new Vector2(GameScreenBackground.Dimentions.X / 2 - 500 / 2, GameScreenBackground.Dimentions.Y / 2), new Vector2(500, 80), Color.White);
             Texture2D thing = ContentManager.Instance.CharacterSpriteSheets[CharacterName.CaptainFalcon];
-            CaptainFalcon = new Character(CharacterName.CaptainFalcon, thing);
+            CaptainFalcon = new CaptainFalcon(CharacterName.CaptainFalcon, thing);
             characterPool.Add(CharacterName.CaptainFalcon, CaptainFalcon);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
@@ -100,12 +100,27 @@ namespace FightingGame
 
             //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
             InputManager.Update(forbiddenDirections);
-
-            foreach(Keys key in keysPressed)
+            if(keysPressed.Length == 0)
             {
-                if(KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
+               currentAnimation = AnimationType.Stand;
+            }
+            else
+            {
+                foreach (Keys key in keysPressed)
                 {
-                    currentAnimation = KeysToAnimation[key];
+                    if (KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
+                    {
+                        currentAnimation = KeysToAnimation[key];
+                        if (currentAnimation == AnimationType.Jump)
+                        {
+                            CaptainFalcon.IsGrounded = false;
+                        }
+                        if(InputManager.Moving && currentAnimation == AnimationType.NeutralAttack)
+                        {
+                            currentAnimation = AnimationType.DirectionalAttack;
+                            Console.WriteLine("is Moving");
+                        }
+                    }
                 }
             }
 

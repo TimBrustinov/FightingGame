@@ -30,6 +30,7 @@ namespace FightingGame
    
     [Flags] public enum AnimationType
     {
+        None,
         Jump,
         Run,
         Down,

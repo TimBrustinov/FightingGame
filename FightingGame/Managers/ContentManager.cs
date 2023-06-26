@@ -48,7 +48,17 @@ namespace FightingGame
             List<Rectangle> CaptainFalconNeutralAttack = new List<Rectangle>();
             CaptainFalconNeutralAttack.Add(new Rectangle(48, 114, 53, 51));
             CaptainFalconNeutralAttack.Add(new Rectangle(123, 113, 77, 52));
+            CaptainFalconNeutralAttack.Add(new Rectangle(123, 113, 77, 52));
             CaptainFalcon.Add((AnimationType.NeutralAttack, !CanBeCanceled), CaptainFalconNeutralAttack);
+
+            List<Rectangle> CaptainFalconDirectionalAttack = new List<Rectangle>();
+            CaptainFalconDirectionalAttack.Add(new Rectangle(32, 319, 63, 48));
+            CaptainFalconDirectionalAttack.Add(new Rectangle(102, 313, 90, 54));
+            CaptainFalconDirectionalAttack.Add(new Rectangle(206, 297, 41, 70));
+            CaptainFalconDirectionalAttack.Add(new Rectangle(206, 297, 41, 70));
+            CaptainFalcon.Add((AnimationType.DirectionalAttack, !CanBeCanceled), CaptainFalconDirectionalAttack);
+
+
 
             Animations.Add(CharacterName.CaptainFalcon, CaptainFalcon);
             #endregion

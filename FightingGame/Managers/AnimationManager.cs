@@ -16,7 +16,7 @@ namespace FightingGame
         public Rectangle PreviousFrame;
         public bool IsAnimationDone;
 
-        private AnimationType lastAnimation;
+        public AnimationType lastAnimation;
         public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<Rectangle> sourceRectangles, float timePerFrame)
         {
             if(Animations.ContainsKey(animation))

@@ -12,7 +12,7 @@ namespace FightingGame
     {
         private static Vector2 direction;
         public static Vector2 Direction => direction;
-        public static bool Moving => direction != Vector2.Zero;
+        public static bool Moving;
 
         public static bool IsMovingLeft = false;
 
@@ -46,6 +46,7 @@ namespace FightingGame
                     direction.Y--;
                 }           
             }
+            Moving = direction != Vector2.Zero;
         }
     }
 }

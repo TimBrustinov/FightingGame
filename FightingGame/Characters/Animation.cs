@@ -32,6 +32,7 @@ namespace FightingGame
             {
                 AnimationFrames.Add(frame);
             }
+            PreviousFrame = CurrerntFrame;
         }
 
         public void Start()
@@ -53,16 +54,17 @@ namespace FightingGame
         {
             if (active)
             {
-                PreviousFrame = CurrerntFrame;
                 frameTimer += (float)Globals.CurrentTime.ElapsedGameTime.TotalSeconds;
 
                 if (frameTimer >= frameTime)
                 {
+                    PreviousFrame = CurrerntFrame;
                     animationFramesIndex = (animationFramesIndex + 1) % AnimationFrames.Count;
-                    if(animationFramesIndex == 0)
+                    if (animationFramesIndex == 0)
                     {
                         IsAnimationDone = true;
                     }
+
                     frameTimer = 0;
                 }
             }
@@ -71,11 +73,11 @@ namespace FightingGame
         {
             if(InputManager.IsMovingLeft)
             {
-                Globals.SpriteBatch.Draw(Texture, position, AnimationFrames[animationFramesIndex], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.FlipHorizontally, 1);
+                Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.FlipHorizontally, 1);
             }
             else
             {
-                Globals.SpriteBatch.Draw(Texture, position, AnimationFrames[animationFramesIndex], Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
+                Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, 1);
             }
         }
     }
