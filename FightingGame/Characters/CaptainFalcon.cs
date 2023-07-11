@@ -63,7 +63,12 @@ namespace FightingGame.Characters
 
         protected override void UpAttack()
         {
-            throw new NotImplementedException();
+            savedAnimaton = AnimationType.DirectionalAttack;
+            Position = new Vector2(Position.X, Position.Y - 4);
+            if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
+            {
+                savedAnimaton = AnimationType.None;
+            }
         }
     }
 }

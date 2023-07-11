@@ -41,9 +41,9 @@ namespace FightingGame
         Special,
 
         NeutralAttack,
-        DirectionalAttack = Run | Attack,
-        DownAttack = Down | Attack,
-        UpAttack = Jump | Attack,
+        DirectionalAttack,
+        DownAttack,
+        UpAttack,
 
         NeutralSpecial = Stand | Special,
         DirectionalSpecial = Run | Special,

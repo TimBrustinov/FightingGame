@@ -58,6 +58,11 @@ namespace FightingGame
             CaptainFalconDirectionalAttack.Add(new Rectangle(206, 297, 41, 70));
             CaptainFalcon.Add((AnimationType.DirectionalAttack, !CanBeCanceled), CaptainFalconDirectionalAttack);
 
+            List<Rectangle> CaptainFalconUpAttack = new List<Rectangle>();
+            CaptainFalconUpAttack.Add(new Rectangle(206, 297, 41, 70));
+            CaptainFalconUpAttack.Add(new Rectangle(206, 297, 41, 70));
+            CaptainFalcon.Add((AnimationType.UpAttack, !CanBeCanceled), CaptainFalconUpAttack);
+
 
 
             Animations.Add(CharacterName.CaptainFalcon, CaptainFalcon);

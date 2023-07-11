@@ -24,6 +24,7 @@ namespace FightingGame.Characters
         public AnimationManager animationManager;
         public AnimationType currentAnimation;
         protected const int defaultVelocity = 20;
+        int JumpCount = 0;
         public AnimationType savedAnimaton;
 
         public Character(CharacterName name, Texture2D texture) : base(texture, new Vector2(0,0), new Vector2(texture.Width, texture.Height), Color.White)
@@ -66,6 +67,7 @@ namespace FightingGame.Characters
                 JumpCount = 1;
                 if (IsGrounded)
                 {
+                    InputManager.MovingUp = false;
                     animationManager.CurrentAnimation.IsAnimationDone = true;
                     Velocity = defaultVelocity;
                     savedAnimaton = AnimationType.None;
@@ -89,6 +91,10 @@ namespace FightingGame.Characters
             else if(currentAnimation == AnimationType.DirectionalAttack)
             {
                 DirectionalAttack();
+            }
+            else if(currentAnimation == AnimationType.UpAttack)
+            {
+                UpAttack();
             }
             else
             {

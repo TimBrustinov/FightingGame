@@ -13,6 +13,8 @@ namespace FightingGame
         private static Vector2 direction;
         public static Vector2 Direction => direction;
         public static bool Moving;
+        public static bool MovingUp;
+        public static bool MovingDown;
 
         public static bool IsMovingLeft = false;
 
@@ -39,12 +41,22 @@ namespace FightingGame
                 }
                 if (keyboardState.IsKeyDown(Keys.S) && !forbiddenDirections.Contains(Keys.S))
                 {
+                    MovingDown = true;
                     direction.Y++;
                 }
-                if (keyboardState.IsKeyDown(Keys.W) && !forbiddenDirections.Contains(Keys.W)) 
+                else
                 {
+                    MovingDown = false;
+                }
+                if (keyboardState.IsKeyDown(Keys.W) && !forbiddenDirections.Contains(Keys.W))
+                {
+                    MovingUp = true;
                     direction.Y--;
-                }           
+                }
+         
+
+
+
             }
             Moving = direction != Vector2.Zero;
         }

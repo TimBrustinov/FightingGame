@@ -18,6 +18,7 @@ namespace FightingGame
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
+        private int updateTicks = 0;
         Character CaptainFalcon;
 
         List<Keys> forbiddenDirections = new List<Keys>();
@@ -32,6 +33,7 @@ namespace FightingGame
             [Keys.L] = AnimationType.Special,
         };
         AnimationType currentAnimation = AnimationType.Stand;
+        AnimationType prevAnimation;
         private Dictionary<CharacterName, Character> characterPool = new Dictionary<CharacterName, Character>();
         #region DrawableObjects
         DrawableObject GameScreenBackground;
@@ -108,14 +110,20 @@ namespace FightingGame
             {
                 foreach (Keys key in keysPressed)
                 {
+                    Console.WriteLine(key);
                     if (KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if (currentAnimation == AnimationType.Jump)
+                        if (InputManager.MovingUp && currentAnimation == AnimationType.NeutralAttack)
+                        {
+                            currentAnimation = AnimationType.UpAttack;
+                            break;
+                        }
+                        if (updateTicks >= 15 && currentAnimation == AnimationType.Jump)
                         {
                             CaptainFalcon.IsGrounded = false;
                         }
-                        if(InputManager.Moving && currentAnimation == AnimationType.NeutralAttack)
+                        if (InputManager.Moving && currentAnimation == AnimationType.NeutralAttack)
                         {
                             currentAnimation = AnimationType.DirectionalAttack;
                             Console.WriteLine("is Moving");
@@ -123,7 +131,6 @@ namespace FightingGame
                     }
                 }
             }
-
             //if (InputManager.Direction == Vector2.Zero)
             //{
             //    if (CaptainFalcon.animationManager.CurrentAnimation != null && !CaptainFalcon.animationManager.CurrentAnimation.CanBeCanceled && savedKey != Keys.None)
@@ -156,6 +163,8 @@ namespace FightingGame
             //        }
             //    }
             //}
+            updateTicks = (updateTicks + 1) % 25;
+            Console.WriteLine(updateTicks);
             CaptainFalcon.Update(currentAnimation, InputManager.Direction);
 
             return Screenum.GameScreen;
