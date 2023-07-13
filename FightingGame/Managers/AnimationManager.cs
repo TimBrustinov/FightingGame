@@ -55,9 +55,9 @@ namespace FightingGame
                 Animations[lastAnimation].Restart();
             }
         }
-        public void Draw(Vector2 position)
+        public void Draw(Vector2 position, bool isMovingLeft)
         {
-            Animations[lastAnimation].Draw(position);
+            Animations[lastAnimation].Draw(position, isMovingLeft);
         }
     }
 }

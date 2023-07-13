@@ -69,9 +69,9 @@ namespace FightingGame
                 }
             }
         }
-        public void Draw(Vector2 position)
+        public void Draw(Vector2 position, bool isMovingLeft)
         {
-            if(InputManager.IsMovingLeft)
+            if(isMovingLeft)
             {
                 Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.FlipHorizontally, 1);
             }

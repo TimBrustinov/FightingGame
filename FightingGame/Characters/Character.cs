@@ -35,7 +35,7 @@ namespace FightingGame.Characters
 
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height);
             animationManager = new AnimationManager();
-            foreach(var animation in ContentManager.Instance.Animations[CharacterName])
+            foreach (var animation in ContentManager.Instance.Animations[CharacterName])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, 0.17f);
             }
@@ -44,6 +44,7 @@ namespace FightingGame.Characters
         protected abstract void DirectionalAttack();
         protected abstract void DownAttack();
         protected abstract void UpAttack();
+        protected abstract void Jump();
         public void Update(AnimationType animation, Vector2 direction) 
         {
             //bool canAnimationChange = CanAnimationChange(animation);
@@ -63,26 +64,27 @@ namespace FightingGame.Characters
 
             if(currentAnimation == AnimationType.Jump)
             {
-                savedAnimaton = AnimationType.Jump;
-                JumpCount = 1;
-                if (IsGrounded)
-                {
-                    InputManager.MovingUp = false;
-                    animationManager.CurrentAnimation.IsAnimationDone = true;
-                    Velocity = defaultVelocity;
-                    savedAnimaton = AnimationType.None;
-                    currentAnimation = AnimationType.Stand;
-                    JumpCount = 0;
-                }
+                //savedAnimaton = AnimationType.Jump;
+                //JumpCount = 1;
+                //if (IsGrounded)
+                //{
+                //    InputManager.MovingUp = false;
+                //    animationManager.CurrentAnimation.IsAnimationDone = true;
+                //    Velocity = defaultVelocity;
+                //    savedAnimaton = AnimationType.None;
+                //    currentAnimation = AnimationType.Stand;
+                //    JumpCount = 0;
+                //}
 
-                if (Velocity == -defaultVelocity - 1)
-                {
-                    Position += new Vector2(direction.X * 5, -1 * Velocity);
-                }
-                else if (currentAnimation == AnimationType.Jump)
-                {
-                    Position += new Vector2(direction.X * 5, -1 * Velocity--);
-                }
+                //if (Velocity == -defaultVelocity - 1)
+                //{
+                //    Position += new Vector2(direction.X * 5, -1 * Velocity);
+                //}
+                //else if (currentAnimation == AnimationType.Jump)
+                //{
+                //    Position += new Vector2(direction.X * 5, -1 * Velocity--);
+                //}e
+                Jump() ;
             }
             else if (currentAnimation == AnimationType.NeutralAttack)
             {
@@ -110,7 +112,7 @@ namespace FightingGame.Characters
 
                 if (!IsGrounded)
                 {
-                    if (fallingSpeed != 5)
+                    if (fallingSpeed != 10)
                     {
                         Position += new Vector2(0, 1 * fallingSpeed++);
                     }
@@ -125,7 +127,7 @@ namespace FightingGame.Characters
         }
         public void Draw()
         {
-            animationManager.Draw(Position);
+            animationManager.Draw(Position, InputManager.IsMovingLeft);
         }
 
         public bool CanAnimationChange(AnimationType animation)

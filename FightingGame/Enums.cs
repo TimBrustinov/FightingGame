@@ -54,6 +54,11 @@ namespace FightingGame
     public enum CharacterName
     {
         CaptainFalcon,
+        Zombie,
+    }
+    public enum EnemyName
+    {
+        Zombie,
     }
     public enum CharacterDirection
     {
