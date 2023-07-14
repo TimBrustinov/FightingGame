@@ -16,6 +16,7 @@ namespace FightingGame.Enemies
         public int Health = 10;
         public int fallingSpeed;
         public float speed;
+        public Vector2 EnemyScale;
 
         public bool IsActive = false;
         public bool IsGrounded = false;
@@ -79,7 +80,7 @@ namespace FightingGame.Enemies
         }
         public void Draw()
         {
-            animationManager.Draw(Position, isMovingLeft);
+            animationManager.Draw(Position, isMovingLeft, EnemyScale);
         }
 
         public bool CanAnimationChange(AnimationType animation)

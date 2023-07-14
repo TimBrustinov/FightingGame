@@ -19,6 +19,7 @@ namespace FightingGame.Enemies
             Position = new Vector2(1000, 350 - enemyRectangle.Height);
 
             Dimentions = new Vector2(enemyRectangle.Width, enemyRectangle.Height);
+            EnemyScale = new Vector2(2, 2);
             speed = 0.5f;
         }
         protected override void SideAttack()

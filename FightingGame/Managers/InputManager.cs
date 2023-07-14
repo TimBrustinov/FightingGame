@@ -41,41 +41,29 @@ namespace FightingGame
                 }
                 if (keyboardState.IsKeyDown(Keys.S) && !forbiddenDirections.Contains(Keys.S))
                 {
-                    MovingDown = true;
                     direction.Y++;
-                }
-                else
-                {
-                    MovingDown = false;
                 }
                 if (keyboardState.IsKeyDown(Keys.W) && !forbiddenDirections.Contains(Keys.W))
                 {
-                    MovingUp = true;
                     direction.Y--;
                 }
-                else
-                {
-                    MovingUp = false;
-                }
+            }
 
-            }
-            if (direction.Y < 0)
-            {
-                MovingUp = true;
-                Console.WriteLine("Moving up");
-                MovingDown = false;
-            }
-            else if (direction.Y > 0)
+            if (direction.Y > 0)
             {
                 MovingDown = true;
-                Console.WriteLine("Moving Down");
                 MovingUp = false;
+            }
+            else if(direction.Y < 0)
+            {
+                MovingUp = true;
+                MovingDown = false;
             }
             else
             {
-                Moving = direction != Vector2.Zero;
-                MovingDown = false;
                 MovingUp = false;
+                MovingDown = false;
+                Moving = direction != Vector2.Zero;
             }
         }
     }

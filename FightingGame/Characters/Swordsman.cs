@@ -20,6 +20,7 @@ namespace FightingGame.Characters
             Position = new Vector2(500, 350 - characterRectangle.Height);
 
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height);
+            CharacterScale = new Vector2(2, 2);
             speed = 3;
         }
 

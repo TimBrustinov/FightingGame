@@ -17,6 +17,7 @@ namespace FightingGame.Characters
         public int speed;
         public int Velocity = defaultVelocity;
         public int fallingSpeed;
+        public Vector2 CharacterScale;
         public Vector2 Direction;
 
         public bool IsActive = false;
@@ -82,7 +83,7 @@ namespace FightingGame.Characters
         }
         public void Draw()
         {
-            animationManager.Draw(Position, InputManager.IsMovingLeft);
+            animationManager.Draw(Position, InputManager.IsMovingLeft, CharacterScale);
         }
 
         public bool CanAnimationChange(AnimationType animation)

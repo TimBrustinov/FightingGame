@@ -63,4 +63,8 @@ namespace FightingGame
         Bottom,
         None,
     }
+    public enum ObjectSprites
+    {
+        Props,
+    }
 }

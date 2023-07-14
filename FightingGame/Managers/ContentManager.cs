@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace FightingGame
         public Dictionary<EnemyName, Rectangle> EnemyTextures = new Dictionary<EnemyName, Rectangle>();
         public Dictionary<EnemyName, Texture2D> EnemySpriteSheets = new Dictionary<EnemyName, Texture2D>();
         public Dictionary<EnemyName, Dictionary<(AnimationType, bool), List<Rectangle>>> EnemyAnimations = new Dictionary<EnemyName, Dictionary<(AnimationType, bool), List<Rectangle>>>();
+
 
         private ContentManager()
         {

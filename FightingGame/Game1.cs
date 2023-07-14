@@ -58,7 +58,7 @@ namespace FightingGame
             #endregion
 
             #region Game Screen
-            GameScreenBackground = Content.Load<Texture2D>("StoneFloorTile");
+            GameScreenBackground = Content.Load<Texture2D>("DesertLandscape");
             gameScreenTextures.Add(Texture.GameScreenBackground, GameScreenBackground);
 
             StageTile = Content.Load<Texture2D>("StageTile");

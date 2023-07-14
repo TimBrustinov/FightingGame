@@ -86,11 +86,7 @@ namespace FightingGame
                     if (KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if(currentAnimation == AnimationType.Attack)
-                        {
-
-                        }
-
+                       
                         if (InputManager.MovingUp && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.UpAttack;
@@ -109,7 +105,6 @@ namespace FightingGame
                         {
                             currentAnimation = AnimationType.SideAttack;
                         }
-                        
                     }
                 }
             }

@@ -55,9 +55,9 @@ namespace FightingGame
                 Animations[lastAnimation].Restart();
             }
         }
-        public void Draw(Vector2 position, bool isMovingLeft)
+        public void Draw(Vector2 position, bool isMovingLeft, Vector2 EnemyScale)
         {
-            Animations[lastAnimation].Draw(position, isMovingLeft);
+            Animations[lastAnimation].Draw(position, isMovingLeft, EnemyScale);
         }
     }
 }
