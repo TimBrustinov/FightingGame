@@ -53,12 +53,30 @@ namespace FightingGame
                     MovingUp = true;
                     direction.Y--;
                 }
-         
-
-
+                else
+                {
+                    MovingUp = false;
+                }
 
             }
-            Moving = direction != Vector2.Zero;
+            if (direction.Y < 0)
+            {
+                MovingUp = true;
+                Console.WriteLine("Moving up");
+                MovingDown = false;
+            }
+            else if (direction.Y > 0)
+            {
+                MovingDown = true;
+                Console.WriteLine("Moving Down");
+                MovingUp = false;
+            }
+            else
+            {
+                Moving = direction != Vector2.Zero;
+                MovingDown = false;
+                MovingUp = false;
+            }
         }
     }
 }

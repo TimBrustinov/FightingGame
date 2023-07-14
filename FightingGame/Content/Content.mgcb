@@ -37,7 +37,7 @@
 /processorParam:TextureFormat=Color
 /build:button_quit-game.png
 
-#begin Captain Falcon.gif
+#begin Skeleton.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,19 +47,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Captain Falcon.gif
-
-#begin GameScreenBackground2.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:GameScreenBackground2.jpg
+/build:Skeleton.png
 
 #begin StageTile.png
 /importer:TextureImporter
@@ -73,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:StageTile.png
 
-#begin zombieSprite.webp
+#begin StoneFloorTile.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -83,5 +71,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:zombieSprite.webp
+/build:StoneFloorTile.jpg
+
+#begin Swordsman.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Swordsman.png
 

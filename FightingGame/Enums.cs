@@ -31,34 +31,24 @@ namespace FightingGame
     [Flags] public enum AnimationType
     {
         None,
-        Jump,
         Run,
-        Down,
-        Fall,
+        RunUp,
+        RunDown,
         Dodge,
         Stand,
         Attack,
-        Special,
 
-        NeutralAttack,
-        DirectionalAttack,
-        DownAttack,
+        SideAttack,
         UpAttack,
-
-        NeutralSpecial = Stand | Special,
-        DirectionalSpecial = Run | Special,
-        DownSpecial = Down | Special,
-        UpSpecial = Jump | Special,
-
+        DownAttack,
     }
     public enum CharacterName
     {
-        CaptainFalcon,
-        Zombie,
+        Swordsman,
     }
     public enum EnemyName
     {
-        Zombie,
+        Skeleton,
     }
     public enum CharacterDirection
     {

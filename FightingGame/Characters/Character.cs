@@ -14,8 +14,10 @@ namespace FightingGame.Characters
     public abstract class Character : DrawableObjectBase
     {
         public int Health = 100;
+        public int speed;
         public int Velocity = defaultVelocity;
         public int fallingSpeed;
+        public Vector2 Direction;
 
         public bool IsActive = false;
         public bool IsGrounded = false;
@@ -30,23 +32,18 @@ namespace FightingGame.Characters
         public Character(CharacterName name, Texture2D texture) : base(texture, new Vector2(0,0), new Vector2(texture.Width, texture.Height), Color.White)
         {
             CharacterName = name;
-            Rectangle characterRectangle = ContentManager.Instance.CharacterTextures[name];
-            Position = new Vector2(500, 350 - characterRectangle.Height);
-
-            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height);
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.Animations[CharacterName])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, 0.17f);
             }
         }
-        protected abstract void NeutralAttack();
-        protected abstract void DirectionalAttack();
-        protected abstract void DownAttack();
+        protected abstract void SideAttack();
         protected abstract void UpAttack();
-        protected abstract void Jump();
+        protected abstract void DownAttack();
         public void Update(AnimationType animation, Vector2 direction) 
         {
+            Direction = direction;
             //bool canAnimationChange = CanAnimationChange(animation);
             if(savedAnimaton != AnimationType.None)
             {
@@ -57,70 +54,28 @@ namespace FightingGame.Characters
                 currentAnimation = animation;
             }
 
-            if (IsGrounded)
+            
+            if (currentAnimation == AnimationType.SideAttack)
             {
-                fallingSpeed = 0;
+                SideAttack();
             }
-
-            if(currentAnimation == AnimationType.Jump)
-            {
-                //savedAnimaton = AnimationType.Jump;
-                //JumpCount = 1;
-                //if (IsGrounded)
-                //{
-                //    InputManager.MovingUp = false;
-                //    animationManager.CurrentAnimation.IsAnimationDone = true;
-                //    Velocity = defaultVelocity;
-                //    savedAnimaton = AnimationType.None;
-                //    currentAnimation = AnimationType.Stand;
-                //    JumpCount = 0;
-                //}
-
-                //if (Velocity == -defaultVelocity - 1)
-                //{
-                //    Position += new Vector2(direction.X * 5, -1 * Velocity);
-                //}
-                //else if (currentAnimation == AnimationType.Jump)
-                //{
-                //    Position += new Vector2(direction.X * 5, -1 * Velocity--);
-                //}e
-                Jump() ;
-            }
-            else if (currentAnimation == AnimationType.NeutralAttack)
-            {
-                NeutralAttack();
-            }
-            else if(currentAnimation == AnimationType.DirectionalAttack)
-            {
-                DirectionalAttack();
-            }
-            else if(currentAnimation == AnimationType.UpAttack)
+            else if (currentAnimation == AnimationType.UpAttack)
             {
                 UpAttack();
+            }
+            else if(currentAnimation == AnimationType.DownAttack)
+            {
+                DownAttack();
             }
             else
             {
                 if (direction != Vector2.Zero)
                 {
-                    Position += Vector2.Normalize(InputManager.Direction) * 5;
+                    Position += Vector2.Normalize(InputManager.Direction) * speed;
                 }
                 else
                 {
                     currentAnimation = AnimationType.Stand;
-                }
-
-
-                if (!IsGrounded)
-                {
-                    if (fallingSpeed != 10)
-                    {
-                        Position += new Vector2(0, 1 * fallingSpeed++);
-                    }
-                    else
-                    {
-                        Position += new Vector2(0, 1 * fallingSpeed);
-                    }
-
                 }
             }
             animationManager.Update(currentAnimation);

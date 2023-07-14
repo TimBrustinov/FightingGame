@@ -15,6 +15,7 @@ namespace FightingGame.Enemies
     {
         public int Health = 10;
         public int fallingSpeed;
+        public float speed;
 
         public bool IsActive = false;
         public bool IsGrounded = false;
@@ -28,10 +29,6 @@ namespace FightingGame.Enemies
         public Enemy(EnemyName name, Texture2D texture) : base(texture, new Vector2(0, 0), new Vector2(texture.Width, texture.Height), Color.White) 
         {
             EnemyName = name;
-            Rectangle enemyDimentions = ContentManager.Instance.EnemyTextures[name];
-            Position = new Vector2(800, 350 - enemyDimentions.Height);
-
-            Dimentions = new Vector2(enemyDimentions.Width, enemyDimentions.Height);
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.EnemyAnimations[name])
             {
@@ -39,7 +36,7 @@ namespace FightingGame.Enemies
             }
         }
        
-        protected abstract void NeutralAttack();
+        protected abstract void SideAttack();
         public void Update(AnimationType animation, Vector2 direction)
         {
             if (direction.X > 0)
@@ -61,20 +58,17 @@ namespace FightingGame.Enemies
                 currentAnimation = animation;
             }
 
-            if (IsGrounded)
-            {
-                fallingSpeed = 0;
-            }
+           
 
-            if (currentAnimation == AnimationType.NeutralAttack)
+            if (currentAnimation == AnimationType.SideAttack)
             {
-                NeutralAttack();
+                SideAttack();
             }
             else
             {
                 if (direction != Vector2.Zero)
                 {
-                    Position = new Vector2(Position.X + (direction.X), Position.Y);
+                    Position += Vector2.Normalize(direction) * speed;
                 }
                 else
                 {
