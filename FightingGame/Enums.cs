@@ -26,6 +26,7 @@ namespace FightingGame
         QuitGame,
         GameScreenBackground,
         StageTile,
+        DungeonUIBackground
     }
    
     [Flags] public enum AnimationType
@@ -62,9 +63,5 @@ namespace FightingGame
         Top,
         Bottom,
         None,
-    }
-    public enum ObjectSprites
-    {
-        Props,
     }
 }

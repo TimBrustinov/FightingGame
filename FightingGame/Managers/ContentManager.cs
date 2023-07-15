@@ -14,6 +14,14 @@ namespace FightingGame
     public class ContentManager
     {
         public Texture2D Pixel;
+        public Texture2D Heart;
+        public Texture2D GrayHeart;
+
+        //Messing around
+        public Texture2D HeartOutline;
+        public Texture2D HeartBackground;
+        //Messing around
+
         public Dictionary<CharacterName, Rectangle> CharacterTextures = new Dictionary<CharacterName, Rectangle>();
         public Dictionary<CharacterName, Texture2D> CharacterSpriteSheets = new Dictionary<CharacterName, Texture2D>();
         public Dictionary<CharacterName, Dictionary<(AnimationType, bool), List<Rectangle>>> Animations = new Dictionary<CharacterName, Dictionary<(AnimationType, bool), List<Rectangle>>>();
@@ -33,6 +41,13 @@ namespace FightingGame
         public void LoadContent(Content content)
         {
             bool CanBeCanceled = true;
+            Heart = content.Load<Texture2D>("Heart");
+            GrayHeart = content.Load<Texture2D>("GrayHeart");
+
+            HeartOutline = content.Load<Texture2D>("HeartOutline");
+            HeartBackground = content.Load<Texture2D>("HeartBackground");
+
+
             #region Swordsman 
             CharacterSpriteSheets.Add(CharacterName.Swordsman, content.Load<Texture2D>("Swordsman"));
             CharacterTextures.Add(CharacterName.Swordsman, new Rectangle(17, 70, 15, 21));
@@ -61,6 +76,7 @@ namespace FightingGame
             Swordsman.Add((AnimationType.RunUp, CanBeCanceled), SwordsmanRunUp);
 
             List<Rectangle> SwordsmanRunDown = new List<Rectangle>();
+            
             SwordsmanRunDown.Add(new Rectangle(18, 164, 13, 23));
             SwordsmanRunDown.Add(new Rectangle(66, 165, 13, 22));
             SwordsmanRunDown.Add(new Rectangle(114, 166, 13, 21));
@@ -69,6 +85,7 @@ namespace FightingGame
             SwordsmanRunDown.Add(new Rectangle(258, 166, 13, 21));
             Swordsman.Add((AnimationType.RunDown, CanBeCanceled), SwordsmanRunDown);
 
+            
             List<Rectangle> SwordsmanSideAttack = new List<Rectangle>();
             SwordsmanSideAttack.Add(new Rectangle(19, 359, 16, 20));
             SwordsmanSideAttack.Add(new Rectangle(56, 358, 34, 23));
@@ -90,7 +107,9 @@ namespace FightingGame
             SwordsmanDownAttack.Add(new Rectangle(162, 312, 13, 19));
             Swordsman.Add((AnimationType.DownAttack, !CanBeCanceled), SwordsmanDownAttack);
 
+
             Animations.Add(CharacterName.Swordsman, Swordsman);
+
             #endregion
 
             #region Skeleton
@@ -136,6 +155,29 @@ namespace FightingGame
             EnemyAnimations.Add(EnemyName.Skeleton, Skeleton);
 
             #endregion
+
+
+        }
+        private List<Rectangle> GenerateFrameRectangles(Texture2D spriteSheet, Rectangle animationRowRectangle, int frameCount)
+        {
+            List<Rectangle> frameRectangles = new List<Rectangle>();
+
+            // Calculate the width and height of each frame
+            int frameWidth = animationRowRectangle.Width / frameCount;
+            int frameHeight = animationRowRectangle.Height;
+
+            // Generate rectangles for each frame in the row
+            for (int i = 0; i < frameCount; i++)
+            {
+                Rectangle frameRectangle = new Rectangle(
+                    animationRowRectangle.X + (i * frameWidth),
+                    animationRowRectangle.Y,
+                    frameWidth,
+                    frameHeight);
+
+                frameRectangles.Add(frameRectangle);
+            }
+            return frameRectangles;
         }
     }
 }

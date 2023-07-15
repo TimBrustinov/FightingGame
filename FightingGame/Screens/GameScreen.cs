@@ -13,19 +13,17 @@ namespace FightingGame
 {
     public class GameScreen : Screen<Screenum>
     {
-        private const int hitBoxMargin = 10;
-       
-        private const int characterHitBoxCompensation = 2;
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
-        private int updateTicks = 0;
+
+        private int heartOffsets = 10;
+        private Vector2 healthStartingPosition = new Vector2(20, 25);
+
         Character Swordsman;
-        Enemies.Enemy Slime;
         Enemies.Enemy Skeleton;
 
         List<Keys> forbiddenDirections = new List<Keys>();
-        private Keys savedKey;
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
             [Keys.W] = AnimationType.RunUp,
@@ -35,31 +33,26 @@ namespace FightingGame
             [Keys.K] = AnimationType.Attack,
         };
         AnimationType currentAnimation = AnimationType.Stand;
-        AnimationType prevAnimation;
 
         private Dictionary<CharacterName, Character> characterPool = new Dictionary<CharacterName, Character>();
+
         #region DrawableObjects
         DrawableObject GameScreenBackground;
-        DrawableObject StageTile;
-        DrawableObject StageTile2;
 
         List<DrawableObject> tiles = new List<DrawableObject>();
         #endregion
+
         public GameScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
-            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920, 1080), Color.White);
-            StageTile = new DrawableObject(textures[Texture.StageTile], new Vector2(GameScreenBackground.Dimentions.X / 2 - 500 / 2, GameScreenBackground.Dimentions.Y / 2), new Vector2(500, 80), Color.White);
-            StageTile2 = new DrawableObject(textures[Texture.StageTile], new Vector2(GameScreenBackground.Dimentions.X / 2 - 150 / 2, GameScreenBackground.Dimentions.Y - 500), new Vector2(150, 20), Color.White);
-            tiles.Add(StageTile);
-            tiles.Add(StageTile2);
+            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374, 860), Color.White);
 
             Swordsman = new Swordsman(CharacterName.Swordsman, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Swordsman]);
             Skeleton = new Enemies.Skeleton(EnemyName.Skeleton, ContentManager.Instance.EnemySpriteSheets[EnemyName.Skeleton]);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1374;
+            graphics.PreferredBackBufferHeight = 960;
             graphics.ApplyChanges();
         }
         public override void Initialize()
@@ -70,38 +63,42 @@ namespace FightingGame
         {
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
             // Hitbox Detection, if side is hit, prevent keys from being pressed. 
-            CheckPlayerHitbox(Swordsman);
-            CheckEnemyHitBox(Skeleton);
-
+            //CheckPlayerHitbox(Swordsman);
+            //CheckEnemyHitBox(Skeleton);
+            MouseState mouseState = Mouse.GetState();
+            if (Swordsman.NumOfHits != 0 && Swordsman.WeaponHitBox.Intersects(Skeleton.HitBox))
+            {
+                Console.WriteLine(Swordsman.NumOfHits);
+                Skeleton.Health--;
+                Swordsman.NumOfHits--;
+                
+            }
             //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
             InputManager.Update(forbiddenDirections);
-            if(keysPressed.Length == 0)
+            if (keysPressed.Length == 0)
             {
-               currentAnimation = AnimationType.Stand;
+                currentAnimation = AnimationType.Stand;
             }
             else
-            {
+            {    
                 foreach (Keys key in keysPressed)
                 {
-                    if (KeysToAnimation.ContainsKey(key) && forbiddenDirections.Contains(key) == false)
+                    if(KeysToAnimation.ContainsKey(key))
                     {
                         currentAnimation = KeysToAnimation[key];
-                       
                         if (InputManager.MovingUp && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.UpAttack;
-                            break;
                         }
                         if (InputManager.MovingDown && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.DownAttack;
-                            break;
                         }
                         if (InputManager.Moving && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.SideAttack;
                         }
-                        if(InputManager.Moving == false && currentAnimation == AnimationType.Attack)
+                        if (InputManager.Moving == false && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.SideAttack;
                         }
@@ -109,6 +106,7 @@ namespace FightingGame
                 }
             }
 
+           
 
             if (CalculateDistance(Swordsman.Position, Skeleton.Position) <= 50f)
             {
@@ -125,18 +123,35 @@ namespace FightingGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             GameScreenBackground.Draw(spriteBatch);
-            StageTile.Draw(spriteBatch);
-            StageTile2.Draw(spriteBatch);
             Swordsman.Draw();
             Skeleton.Draw();
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(0, 350, 1500, 2), Color.Red);
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(0, 350 + 80, 1500, 2), Color.Red);
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, StageTile.HitBox, Color.Blue);
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, CaptainFalcon.HitBox, Color.Green);
-
+            DrawHearts(spriteBatch);
         }
-        
-        public SideHit SideIntersected(Rectangle objectA, Rectangle objectB,  out int offset)
+        private void DrawHearts(SpriteBatch spriteBatch)
+        {
+            int heartX;
+            for (int i = 0; i < Swordsman.RemainingHealth; i++)
+            {
+                heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
+                //spriteBatch.Draw(ContentManager.Instance.Heart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+
+                //Drawing hearts with outline and background
+                spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+                spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Red);
+            }
+            for (int i = Swordsman.RemainingHealth; i < Swordsman.TotalHealth; i++)
+            {
+                heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
+                //spriteBatch.Draw(ContentManager.Instance.GrayHeart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+
+                //Drawing hearts with outline and background
+                spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+                spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Gray);
+            }
+
+            
+        }
+        public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)
         {
             int left = Math.Abs(objectA.Left - objectB.Right);
             int right = Math.Abs(objectA.Right - objectB.Left);
@@ -144,17 +159,17 @@ namespace FightingGame
             int top = Math.Abs(objectA.Top - objectB.Bottom);
 
             int minVal = Min(left, right, top, bottom);
-            if(left == minVal)
+            if (left == minVal)
             {
                 offset = left;
                 return SideHit.Left;
             }
-            else if(right == minVal)
+            else if (right == minVal)
             {
                 offset = right;
                 return SideHit.Right;
             }
-            else if(top == minVal)
+            else if (top == minVal)
             {
                 offset = top;
                 return SideHit.Top;
@@ -164,7 +179,6 @@ namespace FightingGame
                 offset = bottom;
                 return SideHit.Bottom;
             }
-
         }
         private int Min(int a, int b, int c, int d)
         {
@@ -172,14 +186,13 @@ namespace FightingGame
             int tempMin = a;
             for (int i = 0; i < array.Length; i++)
             {
-                if(array[i] < tempMin)
+                if (array[i] < tempMin)
                 {
                     tempMin = array[i];
                 }
             }
             return tempMin;
         }
-
         private void CheckPlayerHitbox(Character character)
         {
             bool isColliding = false;
@@ -193,17 +206,12 @@ namespace FightingGame
                     {
                         forbiddenDirections.Add(Keys.S);
                         character.Position = new Vector2(character.Position.X, character.Position.Y - offset + 1);
-                        character.IsGrounded = true;
                         isColliding = true;
                     }
                     else if (side == SideHit.Bottom)
                     {
                         forbiddenDirections.Add(Keys.W);
                         character.Position = new Vector2(character.Position.X, character.Position.Y + offset);
-                        if (character.Velocity > 0)
-                        {
-                            character.Velocity = 0;
-                        }
                     }
                     else if (side == SideHit.Right)
                     {
@@ -223,7 +231,7 @@ namespace FightingGame
             }
             if (!isColliding)
             {
-                character.IsGrounded = false;
+
             }
         }
         private void CheckEnemyHitBox(Enemies.Enemy enemy)
@@ -238,13 +246,12 @@ namespace FightingGame
                     if (side == SideHit.Top)
                     {
                         enemy.Position = new Vector2(enemy.Position.X, enemy.Position.Y - offset + 1);
-                        enemy.IsGrounded = true;
                         isColliding = true;
                     }
                     else if (side == SideHit.Bottom)
                     {
                         enemy.Position = new Vector2(enemy.Position.X, enemy.Position.Y + offset);
-                      
+
                     }
                     else if (side == SideHit.Right)
                     {
@@ -262,7 +269,7 @@ namespace FightingGame
             }
             if (!isColliding)
             {
-                enemy.IsGrounded = false;
+
             }
         }
         private float CalculateDistance(Vector2 playerPosition, Vector2 enemyPosition)

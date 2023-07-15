@@ -17,7 +17,7 @@ namespace FightingGame
         public bool IsAnimationDone;
         public bool CanBeCanceled = true;
 
-        private int animationFramesIndex = 0;
+        public int animationFramesIndex = 0;
         private float frameTime;
         private bool active = true;
         private float frameTimer = 0;
