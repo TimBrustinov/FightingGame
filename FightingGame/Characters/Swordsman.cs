@@ -12,80 +12,111 @@ namespace FightingGame.Characters
 {
     public class Swordsman : Character
     {
-        private Vector2 swordHitBoxDimentions = new Vector2(15, 22);
-        private int verticalOffset;
+        private Vector2 swordHitBoxDimentions = Vector2.Zero;
+        private int weaponVerticalOffset;
+        private int weaponHorizontalOffset;
+        private int numUpdates = 1;
 
         public Swordsman(CharacterName name, Texture2D texture) : base(name, texture)
         {
             Rectangle characterRectangle = ContentManager.Instance.CharacterTextures[name];
+            CharacterScale = 1.85f;
+            OriginPosition = new Vector2(500, 350);
 
-            Position = new Vector2(500, 350 - characterRectangle.Height);
+            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * CharacterScale;
 
-            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height);
-            CharacterScale = new Vector2(1.85f, 1.85f);
-
-            verticalOffset = (int)Dimentions.Y - (int)swordHitBoxDimentions.Y;
-            swordHitBoxDimentions *= CharacterScale;
-
-            WeaponHitBox = new Rectangle((int)Position.X + (int)Dimentions.X, (int)Position.Y + verticalOffset, (int)swordHitBoxDimentions.X , (int)swordHitBoxDimentions.Y);
-            
             speed = 3;
-            //TotalHealth = 8;
-           // RemainingHealth = TotalHealth;
+            TotalHealth = 8;
+            RemainingHealth = TotalHealth;
         }
 
+        
         protected override void DownAttack()
         {
+            if (numUpdates == 1)
+            {
+                setWeaponHitbox(11, 0, new Vector2(19, 15));
+                numUpdates--;
+            }
+
             savedAnimaton = AnimationType.DownAttack;
             if (Direction != Vector2.Zero)
             {
-                Position += Vector2.Normalize(InputManager.Direction) * speed;
+                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
                 NumOfHits = 1;
+                numUpdates = 1;
             }
         }
 
         protected override void SideAttack()
         {
+            if(numUpdates == 1)
+            {
+                setWeaponHitbox(10, 0, new Vector2(34, 13));
+                numUpdates--;
+            }
+
             savedAnimaton = AnimationType.SideAttack;
             if (Direction != Vector2.Zero)
             {
-                Position += Vector2.Normalize(InputManager.Direction) * speed;
+                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
                 NumOfHits = 1;
+                numUpdates = 1;
             }
         }
 
         protected override void UpAttack()
         {
+            if (numUpdates == 1)
+            {
+                setWeaponHitbox(0, 0, new Vector2(22, 20));
+                numUpdates--;
+            }
+
             savedAnimaton = AnimationType.UpAttack;
             if (Direction != Vector2.Zero)
             {
-                Position += Vector2.Normalize(InputManager.Direction) * speed;
+                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
                 NumOfHits = 1;
+                numUpdates = 1;
             }
         }
 
         protected override void UpdateWeapon()
         {
-            if (InputManager.IsMovingLeft)
+            if(savedAnimaton == AnimationType.SideAttack || savedAnimaton == AnimationType.DownAttack || savedAnimaton == AnimationType.UpAttack)
             {
-                WeaponHitBox = new Rectangle((int)Position.X, (int)Position.Y + verticalOffset, (int)swordHitBoxDimentions.X, (int)swordHitBoxDimentions.Y);
-            }
-            else
-            {
-                WeaponHitBox = new Rectangle((int)Position.X + (int)swordHitBoxDimentions.X + (int)swordHitBoxDimentions.X / 4, (int)Position.Y + verticalOffset, (int)swordHitBoxDimentions.X, (int)swordHitBoxDimentions.Y);
+                if (InputManager.IsMovingLeft)
+                {
+                    WeaponHitBox.X = (int)(Position.X - weaponHorizontalOffset);
+                }
+                else
+                {
+                    WeaponHitBox.X = (int)(Position.X + weaponHorizontalOffset);
+                }
+                WeaponHitBox.Y = (int)(Position.Y + weaponVerticalOffset * CharacterScale);
             }
         }
+
+        private void setWeaponHitbox(int verticalOffset, int horizontalOffset, Vector2 dimenions)
+        {
+            weaponVerticalOffset = verticalOffset;
+            weaponHorizontalOffset = horizontalOffset;
+            swordHitBoxDimentions = dimenions * CharacterScale;
+            WeaponHitBox = new Rectangle((int)Position.X + weaponHorizontalOffset, (int)Position.Y + weaponVerticalOffset, (int)swordHitBoxDimentions.X, (int)swordHitBoxDimentions.Y);
+        }
+
     }
 }

@@ -71,14 +71,9 @@ namespace FightingGame
         }
         public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale)
         {
-            if(isMovingLeft)
-            {
-                Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, Vector2.Zero, scale, SpriteEffects.FlipHorizontally, 1);
-            }
-            else
-            {
-                Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
-            }
+            SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Vector2 origin = new Vector2(PreviousFrame.Width / 2, PreviousFrame.Height / 2);
+            Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, origin, scale, spriteEffect, 1);
         }
     }
 }

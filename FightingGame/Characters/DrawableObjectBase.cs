@@ -36,6 +36,7 @@ namespace FightingGame
                 return new Rectangle((int)Position.X, (int)Position.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
         }
+
         public ClickResult GetMouseAction(MouseState ms)
         {
             if (HitBox.Contains(ms.Position))

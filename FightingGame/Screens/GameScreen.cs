@@ -89,10 +89,12 @@ namespace FightingGame
                         if (InputManager.MovingUp && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.UpAttack;
+                            break;
                         }
                         if (InputManager.MovingDown && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.DownAttack;
+                            break;
                         }
                         if (InputManager.Moving && currentAnimation == AnimationType.Attack)
                         {
@@ -108,13 +110,13 @@ namespace FightingGame
 
            
 
-            if (CalculateDistance(Swordsman.Position, Skeleton.Position) <= 50f)
+            if (CalculateDistance(Swordsman.OriginPosition, Skeleton.Position) <= 50f)
             {
-                Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
+                Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.OriginPosition - Skeleton.Position));
             }
             else
             {
-                Skeleton.Update(AnimationType.Run, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
+                Skeleton.Update(AnimationType.Run, Vector2.Normalize(Swordsman.OriginPosition - Skeleton.Position));
             }
 
             Swordsman.Update(currentAnimation, InputManager.Direction);
@@ -124,7 +126,7 @@ namespace FightingGame
         {
             GameScreenBackground.Draw(spriteBatch);
             Swordsman.Draw();
-            Skeleton.Draw();
+            //Skeleton.Draw();
             DrawHearts(spriteBatch);
         }
         private void DrawHearts(SpriteBatch spriteBatch)
@@ -205,22 +207,22 @@ namespace FightingGame
                     if (side == SideHit.Top)
                     {
                         forbiddenDirections.Add(Keys.S);
-                        character.Position = new Vector2(character.Position.X, character.Position.Y - offset + 1);
+                        character.OriginPosition = new Vector2(character.OriginPosition.X, character.OriginPosition.Y - offset + 1);
                         isColliding = true;
                     }
                     else if (side == SideHit.Bottom)
                     {
                         forbiddenDirections.Add(Keys.W);
-                        character.Position = new Vector2(character.Position.X, character.Position.Y + offset);
+                        character.OriginPosition = new Vector2(character.OriginPosition.X, character.OriginPosition.Y + offset);
                     }
                     else if (side == SideHit.Right)
                     {
-                        character.Position = new Vector2(character.Position.X + offset, character.Position.Y);
+                        character.OriginPosition = new Vector2(character.OriginPosition.X + offset, character.OriginPosition.Y);
                         forbiddenDirections.Add(Keys.D);
                     }
                     else if (side == SideHit.Left)
                     {
-                        character.Position = new Vector2(character.Position.X - offset, character.Position.Y);
+                        character.OriginPosition = new Vector2(character.OriginPosition.X - offset, character.OriginPosition.Y);
                         forbiddenDirections.Add(Keys.A);
                     }
                 }
