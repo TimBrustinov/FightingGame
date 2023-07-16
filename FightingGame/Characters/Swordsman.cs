@@ -21,7 +21,7 @@ namespace FightingGame.Characters
         {
             Rectangle characterRectangle = ContentManager.Instance.CharacterTextures[name];
             CharacterScale = 1.85f;
-            OriginPosition = new Vector2(500, 350);
+            Position = new Vector2(500, 350);
 
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * CharacterScale;
 
@@ -42,7 +42,7 @@ namespace FightingGame.Characters
             savedAnimaton = AnimationType.DownAttack;
             if (Direction != Vector2.Zero)
             {
-                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
+                Position += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
@@ -63,7 +63,7 @@ namespace FightingGame.Characters
             savedAnimaton = AnimationType.SideAttack;
             if (Direction != Vector2.Zero)
             {
-                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
+                Position += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
@@ -84,7 +84,7 @@ namespace FightingGame.Characters
             savedAnimaton = AnimationType.UpAttack;
             if (Direction != Vector2.Zero)
             {
-                OriginPosition += Vector2.Normalize(InputManager.Direction) * speed;
+                Position += Vector2.Normalize(InputManager.Direction) * speed;
             }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
@@ -100,13 +100,13 @@ namespace FightingGame.Characters
             {
                 if (InputManager.IsMovingLeft)
                 {
-                    WeaponHitBox.X = (int)(Position.X - weaponHorizontalOffset);
+                    WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
                 }
                 else
                 {
-                    WeaponHitBox.X = (int)(Position.X + weaponHorizontalOffset);
+                    WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
                 }
-                WeaponHitBox.Y = (int)(Position.Y + weaponVerticalOffset * CharacterScale);
+                WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * CharacterScale);
             }
         }
 
@@ -115,7 +115,7 @@ namespace FightingGame.Characters
             weaponVerticalOffset = verticalOffset;
             weaponHorizontalOffset = horizontalOffset;
             swordHitBoxDimentions = dimenions * CharacterScale;
-            WeaponHitBox = new Rectangle((int)Position.X + weaponHorizontalOffset, (int)Position.Y + weaponVerticalOffset, (int)swordHitBoxDimentions.X, (int)swordHitBoxDimentions.Y);
+            WeaponHitBox = new Rectangle((int)TopLeft.X + weaponHorizontalOffset, (int)TopLeft.Y + weaponVerticalOffset, (int)swordHitBoxDimentions.X, (int)swordHitBoxDimentions.Y);
         }
 
     }

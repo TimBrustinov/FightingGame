@@ -110,13 +110,13 @@ namespace FightingGame
 
            
 
-            if (CalculateDistance(Swordsman.OriginPosition, Skeleton.Position) <= 50f)
+            if (CalculateDistance(Swordsman.Position, Skeleton.Position) <= 50f)
             {
-                Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.OriginPosition - Skeleton.Position));
+                Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
             }
             else
             {
-                Skeleton.Update(AnimationType.Run, Vector2.Normalize(Swordsman.OriginPosition - Skeleton.Position));
+                Skeleton.Update(AnimationType.Run, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
             }
 
             Swordsman.Update(currentAnimation, InputManager.Direction);
@@ -207,22 +207,22 @@ namespace FightingGame
                     if (side == SideHit.Top)
                     {
                         forbiddenDirections.Add(Keys.S);
-                        character.OriginPosition = new Vector2(character.OriginPosition.X, character.OriginPosition.Y - offset + 1);
+                        character.Position = new Vector2(character.Position.X, character.Position.Y - offset + 1);
                         isColliding = true;
                     }
                     else if (side == SideHit.Bottom)
                     {
                         forbiddenDirections.Add(Keys.W);
-                        character.OriginPosition = new Vector2(character.OriginPosition.X, character.OriginPosition.Y + offset);
+                        character.Position = new Vector2(character.Position.X, character.Position.Y + offset);
                     }
                     else if (side == SideHit.Right)
                     {
-                        character.OriginPosition = new Vector2(character.OriginPosition.X + offset, character.OriginPosition.Y);
+                        character.Position = new Vector2(character.Position.X + offset, character.Position.Y);
                         forbiddenDirections.Add(Keys.D);
                     }
                     else if (side == SideHit.Left)
                     {
-                        character.OriginPosition = new Vector2(character.OriginPosition.X - offset, character.OriginPosition.Y);
+                        character.Position = new Vector2(character.Position.X - offset, character.Position.Y);
                         forbiddenDirections.Add(Keys.A);
                     }
                 }

@@ -29,7 +29,7 @@ namespace FightingGame
         {
             spriteBatch.Draw(Texture, Position, sourceRectangle, Color);
         }
-        public Rectangle HitBox
+        public virtual Rectangle HitBox
         {
             get
             {

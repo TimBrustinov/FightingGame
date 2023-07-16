@@ -86,10 +86,10 @@ namespace FightingGame.Enemies
             float healthPercentage = (float)Health / 10;
             int foregroundWidth = (int)(healthPercentage * 20);
           
-           // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Pink);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Pink);
             if (savedAnimaton == AnimationType.SideAttack)
             {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, EnemyWeaponHitbox, Color.Blue);
+                //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, EnemyWeaponHitbox, Color.Blue);
             }
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X, (int)Position.Y - 10, foregroundWidth, 3), Color.Green);
         }
