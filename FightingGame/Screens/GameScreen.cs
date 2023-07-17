@@ -62,16 +62,13 @@ namespace FightingGame
         public override Screenum Update(MouseState ms)
         {
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
-            // Hitbox Detection, if side is hit, prevent keys from being pressed. 
-            //CheckPlayerHitbox(Swordsman);
-            //CheckEnemyHitBox(Skeleton);
             MouseState mouseState = Mouse.GetState();
             if (Swordsman.NumOfHits != 0 && Swordsman.WeaponHitBox.Intersects(Skeleton.HitBox))
             {
-                Console.WriteLine(Swordsman.NumOfHits);
+                //Console.WriteLine(Swordsman.NumOfHits);
                 Skeleton.Health--;
                 Swordsman.NumOfHits--;
-                
+
             }
             //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
             InputManager.Update(forbiddenDirections);
@@ -108,8 +105,6 @@ namespace FightingGame
                 }
             }
 
-           
-
             if (CalculateDistance(Swordsman.Position, Skeleton.Position) <= 50f)
             {
                 Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
@@ -126,7 +121,7 @@ namespace FightingGame
         {
             GameScreenBackground.Draw(spriteBatch);
             Swordsman.Draw();
-            //Skeleton.Draw();
+            Skeleton.Draw();
             DrawHearts(spriteBatch);
         }
         private void DrawHearts(SpriteBatch spriteBatch)

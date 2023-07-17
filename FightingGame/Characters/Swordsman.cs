@@ -30,14 +30,11 @@ namespace FightingGame.Characters
             RemainingHealth = TotalHealth;
         }
 
-        
+
         protected override void DownAttack()
         {
-            if (numUpdates == 1)
-            {
-                setWeaponHitbox(11, 0, new Vector2(19, 15));
-                numUpdates--;
-            }
+            (int, int) offsets = currFrame.GetOffsets();
+            setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
 
             savedAnimaton = AnimationType.DownAttack;
             if (Direction != Vector2.Zero)
@@ -47,6 +44,7 @@ namespace FightingGame.Characters
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
+                currentAnimation = AnimationType.None;
                 NumOfHits = 1;
                 numUpdates = 1;
             }
@@ -54,11 +52,8 @@ namespace FightingGame.Characters
 
         protected override void SideAttack()
         {
-            if(numUpdates == 1)
-            {
-                setWeaponHitbox(10, 0, new Vector2(34, 13));
-                numUpdates--;
-            }
+            (int, int) offsets = currFrame.GetOffsets();
+            setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
 
             savedAnimaton = AnimationType.SideAttack;
             if (Direction != Vector2.Zero)
@@ -68,6 +63,7 @@ namespace FightingGame.Characters
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
+                currentAnimation = AnimationType.None;
                 NumOfHits = 1;
                 numUpdates = 1;
             }
@@ -75,11 +71,8 @@ namespace FightingGame.Characters
 
         protected override void UpAttack()
         {
-            if (numUpdates == 1)
-            {
-                setWeaponHitbox(0, 0, new Vector2(22, 20));
-                numUpdates--;
-            }
+            (int, int) offsets = currFrame.GetOffsets();
+            setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
 
             savedAnimaton = AnimationType.UpAttack;
             if (Direction != Vector2.Zero)
@@ -89,6 +82,7 @@ namespace FightingGame.Characters
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
+                currentAnimation = AnimationType.None;
                 NumOfHits = 1;
                 numUpdates = 1;
             }
@@ -96,7 +90,7 @@ namespace FightingGame.Characters
 
         protected override void UpdateWeapon()
         {
-            if(savedAnimaton == AnimationType.SideAttack || savedAnimaton == AnimationType.DownAttack || savedAnimaton == AnimationType.UpAttack)
+            if (savedAnimaton == AnimationType.SideAttack || savedAnimaton == AnimationType.DownAttack || savedAnimaton == AnimationType.UpAttack)
             {
                 if (InputManager.IsMovingLeft)
                 {
@@ -110,7 +104,7 @@ namespace FightingGame.Characters
             }
         }
 
-        private void setWeaponHitbox(int verticalOffset, int horizontalOffset, Vector2 dimenions)
+        private void setWeaponHitbox(int horizontalOffset, int verticalOffset, Vector2 dimenions)
         {
             weaponVerticalOffset = verticalOffset;
             weaponHorizontalOffset = horizontalOffset;

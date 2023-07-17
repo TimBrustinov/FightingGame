@@ -31,6 +31,7 @@ namespace FightingGame.Characters
         public Vector2 Direction;
         
         public AnimationManager animationManager;
+        public FrameHelper currFrame;
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
@@ -91,38 +92,20 @@ namespace FightingGame.Characters
         {
             if (animationManager.CurrentAnimation != null)
             {
-                Rectangle frame = animationManager.CurrentAnimation.PreviousFrame;
-                Dimentions.X = frame.Width * CharacterScale;
-                Dimentions.Y = frame.Height * CharacterScale;
+                currFrame = animationManager.CurrentAnimation.PreviousFrame;
+                Dimentions.X = currFrame.Frame.Width * CharacterScale;
+                Dimentions.Y = currFrame.Frame.Height * CharacterScale;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
         }
         public void Draw()
         {
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             if (savedAnimaton == AnimationType.SideAttack || savedAnimaton == AnimationType.DownAttack || savedAnimaton == AnimationType.UpAttack)
             {
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Blue);
             }
             animationManager.Draw(Position, InputManager.IsMovingLeft, new Vector2(CharacterScale, CharacterScale));
-            
-
-        }
-
-        public bool CanAnimationChange(AnimationType animation)
-        {
-            if (animationManager.CurrentAnimation != null)
-            {
-                if(animationManager.CurrentAnimation.CanBeCanceled)
-                {
-                    return true;
-                } 
-                else if(animationManager.CurrentAnimation.CanBeCanceled == false && animationManager.CurrentAnimation.IsAnimationDone)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

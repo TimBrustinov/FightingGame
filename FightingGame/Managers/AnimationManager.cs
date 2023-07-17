@@ -17,7 +17,7 @@ namespace FightingGame
         public bool IsAnimationDone;
 
         public AnimationType lastAnimation;
-        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<Rectangle> sourceRectangles, float timePerFrame)
+        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
         {
             if(Animations.ContainsKey(animation))
             {
@@ -46,8 +46,8 @@ namespace FightingGame
                 // always starts the animation and updates
                 Animations[lastAnimation].Start();
                 Animations[lastAnimation].Update();
-                CurrentFrame = Animations[lastAnimation].CurrerntFrame;
-                PreviousFrame = Animations[lastAnimation].PreviousFrame;
+                CurrentFrame = Animations[lastAnimation].CurrerntFrame.Frame;
+                PreviousFrame = Animations[lastAnimation].PreviousFrame.Frame;
             }
             else
             {

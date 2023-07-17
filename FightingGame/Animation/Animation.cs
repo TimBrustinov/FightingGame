@@ -10,10 +10,10 @@ namespace FightingGame
 {
     public class Animation
     {
-        public List<Rectangle> AnimationFrames;
+        public List<FrameHelper> AnimationFrames;
         public Texture2D Texture;
-        public Rectangle PreviousFrame;
-        public Rectangle CurrerntFrame => AnimationFrames[animationFramesIndex];
+        public FrameHelper PreviousFrame;
+        public FrameHelper CurrerntFrame => AnimationFrames[animationFramesIndex];
         public bool IsAnimationDone;
         public bool CanBeCanceled = true;
 
@@ -22,11 +22,11 @@ namespace FightingGame
         private bool active = true;
         private float frameTimer = 0;
 
-        public Animation(Texture2D texture, bool canBeCanceled, float frametime, List<Rectangle> sourceRectangles)
+        public Animation(Texture2D texture, bool canBeCanceled, float frametime, List<FrameHelper> sourceRectangles)
         {
             Texture = texture;
             CanBeCanceled = canBeCanceled;
-            AnimationFrames = new List<Rectangle>();
+            AnimationFrames = new List<FrameHelper>();
             frameTime = frametime;
             foreach (var frame in sourceRectangles)
             {
@@ -72,8 +72,7 @@ namespace FightingGame
         public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale)
         {
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Vector2 origin = new Vector2(PreviousFrame.Width / 2, PreviousFrame.Height / 2);
-            Globals.SpriteBatch.Draw(Texture, position, PreviousFrame, Color.White, 0, origin, scale, spriteEffect, 1);
+            Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.Frame, Color.White, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
         }
     }
 }

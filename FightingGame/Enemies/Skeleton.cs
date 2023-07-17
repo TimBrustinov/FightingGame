@@ -5,64 +5,56 @@ namespace FightingGame.Enemies
 {
     public class Skeleton : Enemy
     {
-        private Vector2 maceHitboxDimentions = new Vector2(40, 30);
-        private int verticalOffset;
-        private int horizontalOffset;
+        private Vector2 maceHitboxDimentions = Vector2.Zero;
+        private int weaponVerticalOffset;
+        private int weaponHorizontalOffset;
+        private int numUpdates = 1;
 
         public Skeleton(EnemyName name, Texture2D texture) : base(name, texture)
         {
             Rectangle enemyRectangle = ContentManager.Instance.EnemyTextures[name];
+            EnemyScale = 1.3f;
+            Position = new Vector2(1000, 350);
 
-            Position = new Vector2(1000, 350 - enemyRectangle.Height);
-
-            Dimentions = new Vector2(enemyRectangle.Width, enemyRectangle.Height);
-            EnemyScale = new Vector2(1.3f, 1.3f);
-
-            maceHitboxDimentions *= EnemyScale;
-
-            verticalOffset = (int)maceHitboxDimentions.Y - (int)Dimentions.Y;
-            horizontalOffset = (int)maceHitboxDimentions.X - (int)Dimentions.X;
-
-            EnemyWeaponHitbox = new Rectangle(281 * (int)EnemyScale.X, 6 * (int)EnemyScale.X, 51 * (int)EnemyScale.X, 28 * (int)EnemyScale.X);
+            Dimentions = new Vector2(enemyRectangle.Width, enemyRectangle.Height) * EnemyScale;
 
             Health = 30;
             speed = 0.5f;
         }
-        protected override void UpdateHitbox()
-        {
-            if(animationManager.CurrentAnimation != null)
-            {
-
-                Rectangle frame = animationManager.CurrentAnimation.CurrerntFrame;
-                Dimentions = new Vector2((int)(frame.Width * EnemyScale.X), (int)(frame.Height * EnemyScale.Y));
-            }
-           
-            verticalOffset = (int)maceHitboxDimentions.Y - (int)Dimentions.Y;
-            horizontalOffset = (int)maceHitboxDimentions.X - (int)Dimentions.X;
-        }
 
         protected override void SideAttack()
         {
+            (int, int) offsets = currFrame.GetOffsets();
+            setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
+            
             savedAnimaton = AnimationType.SideAttack;
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
+                currentAnimation = AnimationType.None;
+
             }
         }
 
-        protected override void WeaponUpdate()
+        protected override void UpdateWeapon()
         {
             if(isMovingLeft)
             {
-                EnemyWeaponHitbox.X = (int)(Position.X - horizontalOffset);
+                WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
             }
             else
             {
-                EnemyWeaponHitbox.X = (int)(Position.X + horizontalOffset);
+                WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
             }
+            WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * EnemyScale);
+        }
 
-            EnemyWeaponHitbox.Y = (int)(Position.Y - verticalOffset);
-
+        private void setWeaponHitbox(int verticalOffset, int horizontalOffset, Vector2 dimenions)
+        {
+            weaponVerticalOffset = verticalOffset;
+            weaponHorizontalOffset = horizontalOffset;
+            maceHitboxDimentions = dimenions * EnemyScale;
+            WeaponHitBox = new Rectangle((int)TopLeft.X + weaponHorizontalOffset, (int)TopLeft.Y + weaponVerticalOffset, (int)maceHitboxDimentions.X, (int)maceHitboxDimentions.Y);
         }
     }
 }

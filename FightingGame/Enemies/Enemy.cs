@@ -11,23 +11,31 @@ using System.Threading.Tasks;
 
 namespace FightingGame.Enemies
 {
-    public abstract class Enemy : DrawableObjectBase
+    public abstract class Enemy
     {
-        public Rectangle EnemyWeaponHitbox;
         public int Health;
-        public int fallingSpeed;
         public float speed;
-        public Vector2 EnemyScale;
+        public float EnemyScale;
+
 
         public bool IsActive = false;
         public bool isMovingLeft;
         public EnemyName EnemyName;
 
+        public Rectangle WeaponHitBox;
+        public Rectangle HitBox;
+        public Vector2 Position;
+        public Vector2 TopLeft => Position - Dimentions / 2;
+        public Vector2 TopRight => Position + Dimentions / 2;
+        public Vector2 Dimentions;
+        public Vector2 Direction;
+
         public AnimationManager animationManager;
+        public FrameHelper currFrame;
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
-        public Enemy(EnemyName name, Texture2D texture) : base(texture, new Vector2(0, 0), new Vector2(texture.Width, texture.Height), Color.White) 
+        public Enemy(EnemyName name, Texture2D texture)
         {
             EnemyName = name;
             animationManager = new AnimationManager();
@@ -36,9 +44,8 @@ namespace FightingGame.Enemies
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, 0.8f);
             }
         }
-        protected abstract void UpdateHitbox();
         protected abstract void SideAttack();
-        protected abstract void WeaponUpdate();
+        protected abstract void UpdateWeapon();
         public void Update(AnimationType animation, Vector2 direction)
         {
             if (direction.X > 0)
@@ -75,25 +82,34 @@ namespace FightingGame.Enemies
                     currentAnimation = AnimationType.Stand;
                 }
             }
-            WeaponUpdate();
             UpdateHitbox();
-
+            UpdateWeapon();
             animationManager.Update(currentAnimation);
         }
         public void Draw()
         {
-            animationManager.Draw(Position, isMovingLeft, EnemyScale);
+            if (savedAnimaton == AnimationType.SideAttack)
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Blue);
+            }
+            animationManager.Draw(Position, isMovingLeft, new Vector2(EnemyScale, EnemyScale));
             float healthPercentage = (float)Health / 10;
             int foregroundWidth = (int)(healthPercentage * 20);
           
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Pink);
-            if (savedAnimaton == AnimationType.SideAttack)
-            {
-                //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, EnemyWeaponHitbox, Color.Blue);
-            }
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X, (int)Position.Y - 10, foregroundWidth, 3), Color.Green);
+            
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), Color.Green);
         }
+        public void UpdateHitbox()
+        {
+            if (animationManager.CurrentAnimation != null)
+            {
+                currFrame = animationManager.CurrentAnimation.PreviousFrame;
+                Dimentions.X = currFrame.Frame.Width * EnemyScale;
+                Dimentions.Y = currFrame.Frame.Height * EnemyScale;
+                HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
+            }
 
+        }
         public bool CanAnimationChange(AnimationType animation)
         {
             if (animationManager.CurrentAnimation != null)
@@ -109,5 +125,6 @@ namespace FightingGame.Enemies
             }
             return false;
         }
+     
     }
 }
