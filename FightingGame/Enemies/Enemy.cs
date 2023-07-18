@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FightingGame.Characters;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -40,6 +41,7 @@ namespace FightingGame.Enemies
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
+        
         public Enemy(EnemyName name, Texture2D texture)
         {
             animationManager = new AnimationManager();

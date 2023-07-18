@@ -40,7 +40,7 @@ namespace FightingGame
         };
         AnimationType currentAnimation = AnimationType.Stand;
 
-        private Dictionary<CharacterName, Character> characterPool = new Dictionary<CharacterName, Character>();
+        private Dictionary<EntityName, Character> characterPool = new Dictionary<EntityName, Character>();
 
         #region DrawableObjects
         DrawableObject GameScreenBackground;
@@ -51,7 +51,7 @@ namespace FightingGame
         public GameScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
             GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374, 860), Color.White);
-            Hashashin = new Hashashin(CharacterName.Hashashin, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Hashashin]);
+            Hashashin = new Hashashin(EntityName.Hashashin, ContentManager.Instance.CharacterSpriteSheets[EntityName.Hashashin]);
             //Samurai = new Samurai(CharacterName.Samurai, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Samurai]);
             Skeleton = new Enemies.Skeleton(EnemyName.Skeleton, ContentManager.Instance.EnemySpriteSheets[EnemyName.Skeleton]);
         }
@@ -131,7 +131,7 @@ namespace FightingGame
             }
 
 
-            SelectedCharacter.Update(currentAnimation, InputManager.Direction);
+            SelectedCharacter.UpdateCharacter(currentAnimation, InputManager.Direction);
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)

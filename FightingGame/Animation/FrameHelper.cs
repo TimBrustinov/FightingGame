@@ -17,7 +17,7 @@ namespace FightingGame
         public Rectangle AttackHitbox;
         public Rectangle CharacterHitbox;
 
-        public FrameHelper(int x, int y, int width, int height)
+        public FrameHelper(int x, int y, int width, int height)            
         {
             SourceRectangle = new Rectangle(x, y, width, height);
             Origin = new Vector2(width / 2, height / 2);

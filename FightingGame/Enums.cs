@@ -43,7 +43,7 @@ namespace FightingGame
         Ability2,
         Ability3,
     }
-    public enum CharacterName
+    public enum EntityName
     {
         Swordsman,
         Hashashin,

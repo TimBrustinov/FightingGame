@@ -23,9 +23,9 @@ namespace FightingGame
         public Texture2D HeartBackground;
         //Messing around
 
-        public Dictionary<CharacterName, Rectangle> CharacterTextures = new Dictionary<CharacterName, Rectangle>();
-        public Dictionary<CharacterName, Texture2D> CharacterSpriteSheets = new Dictionary<CharacterName, Texture2D>();
-        public Dictionary<CharacterName, Dictionary<(AnimationType, bool), List<FrameHelper>>> Animations = new Dictionary<CharacterName, Dictionary<(AnimationType, bool), List<FrameHelper>>>();
+        public Dictionary<EntityName, Rectangle> CharacterTextures = new Dictionary<EntityName, Rectangle>();
+        public Dictionary<EntityName, Texture2D> CharacterSpriteSheets = new Dictionary<EntityName, Texture2D>();
+        public Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>> Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>>();
 
         public Dictionary<EnemyName, Rectangle> EnemyTextures = new Dictionary<EnemyName, Rectangle>();
         public Dictionary<EnemyName, Texture2D> EnemySpriteSheets = new Dictionary<EnemyName, Texture2D>();
@@ -125,8 +125,8 @@ namespace FightingGame
             #endregion
 
             #region Hashashin
-            CharacterSpriteSheets.Add(CharacterName.Hashashin, content.Load<Texture2D>("HashashinSpritesheet"));
-            CharacterTextures.Add(CharacterName.Hashashin, new Rectangle(132, 90, 34, 37));
+            CharacterSpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinSpritesheet"));
+            CharacterTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
             Dictionary<(AnimationType, bool), List<FrameHelper>> Hashashin = new Dictionary<(AnimationType, bool), List<FrameHelper>>();
 
@@ -182,7 +182,7 @@ namespace FightingGame
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1853, 572, 80, 67), new Rectangle(1895, 569, 43, 72), new Rectangle(1859, 600, 26, 38)));
             Hashashin.Add((AnimationType.Ability1, !CanBeCanceled), HashashinAbility1);
 
-            Animations.Add(CharacterName.Hashashin, Hashashin);
+            Animations.Add(EntityName.Hashashin, Hashashin);
 
             #endregion
             #region Skeleton
