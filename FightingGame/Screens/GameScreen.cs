@@ -20,17 +20,23 @@ namespace FightingGame
         private int heartOffsets = 10;
         private Vector2 healthStartingPosition = new Vector2(20, 25);
 
-        Character Swordsman;
+        Character Hashashin;
+        Character Samurai;
+        Character SelectedCharacter;
         Enemies.Enemy Skeleton;
 
         List<Keys> forbiddenDirections = new List<Keys>();
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
-            [Keys.W] = AnimationType.RunUp,
+            [Keys.W] = AnimationType.Run,
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
-            [Keys.S] = AnimationType.RunDown,
+            [Keys.S] = AnimationType.Run,
             [Keys.K] = AnimationType.Attack,
+            [Keys.Q] = AnimationType.Ability1,
+            [Keys.E] = AnimationType.Ability2,
+            [Keys.R] = AnimationType.Ability3,
+            [Keys.Space] = AnimationType.Dodge,
         };
         AnimationType currentAnimation = AnimationType.Stand;
 
@@ -45,8 +51,8 @@ namespace FightingGame
         public GameScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
             GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374, 860), Color.White);
-
-            Swordsman = new Swordsman(CharacterName.Swordsman, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Swordsman]);
+            Hashashin = new Hashashin(CharacterName.Hashashin, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Hashashin]);
+            //Samurai = new Samurai(CharacterName.Samurai, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Samurai]);
             Skeleton = new Enemies.Skeleton(EnemyName.Skeleton, ContentManager.Instance.EnemySpriteSheets[EnemyName.Skeleton]);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
@@ -57,19 +63,25 @@ namespace FightingGame
         }
         public override void Initialize()
         {
-
+            SelectedCharacter = Hashashin;
         }
         public override Screenum Update(MouseState ms)
         {
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
-            MouseState mouseState = Mouse.GetState();
-            if (Swordsman.NumOfHits != 0 && Swordsman.WeaponHitBox.Intersects(Skeleton.HitBox))
+            //MouseState mouseState = Mouse.GetState();
+            if (SelectedCharacter.NumOfHits != 0 && SelectedCharacter.WeaponHitBox.Intersects(Skeleton.HitBox))
             {
-                //Console.WriteLine(Swordsman.NumOfHits);
-                Skeleton.Health--;
-                Swordsman.NumOfHits--;
-
+                Skeleton.RemainingHealth--;
+                Skeleton.objectColor = new Color(255, 255, 255, 0);
+                SelectedCharacter.NumOfHits--;
             }
+            
+            if (Skeleton.NumOfHits != 0 && Skeleton.WeaponHitBox.Intersects(SelectedCharacter.HitBox))
+            {
+                SelectedCharacter.RemainingHealth--;
+                Skeleton.NumOfHits--;
+            }
+
             //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
             InputManager.Update(forbiddenDirections);
             if (keysPressed.Length == 0)
@@ -83,71 +95,80 @@ namespace FightingGame
                     if(KeysToAnimation.ContainsKey(key))
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if (InputManager.MovingUp && currentAnimation == AnimationType.Attack)
+                        if(InputManager.Moving && currentAnimation == AnimationType.Dodge)
                         {
-                            currentAnimation = AnimationType.UpAttack;
-                            break;
-                        }
-                        if (InputManager.MovingDown && currentAnimation == AnimationType.Attack)
-                        {
-                            currentAnimation = AnimationType.DownAttack;
                             break;
                         }
                         if (InputManager.Moving && currentAnimation == AnimationType.Attack)
                         {
-                            currentAnimation = AnimationType.SideAttack;
+                            currentAnimation = AnimationType.BasicAttack;
                         }
                         if (InputManager.Moving == false && currentAnimation == AnimationType.Attack)
                         {
-                            currentAnimation = AnimationType.SideAttack;
+                            currentAnimation = AnimationType.BasicAttack;
                         }
                     }
                 }
             }
 
-            if (CalculateDistance(Swordsman.Position, Skeleton.Position) <= 50f)
+
+            if (Skeleton.RemainingHealth <= 0)
             {
-                Skeleton.Update(AnimationType.SideAttack, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
+                Skeleton.Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
+            }
+            else if (CalculateDistance(SelectedCharacter.Position, Skeleton.Position) <= 50f)
+            {
+                Skeleton.Update(AnimationType.BasicAttack, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
             }
             else
             {
-                Skeleton.Update(AnimationType.Run, Vector2.Normalize(Swordsman.Position - Skeleton.Position));
+                Skeleton.Update(AnimationType.Run, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
             }
 
-            Swordsman.Update(currentAnimation, InputManager.Direction);
+            if(SelectedCharacter.RemainingHealth <= 0)
+            {
+                currentAnimation = AnimationType.Death;
+            }
+
+
+            SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
             GameScreenBackground.Draw(spriteBatch);
-            Swordsman.Draw();
-            Skeleton.Draw();
-            DrawHearts(spriteBatch);
+            SelectedCharacter.Draw();
+            if(!Skeleton.isDead)
+            {
+                Skeleton.Draw();
+            }
+            //DrawHearts(spriteBatch);
         }
-        private void DrawHearts(SpriteBatch spriteBatch)
-        {
-            int heartX;
-            for (int i = 0; i < Swordsman.RemainingHealth; i++)
-            {
-                heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
-                //spriteBatch.Draw(ContentManager.Instance.Heart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+        //private void DrawHearts(SpriteBatch spriteBatch)
+        //{
+        //    int heartX;
+        //    for (int i = 0; i < Swordsman.RemainingHealth; i++)
+        //    {
+        //        heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
+        //        //spriteBatch.Draw(ContentManager.Instance.Heart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
 
-                //Drawing hearts with outline and background
-                spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
-                spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Red);
-            }
-            for (int i = Swordsman.RemainingHealth; i < Swordsman.TotalHealth; i++)
-            {
-                heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
-                //spriteBatch.Draw(ContentManager.Instance.GrayHeart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+        //        //Drawing hearts with outline and background
+        //        spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+        //        spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Red);
+        //    }
+        //    for (int i = Swordsman.RemainingHealth; i < Swordsman.TotalHealth; i++)
+        //    {
+        //        heartX = (int)(healthStartingPosition.X + (i * (25 + heartOffsets)));
+        //        //spriteBatch.Draw(ContentManager.Instance.GrayHeart, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
 
-                //Drawing hearts with outline and background
-                spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
-                spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Gray);
-            }
+        //        //Drawing hearts with outline and background
+        //        spriteBatch.Draw(ContentManager.Instance.HeartOutline, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.White);
+        //        spriteBatch.Draw(ContentManager.Instance.HeartBackground, new Rectangle(heartX, (int)healthStartingPosition.Y, 25, 25), Color.Gray);
+        //    }
 
             
-        }
+        //}
+        
         public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)
         {
             int left = Math.Abs(objectA.Left - objectB.Right);

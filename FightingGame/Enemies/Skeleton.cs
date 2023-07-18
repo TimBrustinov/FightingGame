@@ -18,21 +18,37 @@ namespace FightingGame.Enemies
 
             Dimentions = new Vector2(enemyRectangle.Width, enemyRectangle.Height) * EnemyScale;
 
-            Health = 30;
+            TotalHealth = 5;
+            RemainingHealth = TotalHealth;
+            objectColor = new Color(255, 255, 255, 255);
             speed = 0.5f;
+        }
+
+        protected override void Death()
+        {
+            savedAnimaton = AnimationType.Death;
+            overrideAnimation = true;
+            if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
+            {
+                savedAnimaton = AnimationType.None;
+                isDead = true;
+            }
         }
 
         protected override void SideAttack()
         {
-            (int, int) offsets = currFrame.GetOffsets();
+            (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
             setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
-            
-            savedAnimaton = AnimationType.SideAttack;
+            //if(currFrame.Frame == new Rectangle(514, 16, 62, 32))
+            //{
+            //    NumOfHits = 1;
+            //}
+            savedAnimaton = AnimationType.BasicAttack;
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
             {
                 savedAnimaton = AnimationType.None;
                 currentAnimation = AnimationType.None;
-
+                NumOfHits = 1;
             }
         }
 

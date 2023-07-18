@@ -61,8 +61,6 @@ namespace FightingGame
             GameScreenBackground = Content.Load<Texture2D>("DungeonTile");
             gameScreenTextures.Add(Texture.GameScreenBackground, GameScreenBackground);
 
-            StageTile = Content.Load<Texture2D>("StageTile");
-            gameScreenTextures.Add(Texture.StageTile, StageTile);
             #endregion
             StartMenuScreen startMenuScreen = new StartMenuScreen(startMenuTextures, graphics);
             GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics); 

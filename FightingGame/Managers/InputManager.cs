@@ -35,10 +35,6 @@ namespace FightingGame
                     direction.X++;
                     IsMovingLeft = false;
                 }
-                if (keyboardState.IsKeyDown(Keys.Space) && !forbiddenDirections.Contains(Keys.Space))
-                {
-                    direction.Y--;
-                }
                 if (keyboardState.IsKeyDown(Keys.S) && !forbiddenDirections.Contains(Keys.S))
                 {
                     direction.Y++;
@@ -48,6 +44,7 @@ namespace FightingGame
                     direction.Y--;
                 }
             }
+            Moving = direction != Vector2.Zero;
 
             if (direction.Y > 0)
             {
@@ -63,7 +60,6 @@ namespace FightingGame
             {
                 MovingUp = false;
                 MovingDown = false;
-                Moving = direction != Vector2.Zero;
             }
         }
     }

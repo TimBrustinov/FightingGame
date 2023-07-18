@@ -27,7 +27,7 @@ namespace FightingGame
             Animations.Add(animation, animationSprite);
             lastAnimation = animation;
         }
-        public void Update(AnimationType animationType)
+        public void Update(AnimationType animationType, bool overrideAnimation)
         {
             CurrentAnimation = Animations[lastAnimation];
             if (Animations.ContainsKey(animationType))
@@ -35,7 +35,7 @@ namespace FightingGame
                 //if animation is not the same, and the current animation can be canceled or has finished, then we change animation
                 if(animationType != lastAnimation)
                 { 
-                    if(CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone)
+                    if(CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone || overrideAnimation)
                     {
                         //resets the last animation from frame 0
                         Animations[lastAnimation].Restart();
@@ -46,8 +46,8 @@ namespace FightingGame
                 // always starts the animation and updates
                 Animations[lastAnimation].Start();
                 Animations[lastAnimation].Update();
-                CurrentFrame = Animations[lastAnimation].CurrerntFrame.Frame;
-                PreviousFrame = Animations[lastAnimation].PreviousFrame.Frame;
+                CurrentFrame = Animations[lastAnimation].CurrerntFrame.SourceRectangle;
+                PreviousFrame = Animations[lastAnimation].PreviousFrame.SourceRectangle;
             }
             else
             {
@@ -55,9 +55,9 @@ namespace FightingGame
                 Animations[lastAnimation].Restart();
             }
         }
-        public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale)
+        public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale, Color color)
         {
-            Animations[lastAnimation].Draw(position, isMovingLeft, scale);
+            Animations[lastAnimation].Draw(position, isMovingLeft, scale, color);
         }
     }
 }

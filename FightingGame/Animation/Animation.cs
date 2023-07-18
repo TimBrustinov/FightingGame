@@ -69,10 +69,28 @@ namespace FightingGame
                 }
             }
         }
-        public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale)
+        public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale, Color color)
         {
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.Frame, Color.White, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
+
+            Vector2 adjustedPosition;
+            int offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2; // Calculate the X offset
+            int offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2; // Calculate the Y offset
+
+            if (isMovingLeft)
+            {
+                adjustedPosition = position - new Vector2(offsetX, offsetY);
+            }
+            else
+            {
+                adjustedPosition = position + new Vector2(offsetX, -offsetY);
+
+            }
+            Console.WriteLine(PreviousFrame.Origin);
+            // Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
+            Globals.SpriteBatch.Draw(Texture, adjustedPosition, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
+
+
         }
     }
 }

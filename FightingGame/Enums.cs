@@ -33,23 +33,27 @@ namespace FightingGame
     {
         None,
         Run,
-        RunUp,
-        RunDown,
         Dodge,
         Stand,
         Attack,
+        Death,
 
-        SideAttack,
-        UpAttack,
-        DownAttack,
+        BasicAttack,
+        Ability1,
+        Ability2,
+        Ability3,
     }
     public enum CharacterName
     {
         Swordsman,
+        Hashashin,
+        Samurai,
     }
     public enum EnemyName
     {
         Skeleton,
+        Mage,
+        DeathMage,
     }
     public enum CharacterDirection
     {

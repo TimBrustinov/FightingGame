@@ -13,34 +13,47 @@ namespace FightingGame
     public struct FrameHelper
     {
         public Vector2 Origin;
-        public Rectangle Frame;
+        public Rectangle SourceRectangle;
         public Rectangle AttackHitbox;
+        public Rectangle CharacterHitbox;
 
         public FrameHelper(int x, int y, int width, int height)
         {
-            Frame = new Rectangle(x, y, width, height);
+            SourceRectangle = new Rectangle(x, y, width, height);
             Origin = new Vector2(width / 2, height / 2);
             AttackHitbox = new Rectangle(x, y, 0, 0);
+            CharacterHitbox = SourceRectangle;
         }
         public FrameHelper(int x, int y, int width, int height, Vector2 origin)
         {
-            Frame = new Rectangle(x, y, width,height);
+            SourceRectangle = new Rectangle(x, y, width,height);
             Origin = origin;
             AttackHitbox = new Rectangle(x, y, 0 , 0);
+            CharacterHitbox = SourceRectangle;
+            
         }
         public FrameHelper(int x, int y, int width, int height, Rectangle attackHitbox)
         {
-            Frame = new Rectangle(x, y, width, height);
+            SourceRectangle = new Rectangle(x, y, width, height);
             Origin = new Vector2(width / 2, height / 2);
             AttackHitbox = attackHitbox;
+            CharacterHitbox = SourceRectangle;
+        }
+        public FrameHelper(Rectangle sourceRectangle, Rectangle attackHitbox, Rectangle characterHitbox)
+        {
+            SourceRectangle = sourceRectangle;
+            AttackHitbox = attackHitbox;
+            CharacterHitbox = characterHitbox;
+            //Origin = new Vector2(CharacterHitbox.Width / 2, CharacterHitbox.Height / 2);
+            Origin = new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
         }
         public FrameHelper(int x, int y, int width, int height, Vector2 origin, Rectangle attackHitbox)
         {
-            Frame = new Rectangle(x, y, width, height);
+            SourceRectangle = new Rectangle(x, y, width, height);
             Origin = origin;
             AttackHitbox = attackHitbox;
+            CharacterHitbox = SourceRectangle;
         }
-
-
+        
     }
 }

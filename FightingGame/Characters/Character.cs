@@ -18,9 +18,9 @@ namespace FightingGame.Characters
         public int TotalHealth;
         public int RemainingHealth;
         public int speed;
-        public int NumOfHits = 1;
+        public int NumOfHits = 2;
         public float CharacterScale;
-        private float animationSpeed = 0.18f;
+        public float animationSpeed = 0.1f;
 
         public Rectangle WeaponHitBox;
         public Rectangle HitBox;
@@ -31,6 +31,7 @@ namespace FightingGame.Characters
         public Vector2 Direction;
         
         public AnimationManager animationManager;
+        public bool overrideAnimation = false;
         public FrameHelper currFrame;
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
@@ -44,14 +45,18 @@ namespace FightingGame.Characters
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animationSpeed);
             }
         }
-        protected abstract void SideAttack();
-        protected abstract void UpAttack();
-        protected abstract void DownAttack();
+        protected abstract void BasicAttack();
+        protected abstract void Ability1();
+        protected abstract void Ability2();
+        protected abstract void Ability3();
+        protected abstract void Dodge();
         protected abstract void UpdateWeapon();
+        protected abstract void Death();
         public void Update(AnimationType animation, Vector2 direction) 
         {
             //bool canAnimationChange = CanAnimationChange(animation);
             Direction = direction;
+
             if (savedAnimaton != AnimationType.None)
             {
                 currentAnimation = savedAnimaton;
@@ -60,52 +65,77 @@ namespace FightingGame.Characters
             {
                 currentAnimation = animation;
             }
-            
-            if (currentAnimation == AnimationType.SideAttack)
+
+            switch (currentAnimation)
             {
-                SideAttack();
+                case AnimationType.Death:
+                    Death();
+                    break;
+                case AnimationType.Dodge:
+                    Dodge();
+                    break;
+                case AnimationType.BasicAttack:
+                    BasicAttack();
+                    break;
+                case AnimationType.Ability1:
+                    Ability1();
+                    break;
+                case AnimationType.Ability2:
+                    Ability2();
+                    break;
+                default:
+                    if (direction != Vector2.Zero)
+                    {
+                        Position += Vector2.Normalize(InputManager.Direction) * speed;
+                    }
+                    else
+                    {
+                        currentAnimation = AnimationType.Stand;
+                    }
+                    break;
             }
-            else if (currentAnimation == AnimationType.UpAttack)
-            {
-                UpAttack();
-            }
-            else if(currentAnimation == AnimationType.DownAttack)
-            {
-                DownAttack();
-            }
-            else
-            {
-                if (direction != Vector2.Zero)
-                {
-                    Position += Vector2.Normalize(InputManager.Direction) * speed;
-                }
-                else
-                {
-                    currentAnimation = AnimationType.Stand;
-                }
-            }
+
             UpdateHitbox();
             UpdateWeapon();
-            animationManager.Update(currentAnimation);
+            animationManager.Update(currentAnimation, overrideAnimation);
         }
         private void UpdateHitbox()
         {
-            if (animationManager.CurrentAnimation != null)
+            if (currentAnimation == AnimationType.Dodge)
+            {
+                Dimentions = Vector2.Zero;
+                HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
+            }
+            else if (animationManager.CurrentAnimation != null)
             {
                 currFrame = animationManager.CurrentAnimation.PreviousFrame;
-                Dimentions.X = currFrame.Frame.Width * CharacterScale;
-                Dimentions.Y = currFrame.Frame.Height * CharacterScale;
+                Dimentions.X = currFrame.CharacterHitbox.Width * CharacterScale;
+                Dimentions.Y = currFrame.CharacterHitbox.Height * CharacterScale;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
         }
         public void Draw()
         {
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
-            if (savedAnimaton == AnimationType.SideAttack || savedAnimaton == AnimationType.DownAttack || savedAnimaton == AnimationType.UpAttack)
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, Color.Blue);
+
+            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2)
             {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Blue);
-            }
-            animationManager.Draw(Position, InputManager.IsMovingLeft, new Vector2(CharacterScale, CharacterScale));
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            } 
+            animationManager.Draw(Position, InputManager.IsMovingLeft, new Vector2(CharacterScale, CharacterScale), Color.White);
+            DrawHealthBar(Globals.SpriteBatch);
         }
+        public void DrawHealthBar(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(10, 20, 200, 20), Color.White);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(12, 22, 196, 16), Color.Black);
+
+            float healthPercentage = (float)RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
+            int foregroundWidth = (int)(healthPercentage * 196); // Calculate the width of the foreground health bar
+
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(12, 22, foregroundWidth, 16), Color.Green);
+        }
+
     }
 }

@@ -12,9 +12,9 @@ namespace FightingGame
 {
     static class Extensions
     {
-        public static (int, int) GetOffsets(this FrameHelper frame)
+        public static (int, int) GetWeaponHitboxOffsets(this FrameHelper frame)
         {
-            Rectangle characterHitbox = frame.Frame;
+            Rectangle characterHitbox = frame.SourceRectangle;
             Rectangle weaponHitbox = frame.AttackHitbox;
             if(weaponHitbox.Width == 0 || weaponHitbox.Height == 0)
             {
@@ -22,5 +22,9 @@ namespace FightingGame
             }
             return (weaponHitbox.X - characterHitbox.X, weaponHitbox.Y - characterHitbox.Y);
         }
+        //public static (int, int) GetCharacterHitboxOffsets(this FrameHelper frame)
+        //{
+
+        //}
     }
 }

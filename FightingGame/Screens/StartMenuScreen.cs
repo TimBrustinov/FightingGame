@@ -50,6 +50,7 @@ namespace FightingGame.Screens
         {
             PlayGame.Draw(spriteBatch);
             QuitGame.Draw(spriteBatch);
+            spriteBatch.DrawString(ContentManager.Instance.Font, "Most handsome supporter: Beezer", new Vector2(0, 980), Color.White);
         }
 
     }
