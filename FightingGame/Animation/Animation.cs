@@ -84,9 +84,7 @@ namespace FightingGame
             else
             {
                 adjustedPosition = position + new Vector2(offsetX, -offsetY);
-
             }
-            Console.WriteLine(PreviousFrame.Origin);
             // Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
             Globals.SpriteBatch.Draw(Texture, adjustedPosition, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
 

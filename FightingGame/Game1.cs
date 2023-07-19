@@ -82,9 +82,9 @@ namespace FightingGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             ScreenManager<Screenum>.Instance.Draw(spriteBatch, graphics);
-            spriteBatch.End();
+            //spriteBatch.End();
             base.Draw(gameTime);
         }
     }

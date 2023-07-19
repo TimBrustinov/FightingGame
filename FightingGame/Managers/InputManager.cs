@@ -46,21 +46,21 @@ namespace FightingGame
             }
             Moving = direction != Vector2.Zero;
 
-            if (direction.Y > 0)
-            {
-                MovingDown = true;
-                MovingUp = false;
-            }
-            else if(direction.Y < 0)
-            {
-                MovingUp = true;
-                MovingDown = false;
-            }
-            else
-            {
-                MovingUp = false;
-                MovingDown = false;
-            }
+            //if (direction.Y > 0)
+            //{
+            //    MovingDown = true;
+            //    MovingUp = false;
+            //}
+            //else if(direction.Y < 0)
+            //{
+            //    MovingUp = true;
+            //    MovingDown = false;
+            //}
+            //else
+            //{
+            //    MovingUp = false;
+            //    MovingDown = false;
+            //}
         }
     }
 }

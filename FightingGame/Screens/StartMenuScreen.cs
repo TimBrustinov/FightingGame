@@ -48,9 +48,11 @@ namespace FightingGame.Screens
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
             PlayGame.Draw(spriteBatch);
             QuitGame.Draw(spriteBatch);
             spriteBatch.DrawString(ContentManager.Instance.Font, "Most handsome supporter: Beezer", new Vector2(0, 980), Color.White);
+            spriteBatch.End();
         }
 
     }

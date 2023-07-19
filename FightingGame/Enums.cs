@@ -45,8 +45,8 @@ namespace FightingGame
     }
     public enum EntityName
     {
-        Swordsman,
         Hashashin,
+        Skeleton,
         Samurai,
     }
     public enum EnemyName

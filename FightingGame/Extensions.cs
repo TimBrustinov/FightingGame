@@ -14,7 +14,7 @@ namespace FightingGame
     {
         public static (int, int) GetWeaponHitboxOffsets(this FrameHelper frame)
         {
-            Rectangle characterHitbox = frame.SourceRectangle;
+            Rectangle characterHitbox = frame.CharacterHitbox;
             Rectangle weaponHitbox = frame.AttackHitbox;
             if(weaponHitbox.Width == 0 || weaponHitbox.Height == 0)
             {
@@ -25,6 +25,6 @@ namespace FightingGame
         //public static (int, int) GetCharacterHitboxOffsets(this FrameHelper frame)
         //{
 
-        //}
+        //} 
     }
 }

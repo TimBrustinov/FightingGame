@@ -17,27 +17,28 @@ namespace FightingGame
         public Rectangle AttackHitbox;
         public Rectangle CharacterHitbox;
 
-        public FrameHelper(int x, int y, int width, int height)            
+        public FrameHelper(Rectangle SourceRect)            
         {
-            SourceRectangle = new Rectangle(x, y, width, height);
-            Origin = new Vector2(width / 2, height / 2);
-            AttackHitbox = new Rectangle(x, y, 0, 0);
+            SourceRectangle = SourceRect;
+            Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
+            AttackHitbox = new Rectangle(SourceRectangle.X, SourceRectangle.Y, 0, 0);
             CharacterHitbox = SourceRectangle;
         }
-        public FrameHelper(int x, int y, int width, int height, Vector2 origin)
+        public FrameHelper(Rectangle SourceRect, Vector2 origin)
         {
-            SourceRectangle = new Rectangle(x, y, width,height);
+            SourceRectangle = SourceRect;
             Origin = origin;
-            AttackHitbox = new Rectangle(x, y, 0 , 0);
+            AttackHitbox = new Rectangle(SourceRectangle.X, SourceRectangle.Y, 0, 0);
+            CharacterHitbox = SourceRectangle;
+
+        }
+        public FrameHelper(Rectangle SourceRect, Rectangle attackHitbox)
+        {
+            SourceRectangle = SourceRect;
+            AttackHitbox = attackHitbox;
+            Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
             CharacterHitbox = SourceRectangle;
             
-        }
-        public FrameHelper(int x, int y, int width, int height, Rectangle attackHitbox)
-        {
-            SourceRectangle = new Rectangle(x, y, width, height);
-            Origin = new Vector2(width / 2, height / 2);
-            AttackHitbox = attackHitbox;
-            CharacterHitbox = SourceRectangle;
         }
         public FrameHelper(Rectangle sourceRectangle, Rectangle attackHitbox, Rectangle characterHitbox)
         {
@@ -45,7 +46,7 @@ namespace FightingGame
             AttackHitbox = attackHitbox;
             CharacterHitbox = characterHitbox;
             //Origin = new Vector2(CharacterHitbox.Width / 2, CharacterHitbox.Height / 2);
-            Origin = new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
+            Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
         }
         public FrameHelper(int x, int y, int width, int height, Vector2 origin, Rectangle attackHitbox)
         {
