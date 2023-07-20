@@ -12,55 +12,48 @@ namespace FightingGame
     {
         private static Vector2 direction;
         public static Vector2 Direction => direction;
+        public static Vector2 targetPosition;
         public static bool Moving;
         public static bool MovingUp;
         public static bool MovingDown;
 
         public static bool IsMovingLeft = false;
 
-        public static void Update(List<Keys> forbiddenDirections)
+        public static void Update()
         {
             direction = Vector2.Zero;
             var keyboardState = Keyboard.GetState();
 
             if (keyboardState.GetPressedKeyCount() > 0)
             {
-                if (keyboardState.IsKeyDown(Keys.A) && !forbiddenDirections.Contains(Keys.A))
+                if (keyboardState.IsKeyDown(Keys.A))
                 {
                     direction.X--;
                     IsMovingLeft = true;
                 }
-                if (keyboardState.IsKeyDown(Keys.D) && !forbiddenDirections.Contains(Keys.D))
+                if (keyboardState.IsKeyDown(Keys.D))
                 {
                     direction.X++;
                     IsMovingLeft = false;
                 }
-                if (keyboardState.IsKeyDown(Keys.S) && !forbiddenDirections.Contains(Keys.S))
+                if (keyboardState.IsKeyDown(Keys.S))
                 {
                     direction.Y++;
                 }
-                if (keyboardState.IsKeyDown(Keys.W) && !forbiddenDirections.Contains(Keys.W))
+                if (keyboardState.IsKeyDown(Keys.W))
                 {
                     direction.Y--;
                 }
             }
             Moving = direction != Vector2.Zero;
 
-            //if (direction.Y > 0)
-            //{
-            //    MovingDown = true;
-            //    MovingUp = false;
-            //}
-            //else if(direction.Y < 0)
-            //{
-            //    MovingUp = true;
-            //    MovingDown = false;
-            //}
-            //else
-            //{
-            //    MovingUp = false;
-            //    MovingDown = false;
-            //}
+            var mouseState = Mouse.GetState();
+            if (mouseState.RightButton == ButtonState.Pressed)
+            {
+                int mouseX = mouseState.X;
+                int mouseY = mouseState.Y;
+                targetPosition = new Vector2(mouseX, mouseY);
+            }
         }
     }
 }

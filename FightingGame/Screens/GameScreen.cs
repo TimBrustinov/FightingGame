@@ -15,8 +15,8 @@ namespace FightingGame
     {
         public GraphicsDeviceManager Graphics;
         public Camera Camera;
-        private Matrix Transform;
 
+        private Matrix Transform;
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
@@ -28,7 +28,6 @@ namespace FightingGame
         Character SelectedCharacter;
         Enemy Skeleton;
 
-        List<Keys> forbiddenDirections = new List<Keys>();
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
             [Keys.W] = AnimationType.Run,
@@ -45,50 +44,55 @@ namespace FightingGame
 
         private Dictionary<EntityName, Character> characterPool = new Dictionary<EntityName, Character>();
 
+
+        private int enemyPoolIndex;
+        private int enemySpawnRate = 1000;
+        private int deadEnemies;
+        private List<Enemy> enemyPool;
+        private List<Enemy> reservePool;
+        private double spawnTimer;
+
         #region DrawableObjects
         DrawableObject GameScreenBackground;
-
+        DrawableObject UIBackground;
         List<DrawableObject> tiles = new List<DrawableObject>();
         #endregion
 
         public GameScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
             Graphics = graphics;
-            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374, 860), Color.White);
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 3, 0.18f, 1.2f, ContentManager.Instance.EntityAbilites[EntityName.Hashashin]);
+            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374 + 500, 860 + 500), Color.White);
+            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 5, 0.18f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Hashashin]);
             //Samurai = new Samurai(CharacterName.Samurai, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Samurai]);
             Skeleton = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 10, 1, 0.3f, 1.2f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
-            graphics.PreferredBackBufferWidth = 1374;
-            graphics.PreferredBackBufferHeight = 960;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.PreferredBackBufferHeight = 1000;
             graphics.ApplyChanges();
         }
         public override void Initialize()
         {
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
+            UIBackground = new DrawableObject(ContentManager.Instance.Pixel, new Vector2(0, 0), new Vector2(Camera.Viewport.Width, 10), Color.Gray);
+            enemyPool = new List<Enemy>();
+            reservePool = new List<Enemy>();
+            enemyPoolIndex = 0;
         }
         public override Screenum Update(MouseState ms)
         {
             Keys[] keysPressed = Keyboard.GetState().GetPressedKeys();
             //MouseState mouseState = Mouse.GetState();
-            if (SelectedCharacter.NumOfHits != 0 && SelectedCharacter.WeaponHitBox.Intersects(Skeleton.HitBox))
+            spawnTimer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
+            if(spawnTimer >= enemySpawnRate)
             {
-                Skeleton.RemainingHealth--;
-                //Skeleton.objectColor = new Color(255, 255, 255, 0);
-                SelectedCharacter.NumOfHits--;
+                SpawnEnemy();
+                spawnTimer = 0;
             }
-            
-            //if (Skeleton.NumOfHits != 0 && Skeleton.WeaponHitBox.Intersects(SelectedCharacter))c 
-            //{
-            //    SelectedCharacter.RemainingHealth--;
-            //    Skeleton.NumOfHits--;
-            //}
-
             //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
-            InputManager.Update(forbiddenDirections);
+            InputManager.Update();
             if (keysPressed.Length == 0)
             {
                 currentAnimation = AnimationType.Stand;
@@ -115,46 +119,113 @@ namespace FightingGame
                     }
                 }
             }
+            for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
+            {
+                if(enemyPool[i].IsDead)
+                {
+                    reservePool.Add(enemyPool[i]);
+                    enemyPool.RemoveAt(i);
+                    deadEnemies++;
+                    continue;
+                }
+
+                if (SelectedCharacter.WeaponHitBox.Intersects(enemyPool[i].HitBox))
+                {
+                    if (SelectedCharacter.HasFrameChanged)
+                    {
+                        enemyPool[i].HasBeenHit = false;
+                    }
+                    if (SelectedCharacter.CurrentAbility != null && SelectedCharacter.CurrentAbility.CanHit && !enemyPool[i].HasBeenHit)
+                    {
+                        enemyPool[i].TakeDamage(SelectedCharacter.AbilityDamage);
+                        enemyPool[i].HasBeenHit = true;
+                    }
+                }
+                else
+                {
+                    enemyPool[i].HasBeenHit = false;
+                }
 
 
-            if (Skeleton.RemainingHealth <= 0)
-            {
-                Skeleton.Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
+                if (enemyPool[i].RemainingHealth <= 0)
+                {
+                    enemyPool[i].Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
+                }
+                else if (CalculateDistance(SelectedCharacter.Position, enemyPool[i].Position) <= 50f && Math.Abs(SelectedCharacter.Position.Y - enemyPool[i].Position.Y) <= 20)
+                {
+                    enemyPool[i].Update(AnimationType.BasicAttack, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
+                }
+                else
+                {
+                    enemyPool[i].Update(AnimationType.Run, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
+                }
             }
-            else if (CalculateDistance(SelectedCharacter.Position, Skeleton.Position) <= 50f && Math.Abs(SelectedCharacter.Position.Y - Skeleton.Position.Y) <= 20)
-            {
-                Skeleton.Update(AnimationType.BasicAttack, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
-            }
-
-            else
-            {
-                Skeleton.Update(AnimationType.Run, Vector2.Normalize(SelectedCharacter.Position - Skeleton.Position));
-            }
+            
+            
 
             if(SelectedCharacter.RemainingHealth <= 0)
             {
                 currentAnimation = AnimationType.Death;
             }
-
-
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, 1f);
+            UIBackground.Position = new Vector2(SelectedCharacter.Position.X - Camera.Viewport.Width / 2, SelectedCharacter.Position.Y - Camera.Viewport.Height / 2);
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            //Transform = Camera.GetTransformMatrix();
-            //spriteBatch.Begin(transformMatrix: Transform);
-            spriteBatch.Begin();
+            Transform = Camera.GetTransformMatrix();
+            spriteBatch.Begin(transformMatrix: Transform);
             GameScreenBackground.Draw(spriteBatch);
             SelectedCharacter.Draw();
-            if(!Skeleton.IsDead)
+            for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
-                Skeleton.Draw();
+                if (!enemyPool[i].IsDead)
+                {
+                    enemyPool[i].Draw();
+                }
             }
+
+            UIBackground.Draw(spriteBatch);
             spriteBatch.End();
         }
         
+        private void SpawnEnemy()
+        {
+            int increaseEnemyPoolAmmount = 1;
+            if(reservePool.Count > 0)
+            {
+                deadEnemies = 0;
+                foreach (var enemy in reservePool)
+                {
+                    enemy.Reset();
+                    enemyPool.Add(enemy);
+                    enemy.Position = GetSpawnLocation();
+                }
+                reservePool.Clear();
+            }
+
+            for (int i = 0; i < increaseEnemyPoolAmmount; i++)
+            {
+                Enemy enemy = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 10, 1, 0.3f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+                enemyPool.Add(enemy);
+                enemy.Position = GetSpawnLocation();
+            }
+            enemyPoolIndex += increaseEnemyPoolAmmount;
+
+        }
+        private Vector2 GetSpawnLocation()
+        {
+            int spawnAreaOffset = 50;
+            int minSpawnX = Camera.CameraView.X - Camera.CameraView.Width / 2 + spawnAreaOffset;
+            int maxSpawnX = Camera.CameraView.X + Camera.CameraView.Width / 2 - spawnAreaOffset;
+            int minSpawnY = Camera.CameraView.Y - Camera.CameraView.Height / 2 + spawnAreaOffset;
+            int maxSpawnY = Camera.CameraView.Y + Camera.CameraView.Height / 2 - spawnAreaOffset;
+
+            int randomSpawnX = new Random().Next(minSpawnX, maxSpawnX);
+            int randomSpawnY = new Random().Next(minSpawnY, maxSpawnY);
+            return new Vector2(randomSpawnX,randomSpawnY);
+        }
         public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)
         {
             int left = Math.Abs(objectA.Left - objectB.Right);
@@ -196,47 +267,6 @@ namespace FightingGame
                 }
             }
             return tempMin;
-        }
-        private void CheckPlayerHitbox(Character character)
-        {
-            bool isColliding = false;
-            foreach (var tile in tiles)
-            {
-                if (character.HitBox.Intersects(tile.HitBox))
-                {
-                    SideHit side = SideIntersected(tile.HitBox, character.HitBox, out int offset);
-
-                    if (side == SideHit.Top)
-                    {
-                        forbiddenDirections.Add(Keys.S);
-                        character.Position = new Vector2(character.Position.X, character.Position.Y - offset + 1);
-                        isColliding = true;
-                    }
-                    else if (side == SideHit.Bottom)
-                    {
-                        forbiddenDirections.Add(Keys.W);
-                        character.Position = new Vector2(character.Position.X, character.Position.Y + offset);
-                    }
-                    else if (side == SideHit.Right)
-                    {
-                        character.Position = new Vector2(character.Position.X + offset, character.Position.Y);
-                        forbiddenDirections.Add(Keys.D);
-                    }
-                    else if (side == SideHit.Left)
-                    {
-                        character.Position = new Vector2(character.Position.X - offset, character.Position.Y);
-                        forbiddenDirections.Add(Keys.A);
-                    }
-                }
-                else
-                {
-                    forbiddenDirections.Clear();
-                }
-            }
-            if (!isColliding)
-            {
-
-            }
         }
         //private void CheckEnemyHitBox(Enemies.Enemy enemy)
         //{

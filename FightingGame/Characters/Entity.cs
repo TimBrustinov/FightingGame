@@ -18,6 +18,7 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
+        public Ability CurrentAbility;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -25,12 +26,17 @@ namespace FightingGame
         public bool IsActive = false;
         public bool IsDead = false;
         public bool IsMovingLeft;
+        public bool HasBeenHit;
+        public bool HasFrameChanged;
+
         public EntityName Name;
 
         public int TotalHealth;
         public int RemainingHealth;
+        public int TotalStamina;
+        public int RemainingStamina;
+
         public int Speed;
-        public int NumOfHits = 1;
         public int AbilityDamage;
         public float Scale;
 
@@ -40,27 +46,60 @@ namespace FightingGame
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
-        public Dictionary<AnimationType, Ability> AniamtionToAbility = new Dictionary<AnimationType, Ability>();
-
+        public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
         public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility, float animationSpeed)
         {
             Name = name;
-            AniamtionToAbility = animationToAbility;
+            AnimationToAbility = animationToAbility;
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.Animations[Name])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animationSpeed);
             }
         }
+        private bool canPerformAttack = false;
+
+        public bool staminaSubtracted = false;
+
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
+            overrideAnimation = animation == AnimationType.Death ? true : false;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
-            overrideAnimation = currentAnimation == AnimationType.Death ? true : false;
-
-            if (AniamtionToAbility.ContainsKey(currentAnimation))
+            if (overrideAnimation)
             {
-                savedAnimaton = AniamtionToAbility[currentAnimation].Update(animationManager, currentAnimation, ref Position, direction, Speed);
-                if(savedAnimaton == AnimationType.None)
+                currentAnimation = AnimationType.Death;
+            }
+            if (AnimationToAbility.ContainsKey(currentAnimation))
+            {
+                CurrentAbility = AnimationToAbility[currentAnimation];
+                bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
+
+                if(CurrentAbility.StaminaDrain == 0)
+                {
+                    canPerformAttack = true;
+                }
+                else if (!staminaSubtracted && hasEnoughStamina)
+                {
+                    // Deduct stamina by the required amount
+                    RemainingStamina -= CurrentAbility.StaminaDrain;
+                    staminaSubtracted = true;
+                    canPerformAttack = true;
+                }
+
+                if (staminaSubtracted || canPerformAttack)
+                {
+                    savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
+                    AbilityDamage = CurrentAbility.AbilityDamage;
+                    
+                    if (savedAnimaton == AnimationType.None)
+                    {
+                        IsDead = CurrentAbility.IsDead;
+                        currentAnimation = AnimationType.Stand;
+                        canPerformAttack = false;
+                        staminaSubtracted = false; // Reset the flag for the next animation
+                    }
+                }
+                else
                 {
                     currentAnimation = AnimationType.Stand;
                 }
@@ -77,16 +116,13 @@ namespace FightingGame
                 }
             }
 
+           
             UpdateHitbox();
-            (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
-            setWeaponHitbox(offsets.Item1, offsets.Item2, new Vector2(currFrame.AttackHitbox.Width, currFrame.AttackHitbox.Height));
             UpdateWeapon();
-
-            
-            
-            
             animationManager.Update(currentAnimation, overrideAnimation);
+            HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
+
         private void UpdateHitbox()
         {
             if (currentAnimation == AnimationType.Dodge)
@@ -112,12 +148,30 @@ namespace FightingGame
             //}
             animationManager.Draw(Position, IsMovingLeft, new Vector2(Scale, Scale), Color.White);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
+        }
 
+        public void Reset()
+        {
+            currentAnimation = AnimationType.None;
+            savedAnimaton = AnimationType.None;
+            RemainingHealth = TotalHealth;
+            RemainingStamina = TotalStamina;
+            IsDead = false;
+            overrideAnimation = false;
+        }
+        public void TakeDamage(int damage)
+        {
+            RemainingHealth -= damage;
         }
         private void UpdateWeapon()
         {
             if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2)
             {
+                (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
+                weaponVerticalOffset = offsets.Item2;
+                weaponHorizontalOffset = offsets.Item1;
+                WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * Scale);
+                WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * Scale);
                 if (InputManager.IsMovingLeft)
                 {
                     WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
@@ -128,14 +182,6 @@ namespace FightingGame
                 }
                 WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * Scale);
             }
-        }
-        private void setWeaponHitbox(int horizontalOffset, int verticalOffset, Vector2 dimenions)
-        {
-            Vector2 weaponHitboxDimension = dimenions * Scale;
-            weaponVerticalOffset = verticalOffset;
-            weaponHorizontalOffset = horizontalOffset;
-            //WeaponHitBox = new Rectangle((int)TopLeft.X + weaponHorizontalOffset, (int)TopLeft.Y + weaponVerticalOffset, (int)(dimenions.X * Scale), (int)(dimenions.Y * Scale));
-            WeaponHitBox = new Rectangle((int)TopLeft.X + weaponHorizontalOffset, (int)TopLeft.Y + weaponVerticalOffset, (int)weaponHitboxDimension.X, (int)weaponHitboxDimension.Y);
         }
     }
 }

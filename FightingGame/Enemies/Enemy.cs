@@ -25,7 +25,6 @@ namespace FightingGame
         }
         public override void Update(AnimationType animation, Vector2 direction)
         {
-            Console.WriteLine(Position);
             IsMovingLeft = direction.X < 0;
             base.Update(animation, direction);
             animationManager.Update(currentAnimation, overrideAnimation);

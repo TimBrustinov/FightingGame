@@ -32,6 +32,7 @@ namespace FightingGame
     [Flags] public enum AnimationType
     {
         None,
+        Spawn,
         Run,
         Dodge,
         Stand,

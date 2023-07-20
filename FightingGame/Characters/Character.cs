@@ -12,6 +12,12 @@ namespace FightingGame
 {
     public class Character : Entity
     {
+        public double XP;
+        public int Level;
+
+        private double staminaRegenInterval = 800;
+        private double timer;
+
         public Character(EntityName name, Texture2D texture, int health, int speed, float animationSpeed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites, animationSpeed) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
@@ -22,38 +28,71 @@ namespace FightingGame
             Speed = speed;
             TotalHealth = health;
             RemainingHealth = TotalHealth;
-
-            //Rectangle characterRectangle = ContentManager.Instance.CharacterTextures[name];
-            //    CharacterScale = 1.2f;
-            //    Position = new Vector2(500, 350);
-            //    Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * CharacterScale;
-
-            //    speed = 3;
-            //    TotalHealth = 10;
-            //    RemainingHealth = TotalHealth;
+            TotalStamina = 50;
+            RemainingStamina = TotalStamina;
         }
         public override void Update(AnimationType animation, Vector2 direction)
         {
-            IsMovingLeft = InputManager.IsMovingLeft;
+
+            IsMovingLeft = direction.X < 0;
+
+            if (RemainingStamina <= 0 && animation == AnimationType.Dodge)
+            {
+                ;
+            }
             base.Update(animation, direction);
+            //if (AnimationToAbility.ContainsKey(currentAnimation) && AnimationToAbility[savedAnimaton].StaminaDrain > 0)
+            //{
+            //    if (!hasSubtractedStamina)
+            //    {
+            //        RemainingStamina -= AnimationToAbility[savedAnimaton].StaminaDrain; ;
+            //        RemainingStamina = Math.Max(RemainingStamina, 0);
+            //        hasSubtractedStamina = true; // Set the flag to true to indicate that stamina has been subtracted
+            //    }
+            //}
+            //else
+            //{
+            //    hasSubtractedStamina = false;
+            //}
             animationManager.Update(currentAnimation, overrideAnimation);
         }
         public override void Draw()
         {
             base.Draw();
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             DrawHealthBar(Globals.SpriteBatch);
+            DrawStaminaBar();
         }
         public void DrawHealthBar(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(10, 20, 200, 20), Color.White);
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(12, 22, 196, 16), Color.Black);
-
+            int width = 75;
+            int height = 10;
             float healthPercentage = (float)RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
-            int foregroundWidth = (int)(healthPercentage * 196); // Calculate the width of the foreground health bar
+            int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - height * 5, foregroundWidth, 3), Color.Green);
+        }
+        public void DrawStaminaBar()
+        {
+            int width = 75;
+            int height = 10;
+            timer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
 
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(12, 22, foregroundWidth, 16), Color.Green);
+            if (timer >= staminaRegenInterval && RemainingStamina < TotalStamina)
+            {
+                RemainingStamina++;
+            }
+
+            if(RemainingStamina >= TotalStamina || staminaSubtracted)
+            {
+                timer = 0;
+            }
+
+            float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
+            int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
+
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - (height * 4) - 5, foregroundWidth, 3), Color.Gray);
         }
 
-        
+
     }
 }

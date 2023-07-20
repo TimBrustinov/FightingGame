@@ -15,4 +15,18 @@ namespace FightingGame
             return;
         }
     }
+    public class SkeletonDeath : Ability
+    {
+        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        {
+            return;
+        }
+    }
+    public class SkeletonSpawn : Ability
+    {
+        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        {
+            return;
+        }
+    }
 }

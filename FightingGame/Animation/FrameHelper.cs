@@ -16,6 +16,7 @@ namespace FightingGame
         public Rectangle SourceRectangle;
         public Rectangle AttackHitbox;
         public Rectangle CharacterHitbox;
+        public bool CanHit = false;
 
         public FrameHelper(Rectangle SourceRect)            
         {
@@ -32,21 +33,22 @@ namespace FightingGame
             CharacterHitbox = SourceRectangle;
 
         }
-        public FrameHelper(Rectangle SourceRect, Rectangle attackHitbox)
+        public FrameHelper(Rectangle SourceRect, Rectangle attackHitbox, bool canHit)
         {
             SourceRectangle = SourceRect;
             AttackHitbox = attackHitbox;
             Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
             CharacterHitbox = SourceRectangle;
-            
+            CanHit = canHit; 
         }
-        public FrameHelper(Rectangle sourceRectangle, Rectangle attackHitbox, Rectangle characterHitbox)
+        public FrameHelper(Rectangle sourceRectangle, Rectangle attackHitbox, Rectangle characterHitbox, bool canHit)
         {
             SourceRectangle = sourceRectangle;
             AttackHitbox = attackHitbox;
             CharacterHitbox = characterHitbox;
             //Origin = new Vector2(CharacterHitbox.Width / 2, CharacterHitbox.Height / 2);
             Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
+            CanHit = canHit;
         }
         public FrameHelper(int x, int y, int width, int height, Vector2 origin, Rectangle attackHitbox)
         {

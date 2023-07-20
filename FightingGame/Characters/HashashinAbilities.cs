@@ -12,6 +12,7 @@ namespace FightingGame
         protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
         {
             AbilityDamage = 1;
+            StaminaDrain = 0;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * speed / 4;
@@ -22,6 +23,7 @@ namespace FightingGame
     {
         protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
         {
+            StaminaDrain = 15;
             AbilityDamage = 0;
             if (direction != Vector2.Zero)
             {
@@ -33,7 +35,11 @@ namespace FightingGame
     {
         protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
         {
-            AbilityDamage = 5;
+            AbilityDamage = 2;
+            if (direction != Vector2.Zero)
+            {
+                position += Vector2.Normalize(InputManager.Direction) * speed / 4;
+            }
             return;
         }
     }

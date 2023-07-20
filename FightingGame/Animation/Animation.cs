@@ -16,7 +16,7 @@ namespace FightingGame
         public FrameHelper CurrerntFrame => AnimationFrames[animationFramesIndex];
         public bool IsAnimationDone;
         public bool CanBeCanceled = true;
-
+        public bool hasFrameChanged;
         public int animationFramesIndex = 0;
         private float frameTime;
         private bool active = true;
@@ -55,9 +55,10 @@ namespace FightingGame
             if (active)
             {
                 frameTimer += (float)Globals.CurrentTime.ElapsedGameTime.TotalSeconds;
-
+                hasFrameChanged = false;
                 if (frameTimer >= frameTime)
                 {
+                    hasFrameChanged = true;
                     PreviousFrame = CurrerntFrame;
                     animationFramesIndex = (animationFramesIndex + 1) % AnimationFrames.Count;
                     if (animationFramesIndex == 0)
@@ -74,8 +75,8 @@ namespace FightingGame
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Vector2 adjustedPosition;
-            int offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2; // Calculate the X offset
-            int offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2; // Calculate the Y offset
+            int offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2;
+            int offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2;
 
             if (isMovingLeft)
             {
@@ -85,10 +86,9 @@ namespace FightingGame
             {
                 adjustedPosition = position + new Vector2(offsetX, -offsetY);
             }
-            // Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
+
             Globals.SpriteBatch.Draw(Texture, adjustedPosition, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
-
-
         }
+
     }
 }
