@@ -24,7 +24,10 @@ namespace FightingGame
             savedAnimation = animationType;
             AnimationManager = animationManager;
             UpdateAbility(ref position, speed, direction);
-            CanHit = animationManager.CurrentAnimation.CurrerntFrame.CanHit;
+            if(animationManager.CurrentAnimation != null)
+            {
+                CanHit = animationManager.CurrentAnimation.CurrerntFrame.CanHit;
+            }
             if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimation)
             {
                 if(savedAnimation == AnimationType.Death)

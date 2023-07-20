@@ -11,15 +11,12 @@ namespace FightingGame
     public static class InputManager
     {
         private static Vector2 direction;
+        public static Vector2 MousePosition;
         public static Vector2 Direction => direction;
-        public static Vector2 targetPosition;
         public static bool Moving;
-        public static bool MovingUp;
-        public static bool MovingDown;
-
         public static bool IsMovingLeft = false;
 
-        public static void Update()
+        public static void Update(Camera camera, Entity entity)
         {
             direction = Vector2.Zero;
             var keyboardState = Keyboard.GetState();
@@ -45,15 +42,14 @@ namespace FightingGame
                     direction.Y--;
                 }
             }
-            Moving = direction != Vector2.Zero;
+            // Use mouse input for facing direction
+            MouseState ms = Mouse.GetState();
+            Vector2 msPosition = new Vector2(ms.X, ms.Y);
+            MousePosition = camera.ScreenToWorld(msPosition, camera.Zoom);
 
-            var mouseState = Mouse.GetState();
-            if (mouseState.RightButton == ButtonState.Pressed)
-            {
-                int mouseX = mouseState.X;
-                int mouseY = mouseState.Y;
-                targetPosition = new Vector2(mouseX, mouseY);
-            }
+            // Determine facing direction based on the character's position and the mouse position
+            //IsMovingLeft = MousePosition.X < entity.Position.X;
+            Moving = direction != Vector2.Zero;
         }
     }
 }

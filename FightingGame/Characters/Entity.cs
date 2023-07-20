@@ -25,7 +25,7 @@ namespace FightingGame
 
         public bool IsActive = false;
         public bool IsDead = false;
-        public bool IsMovingLeft;
+        public bool IsFacingLeft;
         public bool HasBeenHit;
         public bool HasFrameChanged;
 
@@ -146,7 +146,7 @@ namespace FightingGame
             //{
             //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             //}
-            animationManager.Draw(Position, IsMovingLeft, new Vector2(Scale, Scale), Color.White);
+            animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 

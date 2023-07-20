@@ -16,7 +16,7 @@ namespace FightingGame
         public Vector2 viewportCenter;
         public Viewport Viewport;
         public Rectangle CameraView;
-        //private readonly float zoom;
+        public float Zoom;
         private Matrix transform;
 
         public Camera(Viewport viewport)
@@ -29,6 +29,7 @@ namespace FightingGame
         public void Update(Vector2 targetPosition, float zoom)
         {
             // Adjust the target position based on the zoom level
+            Zoom = zoom;
             var adjustedTargetPosition = new Vector2(targetPosition.X * zoom, targetPosition.Y * zoom);
             CameraView.X = (int)adjustedTargetPosition.X;
             CameraView.Y = (int) adjustedTargetPosition.Y;
@@ -37,7 +38,11 @@ namespace FightingGame
 
             transform = translationMatrix * zoomMatrix;
         }
-
+        public Vector2 ScreenToWorld(Vector2 screenPosition, float zoom)
+        {
+            var invertedTransform = Matrix.Invert(GetTransformMatrix());
+            return Vector2.Transform(screenPosition, invertedTransform) / zoom;
+        }
 
         public Matrix GetTransformMatrix()
         {

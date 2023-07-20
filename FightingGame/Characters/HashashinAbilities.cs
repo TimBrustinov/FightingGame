@@ -15,7 +15,7 @@ namespace FightingGame
             StaminaDrain = 0;
             if (direction != Vector2.Zero)
             {
-                position += Vector2.Normalize(InputManager.Direction) * speed / 4;
+                position += Vector2.Normalize(InputManager.Direction) * speed;
             }
         }
     }
@@ -38,7 +38,7 @@ namespace FightingGame
             AbilityDamage = 2;
             if (direction != Vector2.Zero)
             {
-                position += Vector2.Normalize(InputManager.Direction) * speed / 4;
+                position += Vector2.Normalize(InputManager.Direction) * speed;
             }
             return;
         }
@@ -48,6 +48,10 @@ namespace FightingGame
         protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
         {
             AbilityDamage = 5;
+            if (direction != Vector2.Zero)
+            {
+                position += Vector2.Normalize(InputManager.Direction) * speed;
+            }
             return;
         }
     }

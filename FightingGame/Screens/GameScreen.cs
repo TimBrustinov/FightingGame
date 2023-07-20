@@ -34,9 +34,9 @@ namespace FightingGame
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
             [Keys.S] = AnimationType.Run,
-            [Keys.K] = AnimationType.Attack,
-            [Keys.Q] = AnimationType.Ability1,
-            [Keys.E] = AnimationType.Ability2,
+            [Keys.J] = AnimationType.Attack,
+            [Keys.K] = AnimationType.Ability1,
+            [Keys.L] = AnimationType.Ability2,
             [Keys.R] = AnimationType.Ability3,
             [Keys.Space] = AnimationType.Dodge,
         };
@@ -46,7 +46,7 @@ namespace FightingGame
 
 
         private int enemyPoolIndex;
-        private int enemySpawnRate = 1000;
+        private int enemySpawnRate = 5000;
         private int deadEnemies;
         private List<Enemy> enemyPool;
         private List<Enemy> reservePool;
@@ -61,8 +61,8 @@ namespace FightingGame
         public GameScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
             Graphics = graphics;
-            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 100), new Vector2(1374 + 500, 860 + 500), Color.White);
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 5, 0.18f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Hashashin]);
+            GameScreenBackground = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1300 + 600, 600 + 600), Color.White);
+            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 5, 0.18f, 1.2f, ContentManager.Instance.EntityAbilites[EntityName.Hashashin]);
             //Samurai = new Samurai(CharacterName.Samurai, ContentManager.Instance.CharacterSpriteSheets[CharacterName.Samurai]);
             Skeleton = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 10, 1, 0.3f, 1.2f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
         }
@@ -91,8 +91,7 @@ namespace FightingGame
                 SpawnEnemy();
                 spawnTimer = 0;
             }
-            //updates input manager, if key pressed = a forbidden direction, the direction vector is unchanged aka (0,0)
-            InputManager.Update();
+            InputManager.Update(Camera, SelectedCharacter);
             if (keysPressed.Length == 0)
             {
                 currentAnimation = AnimationType.Stand;
@@ -104,13 +103,14 @@ namespace FightingGame
                     if(KeysToAnimation.ContainsKey(key))
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if(InputManager.Moving && currentAnimation == AnimationType.Dodge)
+                        if (InputManager.Moving && currentAnimation == AnimationType.Dodge)
                         {
                             break;
                         }
                         if (InputManager.Moving && currentAnimation == AnimationType.Attack)
                         {
                             currentAnimation = AnimationType.BasicAttack;
+                            break;
                         }
                         if (InputManager.Moving == false && currentAnimation == AnimationType.Attack)
                         {
@@ -285,7 +285,6 @@ namespace FightingGame
         //            else if (side == SideHit.Bottom)
         //            {
         //                enemy.Position = new Vector2(enemy.Position.X, enemy.Position.Y + offset);
-
         //            }
         //            else if (side == SideHit.Right)
         //            {
