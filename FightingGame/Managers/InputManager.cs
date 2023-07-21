@@ -25,6 +25,7 @@ namespace FightingGame
             {
                 if (keyboardState.IsKeyDown(Keys.A))
                 {
+
                     direction.X--;
                     IsMovingLeft = true;
                 }

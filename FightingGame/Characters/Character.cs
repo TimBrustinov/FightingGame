@@ -43,6 +43,7 @@ namespace FightingGame
             base.Draw();
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             DrawHealthBar(Globals.SpriteBatch);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - 15, (int)Position.Y + 20, 30, 10), new Color(255, 255, 255, 100));
             DrawStaminaBar();
         }
         public void DrawHealthBar(SpriteBatch spriteBatch)

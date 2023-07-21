@@ -161,8 +161,6 @@ namespace FightingGame
                 }
             }
             
-            
-
             if(SelectedCharacter.RemainingHealth <= 0)
             {
                 currentAnimation = AnimationType.Death;
@@ -177,6 +175,7 @@ namespace FightingGame
             Transform = Camera.GetTransformMatrix();
             spriteBatch.Begin(transformMatrix: Transform);
             GameScreenBackground.Draw(spriteBatch);
+            spriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(700, 700, 30, 20), new Color(255, 255, 255, 100));
             SelectedCharacter.Draw();
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {

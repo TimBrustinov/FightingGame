@@ -14,22 +14,14 @@ namespace FightingGame
     public class ContentManager
     {
         public Texture2D Pixel;
+        public Texture2D Shadow;
         public SpriteFont Font;
         public Texture2D Heart;
-        public Texture2D GrayHeart;
-
-        //Messing around
-        public Texture2D HeartOutline;
-        public Texture2D HeartBackground;
-        //Messing around
-
-        public Dictionary<EntityName, Dictionary<AnimationType, Ability>> EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Ability>>();
-
 
         public Dictionary<EntityName, Rectangle> EntityTextures = new Dictionary<EntityName, Rectangle>();
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
         public Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>> Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>>();
-
+        public Dictionary<EntityName, Dictionary<AnimationType, Ability>> EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Ability>>();
 
         public Texture2D FontTexture;
         public Dictionary<char, Rectangle> PixelFont = new Dictionary<char, Rectangle>();
@@ -47,8 +39,7 @@ namespace FightingGame
             bool canHit = true;
             Heart = content.Load<Texture2D>("Heart");
             Font = content.Load<SpriteFont>("Font");
-            GrayHeart = content.Load<Texture2D>("GrayHeart");
-            HeartOutline = content.Load<Texture2D>("HeartOutline");
+            Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Swordsman 
 
@@ -277,27 +268,6 @@ namespace FightingGame
             EntityAbilites.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
-        }
-        private List<Rectangle> GenerateFrameRectangles(Texture2D spriteSheet, Rectangle animationRowRectangle, int frameCount)
-        {
-            List<Rectangle> frameRectangles = new List<Rectangle>();
-
-            // Calculate the width and height of each frame
-            int frameWidth = animationRowRectangle.Width / frameCount;
-            int frameHeight = animationRowRectangle.Height;
-
-            // Generate rectangles for each frame in the row
-            for (int i = 0; i < frameCount; i++)
-            {
-                Rectangle frameRectangle = new Rectangle(
-                    animationRowRectangle.X + (i * frameWidth),
-                    animationRowRectangle.Y,
-                    frameWidth,
-                    frameHeight);
-
-                frameRectangles.Add(frameRectangle);
-            }
-            return frameRectangles;
         }
     }
 }
