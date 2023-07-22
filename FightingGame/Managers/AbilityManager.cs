@@ -12,13 +12,14 @@ namespace FightingGame
     {
         public bool CanUseAbility;
 
+        public List<AnimationType> AvailableAnimations = new List<AnimationType>();
         private Dictionary<AnimationType, Ability> abilities = new Dictionary<AnimationType, Ability>();
-        private Dictionary<AnimationType, float> cooldowns = new Dictionary<AnimationType, float>();
+        public Dictionary<AnimationType, float> cooldowns = new Dictionary<AnimationType, float>();
 
         public void RegisterAbility(AnimationType type, Ability ability)
         {
             abilities.Add(type, ability);
-            cooldowns.Add(type, ability.CooldownTime);
+            cooldowns.Add(type, ability.Cooldown);
         }
 
         public void Update(GameTime gameTime)
@@ -37,7 +38,7 @@ namespace FightingGame
                 else
                 {
                     CanUseAbility = true;
-                    cooldowns[abilityType] = ability.CooldownTime;
+                    cooldowns[abilityType] = ability.Cooldown;
                 }
             }
         }

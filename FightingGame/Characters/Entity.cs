@@ -51,15 +51,18 @@ namespace FightingGame
         private Vector2 minPosition, maxPosition;
 
         public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
+        public AbilityManager AbilityManager;
         public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility)
         {
             Name = name;
             AnimationToAbility = animationToAbility;
+            AbilityManager = new AbilityManager();
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.Animations[Name])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
             }
+            
         }
         private bool canPerformAttack = false;
 
@@ -72,43 +75,18 @@ namespace FightingGame
             overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
 
-            if (overrideAnimation)
+
+            if(CheckAnimation())
             {
-                currentAnimation = AnimationType.Death;
-            }
-            if (AnimationToAbility.ContainsKey(currentAnimation))
-            {
-                CurrentAbility = AnimationToAbility[currentAnimation];
-                bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
+                savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
+                AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
 
-                if(CurrentAbility.StaminaDrain == 0)
+                if (savedAnimaton == AnimationType.None)
                 {
-                    canPerformAttack = true;
-                }
-                else if (!staminaSubtracted && hasEnoughStamina)
-                {
-                    // Deduct stamina by the required amount
-                    RemainingStamina -= CurrentAbility.StaminaDrain;
-                    staminaSubtracted = true;
-                    canPerformAttack = true;
-                }
-
-                if (staminaSubtracted || canPerformAttack)
-                {
-                    savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
-                    AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
-
-                    if (savedAnimaton == AnimationType.None)
-                    {
-                        IsDead = CurrentAbility.IsDead;
-                        currentAnimation = AnimationType.Stand;
-                        canPerformAttack = false;
-                        staminaSubtracted = false;
-                    }
-                }
-                else
-                {
+                    IsDead = CurrentAbility.IsDead;
                     currentAnimation = AnimationType.Stand;
+                    canPerformAttack = false;
+                    staminaSubtracted = false;
                 }
             }
             else
@@ -122,6 +100,10 @@ namespace FightingGame
                     currentAnimation = AnimationType.Stand;
                 }
             }
+
+
+            
+           
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
            
             UpdateHitbox();
@@ -158,6 +140,38 @@ namespace FightingGame
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 
+        public bool CheckAnimation()
+        {
+            if (overrideAnimation)
+            {
+                currentAnimation = AnimationType.Death;
+            }
+            if (AnimationToAbility.ContainsKey(currentAnimation))
+            {
+                CurrentAbility = AnimationToAbility[currentAnimation];
+                if(AbilityManager.cooldowns[currentAnimation] == 0)
+                {
+                    bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
+                    if (CurrentAbility.StaminaDrain == 0)
+                    {
+                        canPerformAttack = true;
+                    }
+                    else if (!staminaSubtracted && hasEnoughStamina)
+                    {
+                        RemainingStamina -= CurrentAbility.StaminaDrain;
+                        staminaSubtracted = true;
+                        canPerformAttack = true;
+                    }
+                }
+
+                if (staminaSubtracted || canPerformAttack)
+                {
+                    return true;
+                }
+            }
+            return false;
+            
+        }
         public void Reset()
         {
             currentAnimation = AnimationType.None;
