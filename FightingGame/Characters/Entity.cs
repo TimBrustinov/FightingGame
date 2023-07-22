@@ -28,6 +28,7 @@ namespace FightingGame
         public bool IsFacingLeft;
         public bool HasBeenHit;
         public bool HasFrameChanged;
+        private bool CheckedAnimation;
 
         public EntityName Name;
 
@@ -51,18 +52,18 @@ namespace FightingGame
         private Vector2 minPosition, maxPosition;
 
         public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
-        public AbilityManager AbilityManager;
+        public Dictionary<Ability, float> AbilityCooldowns = new Dictionary<Ability, float>();
         public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility)
         {
             Name = name;
             AnimationToAbility = animationToAbility;
-            AbilityManager = new AbilityManager();
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.Animations[Name])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
             }
-            
+            AbilityCooldowns.Add(animationToAbility[AnimationType.BasicAttack], 0);
+
         }
         private bool canPerformAttack = false;
 
@@ -74,9 +75,10 @@ namespace FightingGame
 
             overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
+            UpdateAnimationCooldowns();
 
 
-            if(CheckAnimation())
+            if (CheckAnimation())
             {
                 savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
                 AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
@@ -101,17 +103,27 @@ namespace FightingGame
                 }
             }
 
-
-            
-           
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
-           
+
             UpdateHitbox();
             UpdateWeapon();
             animationManager.Update(currentAnimation, overrideAnimation);
             HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
-
+        public void UpdateAnimationCooldowns()
+        {
+            foreach (var ability in AbilityCooldowns.Keys)
+            {
+                if (AbilityCooldowns[ability] > 0)
+                {
+                    AbilityCooldowns[ability] -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else
+                {
+                    AbilityCooldowns[ability] = 0;
+                }
+            }
+        }
         private void UpdateHitbox()
         {
             if (currentAnimation == AnimationType.Dodge)
@@ -149,7 +161,7 @@ namespace FightingGame
             if (AnimationToAbility.ContainsKey(currentAnimation))
             {
                 CurrentAbility = AnimationToAbility[currentAnimation];
-                if(AbilityManager.cooldowns[currentAnimation] == 0)
+                if (AbilityCooldowns[CurrentAbility] <= 0)
                 {
                     bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
                     if (CurrentAbility.StaminaDrain == 0)
@@ -163,14 +175,13 @@ namespace FightingGame
                         canPerformAttack = true;
                     }
                 }
-
                 if (staminaSubtracted || canPerformAttack)
                 {
+                    AbilityCooldowns[CurrentAbility] = CurrentAbility.Cooldown;
                     return true;
                 }
             }
             return false;
-            
         }
         public void Reset()
         {
@@ -217,7 +228,7 @@ namespace FightingGame
         }
         public void DrawShadow()
         {
-            if(currentAnimation == AnimationType.Dodge)
+            if (currentAnimation == AnimationType.Dodge)
             {
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - currFrame.SourceRectangle.Width / 2, ((int)Position.Y + currFrame.SourceRectangle.Height / 2) + 5, currFrame.SourceRectangle.Width, 10), new Color(255, 255, 255, 100));
             }

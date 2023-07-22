@@ -15,7 +15,7 @@ namespace FightingGame
         AnimationType savedAnimation;
         public int AbilityDamage;
         public int StaminaDrain;
-        public int Cooldown;
+        public float Cooldown;
         public bool CanHit;
         public bool IsDead = false;
         protected abstract void UpdateAbility(ref Vector2 position, float speed, Vector2 direction);

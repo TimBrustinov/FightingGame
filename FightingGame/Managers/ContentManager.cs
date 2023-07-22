@@ -123,7 +123,7 @@ namespace FightingGame
             Dictionary<AnimationType, Ability> HashashinAbilites = new Dictionary<AnimationType, Ability>()
             {
                 [AnimationType.Dodge] = new HashashinDodge(),
-                [AnimationType.BasicAttack] = new HashashinBasicAttack(),
+                [AnimationType.BasicAttack] = new HashashinBasicAttack(5),
                 [AnimationType.Ability1] = new HashashinAbility1(),
                 [AnimationType.Ability2] = new HashashinAbility2(),
             };

@@ -9,6 +9,10 @@ namespace FightingGame
 {
     public class HashashinBasicAttack : Ability
     {
+        public HashashinBasicAttack(float cooldownTime)
+        {
+            Cooldown = cooldownTime;
+        }
         protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             AbilityDamage = 5;

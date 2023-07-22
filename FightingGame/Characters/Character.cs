@@ -69,7 +69,7 @@ namespace FightingGame
         {
             int width = 75;
             int height = 10;
-            timer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
+            timer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (timer >= staminaRegenInterval && RemainingStamina < TotalStamina)
             {

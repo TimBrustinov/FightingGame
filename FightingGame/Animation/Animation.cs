@@ -54,7 +54,7 @@ namespace FightingGame
         {
             if (active)
             {
-                frameTimer += (float)Globals.CurrentTime.ElapsedGameTime.TotalSeconds;
+                frameTimer += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
                 hasFrameChanged = false;
                 if (frameTimer >= frameTime)
                 {

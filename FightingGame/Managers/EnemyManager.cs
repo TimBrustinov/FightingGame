@@ -32,7 +32,7 @@ namespace FightingGame
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-            spawnTimer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
+            spawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (spawnTimer >= enemySpawnRate)
             {
                 SpawnEnemies();
