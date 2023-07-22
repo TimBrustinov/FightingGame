@@ -20,7 +20,7 @@ namespace FightingGame
 
         public Dictionary<EntityName, Rectangle> EntityTextures = new Dictionary<EntityName, Rectangle>();
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
-        public Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>> Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool), List<FrameHelper>>>();
+        public Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>> Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>>();
         public Dictionary<EntityName, Dictionary<AnimationType, Ability>> EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Ability>>();
 
         public Texture2D FontTexture;
@@ -127,7 +127,7 @@ namespace FightingGame
                 [AnimationType.Ability1] = new HashashinAbility1(),
                 [AnimationType.Ability2] = new HashashinAbility2(),
             };
-            Dictionary<(AnimationType, bool), List<FrameHelper>> Hashashin = new Dictionary<(AnimationType, bool), List<FrameHelper>>();
+            Dictionary<(AnimationType, bool, float), List<FrameHelper>> Hashashin = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> HashashinRun = new List<FrameHelper>();
             HashashinRun.Add(new FrameHelper(new Rectangle(123, 219, 39, 36)));
@@ -138,7 +138,7 @@ namespace FightingGame
             HashashinRun.Add(new FrameHelper(new Rectangle(1567, 218, 38, 37)));
             HashashinRun.Add(new FrameHelper(new Rectangle(1849, 216, 44, 30)));
             HashashinRun.Add(new FrameHelper(new Rectangle(2140, 218, 39, 37)));
-            Hashashin.Add((AnimationType.Run, CanBeCanceled), HashashinRun);
+            Hashashin.Add((AnimationType.Run, CanBeCanceled, 0.18f), HashashinRun);
 
             List<FrameHelper> HashashinBasicAttack = new List<FrameHelper>();
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(135, 858, 48, 37), new Rectangle(145, 858, 38, 25), canHit));
@@ -149,7 +149,7 @@ namespace FightingGame
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1562, 856, 39, 39)));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1854, 858, 39, 37)));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(2148, 858, 33, 37)));
-            Hashashin.Add((AnimationType.BasicAttack, !CanBeCanceled), HashashinBasicAttack);
+            Hashashin.Add((AnimationType.BasicAttack, !CanBeCanceled, 0.15f), HashashinBasicAttack);
 
             List<FrameHelper> HashashinDodge = new List<FrameHelper>();
             HashashinDodge.Add(new FrameHelper(new Rectangle(127, 731, 39, 36)));
@@ -158,7 +158,7 @@ namespace FightingGame
             HashashinDodge.Add(new FrameHelper(new Rectangle(992, 736, 34, 31)));
             HashashinDodge.Add(new FrameHelper(new Rectangle(1280, 736, 34, 31)));
             HashashinDodge.Add(new FrameHelper(new Rectangle(1572, 730, 26, 37)));
-            Hashashin.Add((AnimationType.Dodge, !CanBeCanceled), HashashinDodge);
+            Hashashin.Add((AnimationType.Dodge, !CanBeCanceled, 0.18f), HashashinDodge);
 
             List<FrameHelper> HashashinAbility1 = new List<FrameHelper>();
             HashashinAbility1.Add(new FrameHelper(new Rectangle(134, 601, 24, 36)));
@@ -168,7 +168,7 @@ namespace FightingGame
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1269, 575, 84, 61), new Rectangle(1305, 573, 51, 64), new Rectangle(1280, 599, 32, 37), canHit));
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1560, 571, 84, 67), new Rectangle(1601, 569, 49, 70), new Rectangle(1568, 588, 34, 38), canHit));
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1853, 572, 80, 67), new Rectangle(1895, 569, 43, 72), new Rectangle(1859, 600, 26, 38), canHit));
-            Hashashin.Add((AnimationType.Ability1, !CanBeCanceled), HashashinAbility1);
+            Hashashin.Add((AnimationType.Ability1, !CanBeCanceled, 0.18f), HashashinAbility1);
 
             List<FrameHelper> HashashinAbility2 = new List<FrameHelper>();
             HashashinAbility2.Add(new FrameHelper(new Rectangle(978, 986, 45, 37)));
@@ -183,7 +183,7 @@ namespace FightingGame
             HashashinAbility2.Add(new FrameHelper(new Rectangle(3871, 980, 34, 43)));
             HashashinAbility2.Add(new FrameHelper(new Rectangle(4156, 986, 41, 37)));
             HashashinAbility2.Add(new FrameHelper(new Rectangle(4452, 986, 29, 37)));
-            Hashashin.Add((AnimationType.Ability2, !CanBeCanceled), HashashinAbility2);
+            Hashashin.Add((AnimationType.Ability2, !CanBeCanceled, 0.15f), HashashinAbility2);
 
             List<FrameHelper> HashashinStand = new List<FrameHelper>();
             HashashinStand.Add(new FrameHelper(new Rectangle(132, 90, 34, 37)));
@@ -194,7 +194,7 @@ namespace FightingGame
             HashashinStand.Add(new FrameHelper(new Rectangle(1568, 92, 33, 35)));
             HashashinStand.Add(new FrameHelper(new Rectangle(1858, 92, 35, 35)));
             HashashinStand.Add(new FrameHelper(new Rectangle(2147, 91, 34, 36)));
-            Hashashin.Add((AnimationType.Stand, CanBeCanceled), HashashinStand);
+            Hashashin.Add((AnimationType.Stand, CanBeCanceled, 0.28f), HashashinStand);
 
             Animations.Add(EntityName.Hashashin, Hashashin);
             EntityAbilites.Add(EntityName.Hashashin, HashashinAbilites);
@@ -211,7 +211,7 @@ namespace FightingGame
                 [AnimationType.Death] = new SkeletonDeath(),
                 [AnimationType.Spawn] = new SkeletonSpawn(),
             };
-            Dictionary<(AnimationType, bool), List<FrameHelper>> Skeleton = new Dictionary<(AnimationType, bool), List<FrameHelper>>();
+            Dictionary<(AnimationType, bool, float), List<FrameHelper>> Skeleton = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> SkeletonRun = new List<FrameHelper>();
             SkeletonRun.Add(new FrameHelper(new Rectangle(5, 145, 36, 32)));
@@ -225,7 +225,7 @@ namespace FightingGame
             SkeletonRun.Add(new FrameHelper(new Rectangle(516, 144, 38, 33)));
             SkeletonRun.Add(new FrameHelper(new Rectangle(580, 144, 38, 33)));
             //SkeletonRun.Add(new FrameHelper(new Rectangle(654, 145, 37, 32)));
-            Skeleton.Add((AnimationType.Run, CanBeCanceled), SkeletonRun);
+            Skeleton.Add((AnimationType.Run, CanBeCanceled, 0.3f), SkeletonRun);
 
             List<FrameHelper> SkeletonBasicAttack = new List<FrameHelper>();
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(8, 16, 34, 32)));
@@ -241,7 +241,7 @@ namespace FightingGame
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(646, 12, 36, 36)));
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(707, 16, 39, 32)));
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(776, 16, 34, 32)));
-            Skeleton.Add((AnimationType.BasicAttack, !CanBeCanceled), SkeletonBasicAttack);
+            Skeleton.Add((AnimationType.BasicAttack, !CanBeCanceled, 0.2f), SkeletonBasicAttack);
 
             List<FrameHelper> SkeletonDeath = new List<FrameHelper>();
             SkeletonDeath.Add(new FrameHelper(new Rectangle(137, 81, 31, 32)));
@@ -252,17 +252,17 @@ namespace FightingGame
             SkeletonDeath.Add(new FrameHelper(new Rectangle(521, 79, 42, 34)));
             SkeletonDeath.Add(new FrameHelper(new Rectangle(585, 79, 42, 34)));
             SkeletonDeath.Add(new FrameHelper(new Rectangle(649, 80, 42, 33)));
-            Skeleton.Add((AnimationType.Death, !CanBeCanceled), SkeletonDeath);
+            Skeleton.Add((AnimationType.Death, !CanBeCanceled, 0.2f), SkeletonDeath);
 
             List<FrameHelper> SkeletonStand = new List<FrameHelper>();
             SkeletonStand.Add(new FrameHelper(new Rectangle(9, 208, 33, 33)));
-            Skeleton.Add((AnimationType.Stand, CanBeCanceled), SkeletonStand);
+            Skeleton.Add((AnimationType.Stand, CanBeCanceled, 0.3f), SkeletonStand);
 
             List<FrameHelper> SkeletonSpawn = new List<FrameHelper>();
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(9, 271, 32, 34)));
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(73, 272, 32, 33)));
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(137, 272, 32, 33)));
-            Skeleton.Add((AnimationType.Spawn, !CanBeCanceled), SkeletonSpawn);
+            Skeleton.Add((AnimationType.Spawn, !CanBeCanceled, 0.2f), SkeletonSpawn);
 
             Animations.Add(EntityName.Skeleton, Skeleton);
             EntityAbilites.Add(EntityName.Skeleton, SkeletonAbilites);

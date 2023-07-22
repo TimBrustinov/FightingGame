@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FightingGame.Characters
+namespace FightingGame
 {
     public class DrawableObject : DrawableObjectBase
     {

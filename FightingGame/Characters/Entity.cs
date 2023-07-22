@@ -31,13 +31,15 @@ namespace FightingGame
 
         public EntityName Name;
 
-        public int TotalHealth;
-        public int RemainingHealth;
+        public float TotalHealth;
+        public float RemainingHealth;
         public int TotalStamina;
         public int RemainingStamina;
 
-        public int Speed;
-        public int AbilityDamage;
+        public float Speed;
+        public float SpeedMultiplier = 0;
+        public float AbilityDamage;
+        public float AbilityDamageMultiplier = 0;
         public float Scale;
 
         public AnimationManager animationManager;
@@ -46,15 +48,17 @@ namespace FightingGame
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
+        private Vector2 minPosition, maxPosition;
+
         public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility, float animationSpeed)
+        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility)
         {
             Name = name;
             AnimationToAbility = animationToAbility;
             animationManager = new AnimationManager();
             foreach (var animation in ContentManager.Instance.Animations[Name])
             {
-                animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animationSpeed);
+                animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
             }
         }
         private bool canPerformAttack = false;
@@ -63,8 +67,11 @@ namespace FightingGame
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
-            overrideAnimation = animation == AnimationType.Death ? true : false;
+            Speed += Speed * SpeedMultiplier;
+
+            overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
+
             if (overrideAnimation)
             {
                 currentAnimation = AnimationType.Death;
@@ -89,14 +96,14 @@ namespace FightingGame
                 if (staminaSubtracted || canPerformAttack)
                 {
                     savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
-                    AbilityDamage = CurrentAbility.AbilityDamage;
-                    
+                    AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
+
                     if (savedAnimaton == AnimationType.None)
                     {
                         IsDead = CurrentAbility.IsDead;
                         currentAnimation = AnimationType.Stand;
                         canPerformAttack = false;
-                        staminaSubtracted = false; // Reset the flag for the next animation
+                        staminaSubtracted = false;
                     }
                 }
                 else
@@ -115,7 +122,7 @@ namespace FightingGame
                     currentAnimation = AnimationType.Stand;
                 }
             }
-
+            Position = Vector2.Clamp(Position, minPosition, maxPosition);
            
             UpdateHitbox();
             UpdateWeapon();
@@ -147,6 +154,7 @@ namespace FightingGame
             //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             //}
             animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
+            DrawShadow();
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 
@@ -159,7 +167,17 @@ namespace FightingGame
             IsDead = false;
             overrideAnimation = false;
         }
-        public void TakeDamage(int damage)
+        public void Spawn(Vector2 position)
+        {
+            Position = position;
+            savedAnimaton = AnimationType.Spawn;
+        }
+        public void SetBounds(Rectangle mapSize)
+        {
+            minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);
+            maxPosition = new Vector2(mapSize.Width - Dimentions.X / 2, mapSize.Height - Dimentions.Y / 2);
+        }
+        public void TakeDamage(float damage)
         {
             RemainingHealth -= damage;
         }
@@ -181,6 +199,17 @@ namespace FightingGame
                     WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
                 }
                 WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * Scale);
+            }
+        }
+        public void DrawShadow()
+        {
+            if(currentAnimation == AnimationType.Dodge)
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - currFrame.SourceRectangle.Width / 2, ((int)Position.Y + currFrame.SourceRectangle.Height / 2) + 5, currFrame.SourceRectangle.Width, 10), new Color(255, 255, 255, 100));
+            }
+            else
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, (HitBox.Y + HitBox.Height / 2) + 25, HitBox.Width, 10), new Color(255, 255, 255, 100));
             }
         }
     }

@@ -12,23 +12,22 @@ namespace FightingGame
 {
     public abstract class Ability
     {
-        AnimationManager AnimationManager;
         AnimationType savedAnimation;
         public int AbilityDamage;
+        public float CooldownTime;
         public int StaminaDrain;
         public bool CanHit;
         public bool IsDead = false;
-        protected abstract void UpdateAbility(ref Vector2 position, int speed, Vector2 direction);
-        public AnimationType Update(AnimationManager animationManager, AnimationType animationType, ref Vector2 position, Vector2 direction, int speed)
+        protected abstract void UpdateAbility(ref Vector2 position, float speed, Vector2 direction);
+        public AnimationType Update(AnimationManager animationManager, AnimationType animationType, ref Vector2 position, Vector2 direction, float speed)
         {
             savedAnimation = animationType;
-            AnimationManager = animationManager;
             UpdateAbility(ref position, speed, direction);
             if(animationManager.CurrentAnimation != null)
             {
                 CanHit = animationManager.CurrentAnimation.CurrerntFrame.CanHit;
             }
-            if (animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimation)
+            if (animationManager.CurrentAnimation != null && animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimation)
             {
                 if(savedAnimation == AnimationType.Death)
                 {

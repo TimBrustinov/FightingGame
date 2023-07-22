@@ -1,5 +1,4 @@
-﻿using FightingGame.Characters;
-using FightingGame.Screens;
+﻿using FightingGame.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -58,7 +57,7 @@ namespace FightingGame
             #endregion
 
             #region Game Screen
-            GameScreenBackground = Content.Load<Texture2D>("DungeonTile");
+            GameScreenBackground = Content.Load<Texture2D>("HellDungeonDecoration");
             gameScreenTextures.Add(Texture.GameScreenBackground, GameScreenBackground);
 
             #endregion

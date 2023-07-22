@@ -12,13 +12,16 @@ namespace FightingGame
 {
     public class Character : Entity
     {
-        public double XP;
+        public float XP;
         public int Level;
+
+        private float xpToLevelUp;
+        private float maxXpForCurrentLevel;
 
         private double staminaRegenInterval = 800;
         private double timer;
 
-        public Character(EntityName name, Texture2D texture, int health, int speed, float animationSpeed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites, animationSpeed) 
+        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             Scale = scale;
@@ -30,20 +33,28 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             TotalStamina = 50;
             RemainingStamina = TotalStamina;
+
+            XP = 0;
+            Level = 1;
+            xpToLevelUp = 100;
+            maxXpForCurrentLevel = 100;
         }
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
-            //IsFacingLeft = InputManager.IsMovingLeft;
             base.Update(animation, direction);
+            if (XP >= xpToLevelUp)
+            {
+                LevelUp();
+            }
             animationManager.Update(currentAnimation, overrideAnimation);
         }
+        
         public override void Draw()
         {
             base.Draw();
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             DrawHealthBar(Globals.SpriteBatch);
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - 15, (int)Position.Y + 20, 30, 10), new Color(255, 255, 255, 100));
             DrawStaminaBar();
         }
         public void DrawHealthBar(SpriteBatch spriteBatch)
@@ -75,7 +86,12 @@ namespace FightingGame
 
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - (height * 4) - 5, foregroundWidth, 3), Color.Gray);
         }
-
-
+        private void LevelUp()
+        {
+            Level++;
+            xpToLevelUp *= 1.25f;
+            maxXpForCurrentLevel = xpToLevelUp;
+            XP = 0; 
+        }
     }
 }

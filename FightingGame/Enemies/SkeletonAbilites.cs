@@ -9,7 +9,7 @@ namespace FightingGame
 {
     public class SkeletonBasicAttack : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             AbilityDamage = 1;
             return;
@@ -17,14 +17,14 @@ namespace FightingGame
     }
     public class SkeletonDeath : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             return;
         }
     }
     public class SkeletonSpawn : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             return;
         }

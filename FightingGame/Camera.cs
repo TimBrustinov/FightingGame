@@ -1,5 +1,4 @@
-﻿using FightingGame.Characters;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -18,7 +17,6 @@ namespace FightingGame
         public Rectangle CameraView;
         public float Zoom;
         private Matrix transform;
-
         public Camera(Viewport viewport)
         {
             Viewport = viewport;
@@ -26,18 +24,24 @@ namespace FightingGame
             CameraView = new Rectangle(0, 0, viewport.Width, viewport.Height);
         }
 
-        public void Update(Vector2 targetPosition, float zoom)
+        public void Update(Vector2 targetPosition, Rectangle map, float zoom)
         {
             // Adjust the target position based on the zoom level
             Zoom = zoom;
             var adjustedTargetPosition = new Vector2(targetPosition.X * zoom, targetPosition.Y * zoom);
+
+            // Clamp the target position to the map boundaries
+            adjustedTargetPosition.X = MathHelper.Clamp(adjustedTargetPosition.X, map.Left + Viewport.Width / (2f * zoom), map.Right - Viewport.Width / (2f * zoom));
+            adjustedTargetPosition.Y = MathHelper.Clamp(adjustedTargetPosition.Y, map.Top + Viewport.Height / (2f * zoom), map.Bottom - Viewport.Height / (2f * zoom));
+
             CameraView.X = (int)adjustedTargetPosition.X;
-            CameraView.Y = (int) adjustedTargetPosition.Y;
+            CameraView.Y = (int)adjustedTargetPosition.Y;
             var translationMatrix = Matrix.CreateTranslation(viewportCenter.X - adjustedTargetPosition.X, viewportCenter.Y - adjustedTargetPosition.Y, 0f);
             var zoomMatrix = Matrix.CreateScale(zoom);
 
             transform = translationMatrix * zoomMatrix;
         }
+
         public Vector2 ScreenToWorld(Vector2 screenPosition, float zoom)
         {
             var invertedTransform = Matrix.Invert(GetTransformMatrix());

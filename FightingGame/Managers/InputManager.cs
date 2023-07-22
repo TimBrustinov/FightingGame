@@ -15,6 +15,7 @@ namespace FightingGame
         public static Vector2 Direction => direction;
         public static bool Moving;
         public static bool IsMovingLeft = false;
+        public static bool IsMovingUp = false;
 
         public static void Update(Camera camera, Entity entity)
         {
@@ -25,7 +26,6 @@ namespace FightingGame
             {
                 if (keyboardState.IsKeyDown(Keys.A))
                 {
-
                     direction.X--;
                     IsMovingLeft = true;
                 }
@@ -37,10 +37,12 @@ namespace FightingGame
                 if (keyboardState.IsKeyDown(Keys.S))
                 {
                     direction.Y++;
+                    IsMovingUp = false;
                 }
                 if (keyboardState.IsKeyDown(Keys.W))
                 {
                     direction.Y--;
+                    IsMovingUp = true;
                 }
             }
             // Use mouse input for facing direction

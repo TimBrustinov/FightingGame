@@ -9,10 +9,11 @@ namespace FightingGame
 {
     public class HashashinBasicAttack : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
-            AbilityDamage = 1;
+            AbilityDamage = 5;
             StaminaDrain = 0;
+            CooldownTime = 0;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * speed;
@@ -21,10 +22,11 @@ namespace FightingGame
     }
     public class HashashinDodge : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             StaminaDrain = 15;
             AbilityDamage = 0;
+            CooldownTime = 0;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * (speed + 5);
@@ -33,9 +35,10 @@ namespace FightingGame
     }
     public class HashashinAbility1 : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
-            AbilityDamage = 2;
+            AbilityDamage = 10;
+            CooldownTime = 3.5f;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * speed;
@@ -45,9 +48,10 @@ namespace FightingGame
     }
     public class HashashinAbility2 : Ability
     {
-        protected override void UpdateAbility(ref Vector2 position, int speed, Vector2 direction)
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
-            AbilityDamage = 5;
+            AbilityDamage = 10;
+            CooldownTime = 4f;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * speed;
