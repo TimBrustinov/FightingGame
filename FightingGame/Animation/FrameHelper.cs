@@ -33,6 +33,13 @@ namespace FightingGame
             CharacterHitbox = SourceRectangle;
 
         }
+        public FrameHelper(Rectangle SourceRect, Rectangle characterHitbox)
+        {
+            SourceRectangle = SourceRect;
+            Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
+            CharacterHitbox = characterHitbox;
+            AttackHitbox = new Rectangle(SourceRectangle.X, SourceRectangle.Y, 0, 0);
+        }
         public FrameHelper(Rectangle SourceRect, Rectangle attackHitbox, bool canHit)
         {
             SourceRectangle = SourceRect;

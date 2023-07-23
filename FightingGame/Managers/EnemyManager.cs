@@ -21,6 +21,7 @@ namespace FightingGame
 
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+        Enemy GhostWarrior = new Enemy(EntityName.GhostWarrior, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.2f, 2f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
@@ -107,7 +108,7 @@ namespace FightingGame
             }
             for (int i = 0; i < increaseEnemyPoolAmount; i++)
             {
-                Enemy enemy = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+                Enemy enemy = new Enemy(SkeletonPreset);
                 enemyPool.Add(enemy);
                 enemy.Spawn(GetSpawnLocation());
                 enemy.SetBounds(Tilemap.HitBox);

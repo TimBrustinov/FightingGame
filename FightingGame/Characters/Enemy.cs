@@ -24,6 +24,17 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
         }
+        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAbilites[enemy.Name])
+        {
+            Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
+            Scale = enemy.Scale;
+            Position = new Vector2(1000, 350);
+            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * Scale;
+
+            Speed = enemy.Speed;
+            TotalHealth = enemy.TotalHealth;
+            RemainingHealth = TotalHealth;
+        }
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = direction.X < 0;

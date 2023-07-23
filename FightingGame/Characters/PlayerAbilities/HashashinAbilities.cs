@@ -9,10 +9,8 @@ namespace FightingGame
 {
     public class HashashinBasicAttack : Ability
     {
-        public HashashinBasicAttack(float cooldownTime)
-        {
-            Cooldown = cooldownTime;
-        }
+        public HashashinBasicAttack(float cooldownTime) : base(cooldownTime) { }
+
         protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             AbilityDamage = 5;
@@ -25,6 +23,8 @@ namespace FightingGame
     }
     public class HashashinDodge : Ability
     {
+        public HashashinDodge(float cooldownTime) : base(cooldownTime) { }
+
         protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             StaminaDrain = 15;
@@ -37,7 +37,8 @@ namespace FightingGame
     }
     public class HashashinAbility1 : Ability
     {
-        public float CooldownTime = 3f;
+        public HashashinAbility1(float cooldownTime) : base(cooldownTime) { }
+
         protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
             AbilityDamage = 10;
@@ -50,14 +51,27 @@ namespace FightingGame
     }
     public class HashashinAbility2 : Ability
     {
-        public float CooldownTime = 3f;
+        public HashashinAbility2(float cooldownTime) : base(cooldownTime) { }
+
         protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
         {
-            AbilityDamage = 10;
+            AbilityDamage = 20;
             if (direction != Vector2.Zero)
             {
                 position += Vector2.Normalize(InputManager.Direction) * speed;
             }
+            return;
+        }
+    }
+    public class HashashinAbility3 : Ability
+    {
+        public HashashinAbility3(float cooldownTime) : base(cooldownTime) 
+        {
+
+        }
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
+        {
+            AbilityDamage = 20;
             return;
         }
     }

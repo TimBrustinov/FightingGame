@@ -28,7 +28,6 @@ namespace FightingGame
         public bool IsFacingLeft;
         public bool HasBeenHit;
         public bool HasFrameChanged;
-        private bool CheckedAnimation;
 
         public EntityName Name;
 
@@ -62,8 +61,10 @@ namespace FightingGame
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
             }
-            AbilityCooldowns.Add(animationToAbility[AnimationType.BasicAttack], 0);
-
+            foreach (var item in AnimationToAbility)
+            {
+                AbilityCooldowns.Add(animationToAbility[item.Key], 0);
+            }
         }
         private bool canPerformAttack = false;
 
@@ -72,12 +73,9 @@ namespace FightingGame
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
             Speed += Speed * SpeedMultiplier;
-
             overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
             UpdateAnimationCooldowns();
-
-
             if (CheckAnimation())
             {
                 savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
@@ -95,6 +93,7 @@ namespace FightingGame
             {
                 if (direction != Vector2.Zero)
                 {
+                    currentAnimation = AnimationType.Run;
                     Position += Vector2.Normalize(direction) * Speed;
                 }
                 else
@@ -102,7 +101,6 @@ namespace FightingGame
                     currentAnimation = AnimationType.Stand;
                 }
             }
-
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
 
             UpdateHitbox();
@@ -110,20 +108,7 @@ namespace FightingGame
             animationManager.Update(currentAnimation, overrideAnimation);
             HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
-        public void UpdateAnimationCooldowns()
-        {
-            foreach (var ability in AbilityCooldowns.Keys)
-            {
-                if (AbilityCooldowns[ability] > 0)
-                {
-                    AbilityCooldowns[ability] -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-                }
-                else
-                {
-                    AbilityCooldowns[ability] = 0;
-                }
-            }
-        }
+        
         private void UpdateHitbox()
         {
             if (currentAnimation == AnimationType.Dodge)
@@ -143,7 +128,7 @@ namespace FightingGame
         {
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, TopLeft, new Rectangle(currFrame.SourceRectangle.X, currFrame.SourceRectangle.Y, (int)(currFrame.SourceRectangle.Width * Scale), (int)(currFrame.SourceRectangle.Height * Scale)),Color.Red);
-            //if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2)
+            //if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3)
             //{
             //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             //}
@@ -183,6 +168,20 @@ namespace FightingGame
             }
             return false;
         }
+        public void UpdateAnimationCooldowns()
+        {
+            foreach (var ability in AbilityCooldowns.Keys)
+            {
+                if (AbilityCooldowns[ability] > 0)
+                {
+                    AbilityCooldowns[ability] -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                }
+                else
+                {
+                    AbilityCooldowns[ability] = 0;
+                }
+            }
+        }
         public void Reset()
         {
             currentAnimation = AnimationType.None;
@@ -208,7 +207,7 @@ namespace FightingGame
         }
         private void UpdateWeapon()
         {
-            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2)
+            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3)
             {
                 (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
                 weaponVerticalOffset = offsets.Item2;
@@ -234,7 +233,7 @@ namespace FightingGame
             }
             else
             {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, (HitBox.Y + HitBox.Height / 2) + 25, HitBox.Width, 10), new Color(255, 255, 255, 100));
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, HitBox.Y + HitBox.Height - 2, HitBox.Width, 10), new Color(255, 255, 255, 100));
             }
         }
     }

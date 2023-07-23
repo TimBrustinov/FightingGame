@@ -23,9 +23,7 @@ namespace FightingGame
         private Vector2 healthStartingPosition = new Vector2(20, 25);
 
         Character Hashashin;
-        Character Samurai;
         Character SelectedCharacter;
-        Enemy Skeleton;
 
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
@@ -33,16 +31,15 @@ namespace FightingGame
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
             [Keys.S] = AnimationType.Run,
-            [Keys.J] = AnimationType.Attack,
+            [Keys.J] = AnimationType.BasicAttack,
             [Keys.K] = AnimationType.Ability1,
             [Keys.L] = AnimationType.Ability2,
-            [Keys.R] = AnimationType.Ability3,
+            [Keys.I] = AnimationType.Ability3,
             [Keys.Space] = AnimationType.Dodge,
         };
         AnimationType currentAnimation = AnimationType.Stand;
-
-        private Dictionary<EntityName, Character> characterPool = new Dictionary<EntityName, Character>();
-
+        
+        CharacterUIManager CharacterUIManager;
         EnemyManager EnemyManager;
 
         #region DrawableObjects
@@ -67,7 +64,7 @@ namespace FightingGame
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             EnemyManager = new EnemyManager(Tilemap);
-            
+            CharacterUIManager = new CharacterUIManager(SelectedCharacter);
         }
         public override Screenum Update(MouseState ms)
         {
@@ -84,31 +81,22 @@ namespace FightingGame
                     if(KeysToAnimation.ContainsKey(key))
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if (InputManager.Moving && currentAnimation == AnimationType.Dodge)
+                        if(InputManager.Moving && currentAnimation != AnimationType.Run)
                         {
                             break;
-                        }
-                        if (InputManager.Moving && currentAnimation == AnimationType.Attack)
-                        {
-                            currentAnimation = AnimationType.BasicAttack;
-                            break;
-                        }
-                        if (InputManager.Moving == false && currentAnimation == AnimationType.Attack)
-                        {
-                            currentAnimation = AnimationType.BasicAttack;
                         }
                     }
                 }
             }
-          
             if(SelectedCharacter.RemainingHealth <= 0)
             {
                 currentAnimation = AnimationType.Death;
             }
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
-            Camera.Update(SelectedCharacter.Position, Tilemap.HitBox, 1f);
-            //EnemyManager.Update(SelectedCharacter, Camera);
+            Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
+            //CharacterUIManager.Update(Graphics.GraphicsDevice);
+            EnemyManager.Update(SelectedCharacter, Camera);
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -118,7 +106,8 @@ namespace FightingGame
 
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
-            //EnemyManager.Draw();
+            EnemyManager.Draw();
+            //CharacterUIManager.Draw(spriteBatch);
 
             spriteBatch.End();
         }
