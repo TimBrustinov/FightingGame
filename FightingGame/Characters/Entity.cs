@@ -79,7 +79,8 @@ namespace FightingGame
             overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
             UpdateAnimationCooldowns();
-            if (CheckAnimation())
+            bool checkedAnimation = CheckAnimation();
+            if (checkedAnimation)
             {
                 savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
                 AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);

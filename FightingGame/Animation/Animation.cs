@@ -75,8 +75,8 @@ namespace FightingGame
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             Vector2 adjustedPosition;
-            int offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2;
-            int offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2;
+            float offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2;
+            float offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2;
 
             if (isMovingLeft)
             {
@@ -86,7 +86,15 @@ namespace FightingGame
             {
                 adjustedPosition = position + new Vector2(offsetX, -offsetY);
             }
-
+            
+            //if(PreviousFrame.SourceRectangle != PreviousFrame.CharacterHitbox)
+            //{
+            //    origin = new Vector2(PreviousFrame.CharacterHitbox.Width / 2, PreviousFrame.CharacterHitbox.Height / 2);
+            //}
+            //else
+            //{
+            //    origin = PreviousFrame.Origin;
+            //}
             Globals.SpriteBatch.Draw(Texture, adjustedPosition, PreviousFrame.SourceRectangle, color, 0, PreviousFrame.Origin, scale, spriteEffect, 1);
         }
 

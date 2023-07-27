@@ -65,9 +65,6 @@ namespace FightingGame
                 InUltimateForm = true;
             }
 
-
-
-           
             base.Update(animation, direction);
             if (XP >= xpToLevelUp)
             {

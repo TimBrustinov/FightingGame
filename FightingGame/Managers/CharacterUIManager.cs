@@ -64,7 +64,7 @@ namespace FightingGame
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X, cameraCorner.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 15), new Color(30, 30, 30, 255));
             float xpPercentage = character.XP / character.xpToLevelUp; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(xpPercentage * Camera.CameraView.Width); // Calculate the width of the foreground health bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 5, cameraCorner.Y + 7), new Rectangle(0, 0, foregroundWidth, 10), Color.Purple);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 5, cameraCorner.Y + 7), new Rectangle(0, 0, foregroundWidth, 10), Color.Aqua);
         }
         private void DrawHealthBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {

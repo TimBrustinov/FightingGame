@@ -120,4 +120,20 @@ namespace FightingGame
             }
         }
     }
+    public class HashashinUltimateAbility1 : Ability
+    {
+        public HashashinUltimateAbility1(float cooldownTime) : base(cooldownTime)
+        {
+        }
+
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
+        {
+            AbilityDamage = 10;
+            StaminaDrain = 0;
+            if (direction != Vector2.Zero)
+            {
+                position += Vector2.Normalize(InputManager.Direction) * speed;
+            }
+        }
+    }
 }
