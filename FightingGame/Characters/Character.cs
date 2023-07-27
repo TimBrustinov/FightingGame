@@ -15,11 +15,24 @@ namespace FightingGame
         public float XP;
         public int Level;
 
-        private float xpToLevelUp;
+        public float xpToLevelUp;
         private float maxXpForCurrentLevel;
 
         private double staminaRegenInterval = 800;
         private double timer;
+
+        private bool InUltimateForm = false;
+        private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
+        {
+            [AnimationType.UltimateTransform] = AnimationType.UltimateTransform,
+            [AnimationType.BasicAttack] = AnimationType.UltimateBasicAttack,
+            [AnimationType.Ability1] = AnimationType.UltimateAbility1,
+            [AnimationType.Ability2] = AnimationType.UltimateAbility2,
+            [AnimationType.Ability3] = AnimationType.UltimateAbility3,
+            [AnimationType.Run] = AnimationType.UltimateRun,
+            [AnimationType.Dodge] = AnimationType.UltimateDodge,
+            [AnimationType.Stand] = AnimationType.UltimateStand,
+        };
 
         public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites) 
         {
@@ -42,6 +55,19 @@ namespace FightingGame
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
+            if (InUltimateForm)
+            {
+                animation = UltimateAblities[animation];
+            }
+
+            if (animation == AnimationType.UltimateTransform)
+            {
+                InUltimateForm = true;
+            }
+
+
+
+           
             base.Update(animation, direction);
             if (XP >= xpToLevelUp)
             {

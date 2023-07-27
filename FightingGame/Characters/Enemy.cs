@@ -12,7 +12,7 @@ namespace FightingGame
 {
     public class Enemy : Entity
     {
-        public int XPAmmount;
+        public int XPAmmount = 5;
         public Enemy(EntityName name, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];

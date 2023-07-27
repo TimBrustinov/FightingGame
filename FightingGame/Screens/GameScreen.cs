@@ -31,10 +31,11 @@ namespace FightingGame
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
             [Keys.S] = AnimationType.Run,
-            [Keys.J] = AnimationType.BasicAttack,
-            [Keys.K] = AnimationType.Ability1,
-            [Keys.L] = AnimationType.Ability2,
-            [Keys.I] = AnimationType.Ability3,
+            [Keys.I] = AnimationType.BasicAttack,
+            [Keys.J] = AnimationType.Ability1,
+            [Keys.K] = AnimationType.Ability2,
+            [Keys.L] = AnimationType.Ability3,
+            [Keys.R] = AnimationType.UltimateTransform,
             [Keys.Space] = AnimationType.Dodge,
         };
         AnimationType currentAnimation = AnimationType.Stand;
@@ -64,7 +65,7 @@ namespace FightingGame
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             EnemyManager = new EnemyManager(Tilemap);
-            CharacterUIManager = new CharacterUIManager(SelectedCharacter);
+            CharacterUIManager = new CharacterUIManager(SelectedCharacter, Camera);
         }
         public override Screenum Update(MouseState ms)
         {
@@ -95,7 +96,6 @@ namespace FightingGame
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
-            //CharacterUIManager.Update(Graphics.GraphicsDevice);
             EnemyManager.Update(SelectedCharacter, Camera);
             return Screenum.GameScreen;
         }
@@ -107,7 +107,7 @@ namespace FightingGame
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
             EnemyManager.Draw();
-            //CharacterUIManager.Draw(spriteBatch);
+            CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();
         }

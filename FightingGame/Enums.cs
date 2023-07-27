@@ -43,6 +43,15 @@ namespace FightingGame
         Ability1,
         Ability2,
         Ability3,
+
+        UltimateTransform,
+        UltimateStand,
+        UltimateRun,
+        UltimateDodge,
+        UltimateBasicAttack,
+        UltimateAbility1,
+        UltimateAbility2,
+        UltimateAbility3,
     }
     public enum EntityName
     {

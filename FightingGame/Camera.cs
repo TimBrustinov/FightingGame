@@ -17,11 +17,14 @@ namespace FightingGame
         public Rectangle CameraView;
         public float Zoom;
         private Matrix transform;
+        public Vector2 Corner;
+
         public Camera(Viewport viewport)
         {
             Viewport = viewport;
             viewportCenter = new Vector2(viewport.Width / 2, viewport.Height / 2);
             CameraView = new Rectangle(0, 0, viewport.Width, viewport.Height);
+            Corner = Vector2.Zero;
         }
 
         public void Update(Vector2 targetPosition, Rectangle map)
@@ -30,6 +33,9 @@ namespace FightingGame
             // Clamp the target position to the map boundaries
             targetPosition.X = MathHelper.Clamp(targetPosition.X, map.Left + Viewport.Width / 2, map.Right - Viewport.Width / 2);
             targetPosition.Y = MathHelper.Clamp(targetPosition.Y, map.Top + Viewport.Height / 2, map.Bottom - Viewport.Height / 2);
+
+            Corner.X = targetPosition.X - CameraView.Width/2;
+            Corner.Y = targetPosition.Y - CameraView.Height/2;
 
             CameraView.X = (int)targetPosition.X;
             CameraView.Y = (int)targetPosition.Y;

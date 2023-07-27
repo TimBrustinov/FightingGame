@@ -40,10 +40,8 @@ namespace FightingGame
         {
             bool CanBeCanceled = true;
             bool canHit = true;
-            Heart = content.Load<Texture2D>("Heart");
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
-
             #region Swordsman 
 
             //CharacterSpriteSheets.Add(CharacterName.Swordsman, content.Load<Texture2D>("Swordsman"));
@@ -120,7 +118,7 @@ namespace FightingGame
             #endregion
 
             #region Hashashin
-            EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinSpritesheet"));
+            EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
             Dictionary<AnimationType, Ability> HashashinAbilites = new Dictionary<AnimationType, Ability>()
@@ -130,13 +128,16 @@ namespace FightingGame
                 [AnimationType.Ability1] = new HashashinAbility1(2),
                 [AnimationType.Ability2] = new HashashinAbility2(3),
                 [AnimationType.Ability3] = new HashashinAbility3(3),
+                [AnimationType.UltimateTransform] = new HashashinUltimateTransform(0),
+                [AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
+                [AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
             };
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
             { 
-                [AnimationType.Ability1] = new Rectangle(702, 578, 70, 59),
-                [AnimationType.Ability2] = new Rectangle(5398, 1111, 25, 40),
-                [AnimationType.Ability3] = new Rectangle(5230, 1247, 63, 32),
+                [AnimationType.Ability1] = new Rectangle(988, 597, 50, 50),
+                [AnimationType.Ability2] = new Rectangle(5677, 1106, 50, 50),
+                [AnimationType.Ability3] = new Rectangle(1300, 1236, 50, 50),
             };
 
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> Hashashin = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
@@ -236,6 +237,74 @@ namespace FightingGame
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8212, 1243, 39, 36)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8478, 1243, 39, 36)));
             Hashashin.Add((AnimationType.Ability3, !CanBeCanceled, 0.13f), HashashinAbility3);
+
+            List<FrameHelper> HashashinUltimateTransformation = new List<FrameHelper>();
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(132, 1754, 34, 37)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(420, 1754, 32, 37)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(708, 1754, 28, 37)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(987, 1754, 41, 37)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(1277, 1748, 36, 43)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(1552, 1753, 53, 38)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(1831, 1756, 66, 35)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(2116, 1757, 60, 34)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(2404, 1757, 60, 34)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(2692, 1757, 60, 34)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(2961, 1752, 88, 40)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(3254, 1749, 102, 43), new Rectangle(3254, 1749, 102, 43), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(3550, 1749, 96, 43), new Rectangle(3550, 1749, 96, 43), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(3843, 1728, 91, 64), new Rectangle(3843, 1728, 91, 64), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(4130, 1726, 91, 66), new Rectangle(4130, 1726, 91, 66), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(4418, 1727, 91, 65), new Rectangle(4418, 1727, 91, 65), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(4658, 1681, 191, 111), new Rectangle(4658, 1681, 191, 111), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(4944, 1682, 193, 110), new Rectangle(4944, 1682, 193, 110), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(5231, 1683, 196, 109), new Rectangle(5231, 1683, 196, 109), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(5519, 1684, 196, 108), new Rectangle(5519, 1648, 196, 108), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(5805, 1689, 200, 100), new Rectangle(5805, 1689, 200, 100), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(6084, 1686, 217, 103), new Rectangle(6084, 1686, 217, 103), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(6364, 1684, 233, 108), new Rectangle(6364, 1684, 233, 108), canHit));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(6648, 1682, 241, 110)));
+            HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(7032, 1732, 62, 55)));
+            Hashashin.Add((AnimationType.UltimateTransform, !CanBeCanceled, 0.18f), HashashinUltimateTransformation);
+
+            List<FrameHelper> HashashinUltimateStand = new List<FrameHelper>();
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(120, 1860, 59, 56)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(408, 1859, 59, 56)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(696, 1857, 62, 59)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(984, 1857, 62, 58)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(1272, 1859, 62, 57)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(1560, 1861, 63, 54)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(1848, 1858, 63, 58)));
+            HashashinUltimateStand.Add(new FrameHelper(new Rectangle(2136, 1860, 62, 55)));
+            Hashashin.Add((AnimationType.UltimateStand, CanBeCanceled, 0.15f), HashashinUltimateStand);
+
+            List<FrameHelper> HashashinUltimateRun = new List<FrameHelper>();
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(116, 1993, 57, 52)));
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(403, 1995, 58, 49)));
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(692, 1994, 57, 50)));
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(979, 1996, 58, 51)));
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(1270, 1995, 55, 49)));
+            HashashinUltimateRun.Add(new FrameHelper(new Rectangle(1554, 1994, 59, 50)));
+            Hashashin.Add((AnimationType.UltimateRun, CanBeCanceled, 0.14f), HashashinUltimateRun);
+
+            List<FrameHelper> HashashinUltimateDodge = new List<FrameHelper>();
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(122, 3014, 41, 53)));
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(652, 3014, 48, 56)));
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(1243, 3016, 40, 52)));
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(1556, 3014, 59, 48)));
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(1846, 3014, 55, 54)));
+            HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(2122, 3014, 64, 53)));
+            Hashashin.Add((AnimationType.UltimateDodge, !CanBeCanceled, 0.14f), HashashinUltimateDodge);
+
+            List<FrameHelper> HashashinUltimateBasicAttack = new List<FrameHelper>();
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(139, 2503, 59, 53)));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(372, 2501, 133, 54), new Rectangle(449, 2500, 72, 57), new Rectangle(404, 2505, 43, 50), canHit));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(659, 2500, 203, 56), new Rectangle(770, 2497, 122, 57), new Rectangle(690, 2505, 45, 45), canHit));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(944, 2457, 198, 98), new Rectangle(1059, 2437, 102, 70), new Rectangle(979, 2502, 40, 47), canHit));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(1232, 2473, 145, 83), new Rectangle(1311, 2458, 93, 59), new Rectangle(1264, 2497, 39, 59), canHit));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(1232, 2473, 145, 83), new Rectangle(1311, 2458, 93, 59)));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(1518, 2491, 95, 64)));
+            HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(2142, 2500, 49, 55)));
+            Hashashin.Add((AnimationType.UltimateBasicAttack, !CanBeCanceled, 0.17f), HashashinUltimateBasicAttack);
 
             List<FrameHelper> HashashinStand = new List<FrameHelper>();
             HashashinStand.Add(new FrameHelper(new Rectangle(132, 90, 34, 37)));

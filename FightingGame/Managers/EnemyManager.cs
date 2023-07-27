@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace FightingGame
 {
@@ -42,6 +40,10 @@ namespace FightingGame
 
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
+                if (enemyPool[i].IsDead)
+                {
+                    SelectedCharacter.XP += enemyPool[i].XPAmmount;
+                }
                 if (enemyPool[i].IsDead || CheckEnemyDistanceToPlayer(enemyPool[i], SelectedCharacter))
                 {
                     reservePool.Add(enemyPool[i]);
@@ -70,7 +72,6 @@ namespace FightingGame
                 if (enemyPool[i].RemainingHealth <= 0)
                 {
                     enemyPool[i].Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
-                    SelectedCharacter.XP += enemyPool[i].XPAmmount;
                 }
                 else if (CalculateDistance(SelectedCharacter.Position, enemyPool[i].Position) <= 50f && Math.Abs(SelectedCharacter.Position.Y - enemyPool[i].Position.Y) <= 20)
                 {

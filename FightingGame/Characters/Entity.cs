@@ -51,7 +51,8 @@ namespace FightingGame
         private Vector2 minPosition, maxPosition;
 
         public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
-        public Dictionary<Ability, float> AbilityCooldowns = new Dictionary<Ability, float>();
+        public Dictionary<AnimationType, float> MaxAbilityCooldowns = new Dictionary<AnimationType, float>();
+        public Dictionary<AnimationType, float> AbilityCooldowns = new Dictionary<AnimationType, float>();
         public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility)
         {
             Name = name;
@@ -63,8 +64,10 @@ namespace FightingGame
             }
             foreach (var item in AnimationToAbility)
             {
-                AbilityCooldowns.Add(animationToAbility[item.Key], 0);
+                MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
+                AbilityCooldowns.Add(item.Key, 0);
             }
+
         }
         private bool canPerformAttack = false;
 
@@ -93,12 +96,7 @@ namespace FightingGame
             {
                 if (direction != Vector2.Zero)
                 {
-                    currentAnimation = AnimationType.Run;
                     Position += Vector2.Normalize(direction) * Speed;
-                }
-                else
-                {
-                    currentAnimation = AnimationType.Stand;
                 }
             }
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
@@ -108,10 +106,22 @@ namespace FightingGame
             animationManager.Update(currentAnimation, overrideAnimation);
             HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
-        
+        public virtual void Draw()
+        {
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, TopLeft, new Rectangle(currFrame.SourceRectangle.X, currFrame.SourceRectangle.Y, (int)(currFrame.SourceRectangle.Width * Scale), (int)(currFrame.SourceRectangle.Height * Scale)),Color.Red);
+            //if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3 || savedAnimaton == AnimationType.UltimateTransform)
+            //{
+            //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            //}
+            animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
+            DrawShadow();
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
+        }
+
         private void UpdateHitbox()
         {
-            if (currentAnimation == AnimationType.Dodge)
+            if (currentAnimation == AnimationType.Dodge || currentAnimation == AnimationType.UltimateDodge)
             {
                 Dimentions = Vector2.Zero;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
@@ -124,19 +134,34 @@ namespace FightingGame
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
         }
-        public virtual void Draw()
+        private void UpdateWeapon()
         {
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, TopLeft, new Rectangle(currFrame.SourceRectangle.X, currFrame.SourceRectangle.Y, (int)(currFrame.SourceRectangle.Width * Scale), (int)(currFrame.SourceRectangle.Height * Scale)),Color.Red);
-            //if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3)
-            //{
-            //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
-            //}
-            animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
-            DrawShadow();
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
+            (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
+            weaponVerticalOffset = offsets.Item2;
+            weaponHorizontalOffset = offsets.Item1;
+            WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * Scale);
+            WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * Scale);
+            if (InputManager.IsMovingLeft)
+            {
+                WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
+            }
+            else
+            {
+                WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
+            }
+            WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * Scale);
         }
-
+        private void DrawShadow()
+        {
+            if (currentAnimation == AnimationType.Dodge || currentAnimation == AnimationType.UltimateDodge)
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - currFrame.SourceRectangle.Width / 2, ((int)Position.Y + currFrame.SourceRectangle.Height / 2) + 5, currFrame.SourceRectangle.Width, 10), new Color(255, 255, 255, 100));
+            }
+            else
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, HitBox.Y + HitBox.Height - 2, HitBox.Width, 10), new Color(255, 255, 255, 100));
+            }
+        }
         public bool CheckAnimation()
         {
             if (overrideAnimation)
@@ -146,7 +171,7 @@ namespace FightingGame
             if (AnimationToAbility.ContainsKey(currentAnimation))
             {
                 CurrentAbility = AnimationToAbility[currentAnimation];
-                if (AbilityCooldowns[CurrentAbility] <= 0)
+                if (AbilityCooldowns[currentAnimation] <= 0)
                 {
                     bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
                     if (CurrentAbility.StaminaDrain == 0)
@@ -162,7 +187,7 @@ namespace FightingGame
                 }
                 if (staminaSubtracted || canPerformAttack)
                 {
-                    AbilityCooldowns[CurrentAbility] = CurrentAbility.Cooldown;
+                    AbilityCooldowns[currentAnimation] = CurrentAbility.Cooldown;
                     return true;
                 }
             }
@@ -205,36 +230,6 @@ namespace FightingGame
         {
             RemainingHealth -= damage;
         }
-        private void UpdateWeapon()
-        {
-            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3)
-            {
-                (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
-                weaponVerticalOffset = offsets.Item2;
-                weaponHorizontalOffset = offsets.Item1;
-                WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * Scale);
-                WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * Scale);
-                if (InputManager.IsMovingLeft)
-                {
-                    WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
-                }
-                else
-                {
-                    WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
-                }
-                WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * Scale);
-            }
-        }
-        public void DrawShadow()
-        {
-            if (currentAnimation == AnimationType.Dodge)
-            {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - currFrame.SourceRectangle.Width / 2, ((int)Position.Y + currFrame.SourceRectangle.Height / 2) + 5, currFrame.SourceRectangle.Width, 10), new Color(255, 255, 255, 100));
-            }
-            else
-            {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, HitBox.Y + HitBox.Height - 2, HitBox.Width, 10), new Color(255, 255, 255, 100));
-            }
-        }
+ 
     }
 }
