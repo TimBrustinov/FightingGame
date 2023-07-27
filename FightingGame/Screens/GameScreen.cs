@@ -19,8 +19,6 @@ namespace FightingGame
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
-        private int heartOffsets = 10;
-        private Vector2 healthStartingPosition = new Vector2(20, 25);
 
         Character Hashashin;
         Character SelectedCharacter;

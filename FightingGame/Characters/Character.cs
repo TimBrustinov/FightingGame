@@ -21,10 +21,11 @@ namespace FightingGame
         private double staminaRegenInterval = 800;
         private double timer;
 
-        private bool InUltimateForm = false;
+        public bool InUltimateForm = false;
         private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
         {
             [AnimationType.UltimateTransform] = AnimationType.UltimateTransform,
+            [AnimationType.UndoTransform] = AnimationType.UndoTransform,
             [AnimationType.BasicAttack] = AnimationType.UltimateBasicAttack,
             [AnimationType.Ability1] = AnimationType.UltimateAbility1,
             [AnimationType.Ability2] = AnimationType.UltimateAbility2,
@@ -55,9 +56,22 @@ namespace FightingGame
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
+
             if (InUltimateForm)
             {
                 animation = UltimateAblities[animation];
+            }
+
+            if (CheckIfOnCooldown(animation))
+            {
+                if(direction != Vector2.Zero)
+                {
+                    animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
+                }
+                else
+                {
+                    animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
+                }
             }
 
             if (animation == AnimationType.UltimateTransform)
@@ -115,6 +129,17 @@ namespace FightingGame
             xpToLevelUp *= 1.25f;
             maxXpForCurrentLevel = xpToLevelUp;
             XP = 0; 
+        }
+        private bool CheckIfOnCooldown(AnimationType animation)
+        {
+            if(AbilityCooldowns.ContainsKey(animation))
+            {
+                if(AbilityCooldowns[animation] != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -128,10 +128,10 @@ namespace FightingGame
                 [AnimationType.Ability1] = new HashashinAbility1(2),
                 [AnimationType.Ability2] = new HashashinAbility2(3),
                 [AnimationType.Ability3] = new HashashinAbility3(3),
+                [AnimationType.UltimateAbility1] = new HashashinUltimateAbility1(3),
                 [AnimationType.UltimateTransform] = new HashashinUltimateTransform(0),
                 [AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
                 [AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
-                [AnimationType.UltimateAbility1] = new HashashinUltimateAbility1(3),
             };
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
@@ -317,6 +317,21 @@ namespace FightingGame
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(1808, 2354, 128, 72), new Rectangle(1803, 2350, 138, 78), new Rectangle(1854, 2372, 36, 52), canHit));
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(2125, 2353, 71, 75)));
             Hashashin.Add((AnimationType.UltimateAbility1, !CanBeCanceled, 0.15f), HashashinUltimateAbility1);
+
+            //List<FrameHelper> UndoTransform = new List<FrameHelper>();
+            //UndoTransform.Add(new FrameHelper(new Rectangle(120, 3268, 59, 56)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(400, 3267, 64, 52), new Rectangle(400, 3267, 64, 52), new Rectangle(419, 3270, 25, 38), canHit));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(665, 3265, 110, 55), new Rectangle(665, 3265, 110, 55), new Rectangle(709, 3274, 24, 38), canHit));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(665, 3265, 110, 55), new Rectangle(665, 3265, 110, 55)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(953, 3269, 112, 51), new Rectangle(953, 3269, 112, 51), new Rectangle(994, 3278, 28, 35), canHit));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(953, 3269, 112, 51), new Rectangle(953, 3269, 112, 51)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(1236, 3270, 121, 51), new Rectangle(1236, 3270, 121, 51), new Rectangle(1283, 3284, 25, 38), canHit));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(1236, 3270, 121, 51), new Rectangle(1236, 3270, 121, 51)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(1520, 3270, 130, 57), new Rectangle(1520, 3270, 130, 57), new Rectangle(1571, 3295, 26, 32), canHit));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(1520, 3270, 130, 57), new Rectangle(1520, 3270, 130, 57)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(1859, 3294, 26, 33)));
+            //UndoTransform.Add(new FrameHelper(new Rectangle(2436, 3290, 26, 37)));
+            //Hashashin.Add((AnimationType.UndoTransform, !CanBeCanceled, 0.17f), UndoTransform);
 
             List<FrameHelper> HashashinStand = new List<FrameHelper>();
             HashashinStand.Add(new FrameHelper(new Rectangle(132, 90, 34, 37)));

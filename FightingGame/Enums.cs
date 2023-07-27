@@ -45,6 +45,7 @@ namespace FightingGame
         Ability3,
 
         UltimateTransform,
+        UndoTransform,
         UltimateStand,
         UltimateRun,
         UltimateDodge,
