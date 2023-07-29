@@ -56,8 +56,6 @@ namespace FightingGame
             int x = CharacterHitbox.X - SourceRectangle.X;
             int y = CharacterHitbox.Y - SourceRectangle.Y;
             Origin = new Vector2(x + CharacterHitbox.Width / 2, y + CharacterHitbox.Height / 2);
-            //Origin = new Vector2(CharacterHitbox.Width / 2, CharacterHitbox.Height / 2);
-            //Origin = new Vector2(SourceRectangle.Width / 2, SourceRectangle.Height / 2);
             CanHit = canHit;
         }
         public FrameHelper(int x, int y, int width, int height, Vector2 origin, Rectangle attackHitbox)
