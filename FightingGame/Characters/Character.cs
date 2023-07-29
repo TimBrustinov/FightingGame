@@ -78,6 +78,10 @@ namespace FightingGame
             {
                 InUltimateForm = true;
             }
+            else if(animation == AnimationType.UndoTransform)
+            {
+                InUltimateForm = false;
+            }
 
             base.Update(animation, direction);
             if (XP >= xpToLevelUp)

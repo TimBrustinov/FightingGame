@@ -117,7 +117,7 @@ namespace FightingGame
             //}
             animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
             DrawShadow();
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
+           // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 

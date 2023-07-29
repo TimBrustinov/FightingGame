@@ -34,6 +34,7 @@ namespace FightingGame
             [Keys.K] = AnimationType.Ability2,
             [Keys.L] = AnimationType.Ability3,
             [Keys.R] = AnimationType.UltimateTransform,
+            [Keys.F] = AnimationType.UndoTransform,
             [Keys.Space] = AnimationType.Dodge,
         };
         AnimationType currentAnimation = AnimationType.Stand;

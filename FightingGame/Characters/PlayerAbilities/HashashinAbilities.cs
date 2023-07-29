@@ -136,4 +136,48 @@ namespace FightingGame
             }
         }
     }
+
+    public class HashashinUltimateAbility2 : Ability
+    {
+        public HashashinUltimateAbility2(float cooldownTime) : base(cooldownTime)
+        {
+        }
+
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
+        {
+            AbilityDamage = 10;
+            StaminaDrain = 0;
+            if (direction != Vector2.Zero)
+            {
+                position += Vector2.Normalize(InputManager.Direction) * speed;
+            }
+        }
+    }
+    public class HashashinUndoTransform : Ability
+    {
+        public HashashinUndoTransform(float cooldownTime) : base(cooldownTime)
+        {
+        }
+
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
+        {
+            return;
+        }
+    }
+    public class HashashinUltimateAbility3 : Ability
+    {
+        public HashashinUltimateAbility3(float cooldownTime) : base(cooldownTime)
+        {
+        }
+
+        protected override void UpdateAbility(ref Vector2 position, float speed, Vector2 direction)
+        {
+            AbilityDamage = 10;
+            StaminaDrain = 0;
+            if (direction != Vector2.Zero)
+            {
+                position += Vector2.Normalize(InputManager.Direction) * speed;
+            }
+        }
+    }
 }
