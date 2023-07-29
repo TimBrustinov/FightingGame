@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FightingGame
 {
-    public class CharacterUIManager
+    public class UIManager
     {
         private Character character;
         private Dictionary<AnimationType, Rectangle> AbilityIcons;
@@ -20,7 +20,7 @@ namespace FightingGame
 
         private float portraitScale = 0.7f;
 
-        public CharacterUIManager(Character character, Camera camera)
+        public UIManager(Character character, Camera camera)
         {
             this.character = character;
             AbilityIcons = ContentManager.Instance.CharacterAbilityIcons[character.Name];
@@ -30,20 +30,17 @@ namespace FightingGame
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, cameraCorner + new Vector2(0, 0), new Rectangle(0, 0, 250, 54), new Color(30, 30, 30, 255));
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, cameraCorner, new Rectangle(0, 0, chara))
             DrawHealthBar(spriteBatch, cameraCorner);
             DrawXpBar(spriteBatch, cameraCorner);
             DrawStaminaBar(spriteBatch, cameraCorner);
             DrawIcons(spriteBatch, cameraCorner);
-            //DrawCooldowns(spriteBatch, cameraCorner);
         }
         private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
             int i = 0;
-            Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height);
+            Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height - 10);
             //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - offset * 3, cameraCorner.Y + Camera.Viewport.Height - offset * 2), new Rectangle(0, 0, offset * 3, offset), new Color(30, 30, 30, 255));
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 137, position.Y - 58), new Rectangle(0, 0, 235, 65), new Color(30, 30, 30, 255));
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 137, position.Y - 58), new Rectangle(0, 0, 235, 60), new Color(20, 20, 20, 210));
             if (!character.InUltimateForm)
             {
                 //Draws the portrait 
@@ -85,8 +82,6 @@ namespace FightingGame
                 }
             }
         }
-
-        
         private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
             Vector2 position = new Vector2(cameraCorner.X, cameraCorner.Y);
@@ -102,18 +97,31 @@ namespace FightingGame
         }
         private void DrawHealthBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
+            Vector2 position = new Vector2(cameraCorner.X, cameraCorner.Y + 35);
 
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X, cameraCorner.Y + 35), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
             float healthPercentage = (float)character.RemainingHealth / character.TotalHealth; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * 300); // Calculate the width of the foreground health bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 5, cameraCorner.Y + 40), new Rectangle(0, 0, foregroundWidth, 20), Color.Green);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, foregroundWidth, 20), Color.Green);
+
+            // Draw health progress text
+            string healthText = $"{character.RemainingHealth} / {character.TotalHealth}";
+            Vector2 healthTextPosition = new Vector2(position.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(healthText).X / 2, position.Y + 7); 
+            spriteBatch.DrawString(ContentManager.Instance.Font, healthText, healthTextPosition, Color.White);
         }
         private void DrawStaminaBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 320, cameraCorner.Y + 35), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float staminaPercentage = (float)character.RemainingStamina / character.TotalStamina; // Calculate the percentage of remaining health
-            int staminaForegroundWidth = (int)(staminaPercentage * 300); // Calculate the width of the foreground health bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 325, cameraCorner.Y + 40), new Rectangle(0, 0, staminaForegroundWidth, 20), Color.Gray);
+            Vector2 position = new Vector2(cameraCorner.X + 320, cameraCorner.Y + 35);
+
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
+            float staminaPercentage = (float)character.RemainingStamina / character.TotalStamina; // Calculate the percentage of remaining stamina
+            int staminaForegroundWidth = (int)(staminaPercentage * 300); // Calculate the width of the foreground stamina bar
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, staminaForegroundWidth, 20), Color.Gray);
+
+            // Draw stamina progress text
+            string staminaText = $"{character.RemainingStamina} / {character.TotalStamina}";
+            Vector2 staminaTextPosition = new Vector2(position.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(staminaText).X / 2, position.Y + 7); 
+            spriteBatch.DrawString(ContentManager.Instance.Font, staminaText, staminaTextPosition, Color.White);
         }
     }
 }

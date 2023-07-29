@@ -9,91 +9,101 @@ namespace FightingGame
     {
         private Camera Camera;
         private DrawableObject Tilemap;
-        private int enemySpawnRate = 5000;
-        private double spawnTimer;
 
+        private int enemySpawnRate = 5000;
+        private double enemySpawnTimer;
         private int enemyPoolIndex;
         private int deadEnemies;
-        private List<Enemy> enemyPool;
-        private List<Enemy> reservePool;
+        public List<Enemy> EnemyPool;
+        private List<Enemy> ReserveEnemyPool;
+
+        public List<Enemy> BossPool;
+        private List<Enemy> ReserveBossPool;
 
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
-        Enemy GhostWarrior = new Enemy(EntityName.GhostWarrior, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.2f, 2f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
             Tilemap = tilemap;
-            reservePool = new List<Enemy>();
-            enemyPool = new List<Enemy>();
+            ReserveEnemyPool = new List<Enemy>();
+            EnemyPool = new List<Enemy>();
         }
 
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-            spawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if (spawnTimer >= enemySpawnRate)
+            enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+            if (enemySpawnTimer >= enemySpawnRate)
             {
-                SpawnEnemies();
-                spawnTimer = 0;
+                SpawnEnemies(EnemyPool, ReserveEnemyPool);
+                enemySpawnTimer = 0;
             }
 
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
-                if (enemyPool[i].IsDead)
-                {
-                    SelectedCharacter.XP += enemyPool[i].XPAmmount;
-                }
-                if (enemyPool[i].IsDead || CheckEnemyDistanceToPlayer(enemyPool[i], SelectedCharacter))
-                {
-                    reservePool.Add(enemyPool[i]);
-                    enemyPool.RemoveAt(i);
-                    deadEnemies++;
-                    continue;
-                }
-
-                if (SelectedCharacter.WeaponHitBox.Intersects(enemyPool[i].HitBox))
-                {
-                    if (SelectedCharacter.HasFrameChanged)
-                    {
-                        enemyPool[i].HasBeenHit = false;
-                    }
-                    if (SelectedCharacter.CurrentAbility != null && SelectedCharacter.CurrentAbility.CanHit && !enemyPool[i].HasBeenHit)
-                    {
-                        enemyPool[i].TakeDamage(SelectedCharacter.AbilityDamage);
-                        enemyPool[i].HasBeenHit = true;
-                    }
-                }
-                else
-                {
-                    enemyPool[i].HasBeenHit = false;
-                }
-
-                if (enemyPool[i].RemainingHealth <= 0)
-                {
-                    enemyPool[i].Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
-                }
-                else if (CalculateDistance(SelectedCharacter.Position, enemyPool[i].Position) <= 50f && Math.Abs(SelectedCharacter.Position.Y - enemyPool[i].Position.Y) <= 20)
-                {
-                    enemyPool[i].Update(AnimationType.BasicAttack, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
-                }
-                else
-                {
-                    enemyPool[i].Update(AnimationType.Run, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
-                }
+                UpdateEnemy(EnemyPool, ReserveEnemyPool, EnemyPool[i], SelectedCharacter);
             }
         }
-        public void Draw()
+
+        private void UpdateEnemy(List<Enemy> mainPool, List<Enemy> reservePool, Enemy enemy, Character selectedCharacter)
+        {
+            if (enemy.IsDead)
+            {
+                selectedCharacter.XP += enemy.XPAmmount;
+            }
+
+            if (enemy.IsDead || CheckEnemyDistanceToPlayer(enemy, selectedCharacter))
+            {
+                reservePool.Add(enemy);
+                mainPool.Remove(enemy);
+                deadEnemies++;
+                return;
+            }
+
+            if (selectedCharacter.WeaponHitBox.Intersects(enemy.HitBox))
+            {
+                if (selectedCharacter.HasFrameChanged)
+                {
+                    enemy.HasBeenHit = false;
+                }
+                if (selectedCharacter.CurrentAbility != null && selectedCharacter.CurrentAbility.CanHit && !enemy.HasBeenHit)
+                {
+                    enemy.TakeDamage(selectedCharacter.AbilityDamage);
+                    enemy.HasBeenHit = true;
+                }
+            }
+            else
+            {
+                enemy.HasBeenHit = false;
+            }
+
+            if (enemy.RemainingHealth <= 0)
+            {
+                enemy.Update(AnimationType.Death, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
+            }
+            else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= 50f && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 20)
+            {
+                enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
+            }
+            else
+            {
+                enemy.Update(AnimationType.Run, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
+            }
+        }
+
+        public void Draw(List<Enemy> pool)
         {
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
-                if (!enemyPool[i].IsDead)
+                if (!pool[i].IsDead)
                 {
-                    enemyPool[i].Draw();
+                    pool[i].Draw();
                 }
             }
         }
-        private void SpawnEnemies()
+        private void SpawnEnemies(List<Enemy> mainPool, List<Enemy> reservePool)
         {
             int increaseEnemyPoolAmount = 1;
             if (reservePool.Count > 0)
@@ -102,16 +112,30 @@ namespace FightingGame
                 foreach (var enemy in reservePool)
                 {
                     enemy.Reset();
-                    enemyPool.Add(enemy);
-                    enemy.Spawn(GetSpawnLocation());
+                    mainPool.Add(enemy);
+                    if (enemy.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                    {
+                        enemy.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                    }
+                    else
+                    {
+                        enemy.Spawn(GetSpawnLocation());
+                    }
                 }
                 reservePool.Clear();
             }
             for (int i = 0; i < increaseEnemyPoolAmount; i++)
             {
                 Enemy enemy = new Enemy(SkeletonPreset);
-                enemyPool.Add(enemy);
-                enemy.Spawn(GetSpawnLocation());
+                mainPool.Add(enemy);
+                if(enemy.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                {
+                    enemy.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                }
+                else
+                {
+                    enemy.Spawn(GetSpawnLocation());
+                }
                 enemy.SetBounds(Tilemap.HitBox);
             }
             enemyPoolIndex += increaseEnemyPoolAmount;

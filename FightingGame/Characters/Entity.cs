@@ -218,11 +218,7 @@ namespace FightingGame
             IsDead = false;
             overrideAnimation = false;
         }
-        public void Spawn(Vector2 position)
-        {
-            Position = position;
-            savedAnimaton = AnimationType.Spawn;
-        }
+        
         public void SetBounds(Rectangle mapSize)
         {
             minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);

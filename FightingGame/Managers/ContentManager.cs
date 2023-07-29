@@ -393,7 +393,7 @@ namespace FightingGame
 
             Dictionary<AnimationType, Ability> GhostWarriorAbilites = new Dictionary<AnimationType, Ability>()
             {
-               
+
             };
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> GhostWarrior = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
@@ -409,15 +409,16 @@ namespace FightingGame
             GhostWarrior.Add((AnimationType.Stand, CanBeCanceled, 0.1f), GhostWarriorStand);
 
             List<FrameHelper> GhostWarriorRun = new List<FrameHelper>();
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(43, 232, 70, 58)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(176, 228, 67, 62)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(307, 227, 66, 63)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(437, 231, 66, 59)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(568, 233, 65, 57)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(700, 229, 63, 61)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(830, 233, 63, 57)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(956, 231, 67, 59)));
-            GhostWarrior.Add((AnimationType.Run, CanBeCanceled, 0.3f), GhostWarriorRun);
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(43, 232, 70, 58), new Rectangle(43, 232, 35, 58)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(176, 228, 67, 62), new Rectangle(176, 228, 30, 62)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(307, 227, 66, 63), new Rectangle(307, 227, 29, 63)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(437, 231, 66, 59), new Rectangle(437, 231, 30, 59)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(568, 233, 65, 57), new Rectangle(568, 233, 30, 57)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(700, 229, 63, 61), new Rectangle(700, 229, 26, 61)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(830, 233, 63, 57), new Rectangle(830, 233, 26, 57)));
+            GhostWarriorRun.Add(new FrameHelper(new Rectangle(956, 231, 67, 59), new Rectangle(956, 231, 31, 59)));
+            GhostWarrior.Add((AnimationType.Run, CanBeCanceled, 0.4f), GhostWarriorRun);
+
 
             Animations.Add(EntityName.GhostWarrior, GhostWarrior);
             EntityAbilites.Add(EntityName.GhostWarrior, GhostWarriorAbilites);

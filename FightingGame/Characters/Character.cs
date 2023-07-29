@@ -131,7 +131,6 @@ namespace FightingGame
             //spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - height * 5, width, 3), Color.Red); // Draw the background health bar
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - height * 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Green); // Draw the foreground health bar
         }
-
         public void DrawStaminaBar()
         {
             int width = 75;

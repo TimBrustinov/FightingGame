@@ -48,5 +48,15 @@ namespace FightingGame
             int foregroundWidth = (int)(healthPercentage * 30);
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), Color.Green);
         }
+        public void Spawn(Vector2 position, AnimationType animation)
+        {
+            Position = position;
+            savedAnimaton = animation;
+        }
+        public void Spawn(Vector2 position)
+        {
+            Position = position;
+        }
+
     }
 }
