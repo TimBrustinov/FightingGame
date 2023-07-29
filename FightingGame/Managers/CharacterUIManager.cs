@@ -14,13 +14,17 @@ namespace FightingGame
     {
         private Character character;
         private Dictionary<AnimationType, Rectangle> AbilityIcons;
+        Dictionary<CharacterPortrait, Texture2D> Portraits;
         private int offset;
         private Camera Camera;
+
+        private float portraitScale = 0.7f;
 
         public CharacterUIManager(Character character, Camera camera)
         {
             this.character = character;
             AbilityIcons = ContentManager.Instance.CharacterAbilityIcons[character.Name];
+            Portraits = ContentManager.Instance.CharacterPortraits[character.Name];
             Camera = camera;
             offset = 55;
         }
@@ -32,69 +36,73 @@ namespace FightingGame
             DrawXpBar(spriteBatch, cameraCorner);
             DrawStaminaBar(spriteBatch, cameraCorner);
             DrawIcons(spriteBatch, cameraCorner);
-            DrawCooldowns(spriteBatch, cameraCorner);
+            //DrawCooldowns(spriteBatch, cameraCorner);
         }
         private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
             int i = 0;
+            Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height);
             //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - offset * 3, cameraCorner.Y + Camera.Viewport.Height - offset * 2), new Rectangle(0, 0, offset * 3, offset), new Color(30, 30, 30, 255));
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - 87, cameraCorner.Y + Camera.Viewport.Height - 58), new Rectangle(0, 0, 185, 65), new Color(30, 30, 30, 255));
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 137, position.Y - 58), new Rectangle(0, 0, 235, 65), new Color(30, 30, 30, 255));
             if (!character.InUltimateForm)
             {
-                // Draw normal abilities when not in ultimate form
+                //Draws the portrait 
+                spriteBatch.Draw(Portraits[CharacterPortrait.HashashinBase], new Vector2(position.X - 130, position.Y - offset + 4), default, Color.White, 0f, Vector2.Zero, portraitScale, SpriteEffects.None, 1f);
                 foreach (var item in AbilityIcons)
                 {
                     if (item.Key != AnimationType.UltimateAbility1 && item.Key != AnimationType.UltimateAbility2 && item.Key != AnimationType.UltimateAbility3)
                     {
-                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - 75 + i * offset, cameraCorner.Y + Camera.Viewport.Height - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        //Draws the ability Icon
+                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(position.X - 75 + i * offset, position.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        
+                        //Draws the cooldown for the ability
+                        float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
+                        int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
+                        Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
+                        spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                         i++;
                     }
                 }
             }
             else
             {
-                // Draw ultimate abilities when in ultimate form
+                //Draws the portrait 
+                spriteBatch.Draw(Portraits[CharacterPortrait.HashashinElemental], new Vector2(position.X - 130, position.Y - offset + 4), default, Color.White, 0f, Vector2.Zero, portraitScale, SpriteEffects.None, 1f);
+
                 foreach (var item in AbilityIcons)
                 {
                     if (item.Key == AnimationType.UltimateAbility1 || item.Key == AnimationType.UltimateAbility2 || item.Key == AnimationType.UltimateAbility3)
                     {
-                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - 75 + i * offset, cameraCorner.Y + Camera.Viewport.Height - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(position.X - 75 + i * offset, position.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+                        //Draws the cooldown for the ability
+                        float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
+                        int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
+                        Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
+                        spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                         i++;
                     }
                 }
             }
         }
 
-        private void DrawCooldowns(SpriteBatch spriteBatch, Vector2 cameraCorner)
-        {
-            int i = 0;
-            if(character.InUltimateForm)
-            {
-                i = -3;
-            }
-            foreach (var item in AbilityIcons)
-            {
-                float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
-                int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
-                Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - 75 + i * offset, cameraCorner.Y + Camera.Viewport.Height - offset) + new Vector2(0, 50 - foregroundHeight);
-                spriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-                i++;
-            }
-        }
+        
         private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X, cameraCorner.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 20), new Color(30, 30, 30, 255));
+            Vector2 position = new Vector2(cameraCorner.X, cameraCorner.Y);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 20), new Color(30, 30, 30, 255));
             float xpPercentage = character.XP / character.xpToLevelUp; // Calculate the percentage of XP progress
             int foregroundWidth = (int)(xpPercentage * Camera.CameraView.Width); // Calculate the width of the foreground XP bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + 5, cameraCorner.Y + 7), new Rectangle(0, 0, foregroundWidth, 15), Color.MediumPurple);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 7), new Rectangle(0, 0, foregroundWidth, 15), Color.MediumPurple);
 
             // Draw XP progress text
-            string xpText = $"{character.XP} / {character.xpToLevelUp}";
-            Vector2 xpTextPosition = new Vector2(cameraCorner.X + Camera.CameraView.Width / 2 - ContentManager.Instance.Font.MeasureString(xpText).X / 2, cameraCorner.Y + 7);
+            string xpText = $"{character.XP} / {(int)character.xpToLevelUp}";
+            Vector2 xpTextPosition = new Vector2(position.X + Camera.CameraView.Width / 2 - ContentManager.Instance.Font.MeasureString(xpText).X / 2, position.Y + 7);
             spriteBatch.DrawString(ContentManager.Instance.Font, xpText, xpTextPosition, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         private void DrawHealthBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
+
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X, cameraCorner.Y + 35), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
             float healthPercentage = (float)character.RemainingHealth / character.TotalHealth; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * 300); // Calculate the width of the foreground health bar

@@ -60,6 +60,11 @@ namespace FightingGame
         GhostWarrior,
         Skeleton,
     }
+    public enum CharacterPortrait
+    {
+        HashashinElemental,
+        HashashinBase,
+    }
     public enum EnemyName
     {
         Skeleton,

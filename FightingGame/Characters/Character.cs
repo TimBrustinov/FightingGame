@@ -21,6 +21,10 @@ namespace FightingGame
         private double staminaRegenInterval = 800;
         private double timer;
 
+        public float healthRegenPerSecond; 
+        private float timeElapsed = 0f;
+        private float regenerationInterval; // Time interval for health regeneration in seconds
+
         public bool InUltimateForm = false;
         private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
         {
@@ -52,6 +56,9 @@ namespace FightingGame
             Level = 1;
             xpToLevelUp = 100;
             maxXpForCurrentLevel = 100;
+
+            regenerationInterval = 8f;
+            healthRegenPerSecond = 0.02f;
         }
         public override void Update(AnimationType animation, Vector2 direction)
         {
@@ -84,6 +91,7 @@ namespace FightingGame
             }
 
             base.Update(animation, direction);
+
             if (XP >= xpToLevelUp)
             {
                 LevelUp();
@@ -98,14 +106,32 @@ namespace FightingGame
             DrawHealthBar(Globals.SpriteBatch);
             DrawStaminaBar();
         }
+        
+
         public void DrawHealthBar(SpriteBatch spriteBatch)
         {
             int width = 75;
             int height = 10;
-            float healthPercentage = (float)RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
+
+            // Calculate health regeneration amount based on time elapsed and regeneration rate
+            if (RemainingHealth < TotalHealth)
+            {
+                timeElapsed += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                if (timeElapsed >= regenerationInterval)
+                {
+                    int healthToRegen = (int)(TotalHealth * healthRegenPerSecond);
+                    RemainingHealth = Math.Min(TotalHealth, RemainingHealth + healthToRegen);
+                    timeElapsed -= regenerationInterval;
+                }
+            }
+
+            float healthPercentage = RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - height * 5, foregroundWidth, 3), Color.Green);
+
+            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - height * 5, width, 3), Color.Red); // Draw the background health bar
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - height * 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Green); // Draw the foreground health bar
         }
+
         public void DrawStaminaBar()
         {
             int width = 75;
@@ -124,8 +150,7 @@ namespace FightingGame
 
             float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
-
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)Position.X - width / 2, (int)Position.Y - (height * 4) - 5, foregroundWidth, 3), Color.Gray);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - (height * 4) - 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Gray);
         }
         private void LevelUp()
         {

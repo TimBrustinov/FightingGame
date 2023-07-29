@@ -24,7 +24,7 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<AnimationType, Ability>> EntityAbilites;
 
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
-
+        public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
         private ContentManager()
         {
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
@@ -32,6 +32,7 @@ namespace FightingGame
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
             Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>>();
             EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Ability>>();
+            CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -42,80 +43,6 @@ namespace FightingGame
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
-            #region Swordsman 
-
-            //CharacterSpriteSheets.Add(CharacterName.Swordsman, content.Load<Texture2D>("Swordsman"));
-            //CharacterTextures.Add(CharacterName.Swordsman, new Rectangle(17, 70, 15, 21));
-
-            //Dictionary<(AnimationType, bool), List<FrameHelper>> Swordsman = new Dictionary<(AnimationType, bool), List<FrameHelper>>();
-            //List<FrameHelper> SwordsmanStand = new List<FrameHelper>();
-            //SwordsmanStand.Add(new FrameHelper(17, 70, 15, 21));
-            //Swordsman.Add((AnimationType.Stand, CanBeCanceled), SwordsmanStand);
-
-            //List<FrameHelper> SwordsmanRun = new List<FrameHelper>();
-            //SwordsmanRun.Add(new FrameHelper(17, 212, 15, 23));
-            //SwordsmanRun.Add(new FrameHelper(65, 213, 15, 22));
-            //SwordsmanRun.Add(new FrameHelper(113, 214, 15, 21));
-            //SwordsmanRun.Add(new FrameHelper(161, 212, 15, 23));
-            //SwordsmanRun.Add(new FrameHelper(209, 213, 15, 22));
-            //SwordsmanRun.Add(new FrameHelper(257, 214, 15, 21));
-            //Swordsman.Add((AnimationType.Run, CanBeCanceled), SwordsmanRun);
-
-            //List<FrameHelper> SwordsmanRunUp = new List<FrameHelper>();
-            //SwordsmanRunUp.Add(new FrameHelper(18, 261, 13, 22));
-            //SwordsmanRunUp.Add(new FrameHelper(66, 262, 13, 21));
-            //SwordsmanRunUp.Add(new FrameHelper(114, 263, 13, 20));
-            //SwordsmanRunUp.Add(new FrameHelper(162, 261, 13, 22));
-            //SwordsmanRunUp.Add(new FrameHelper(210, 262, 13, 21));
-            //SwordsmanRunUp.Add(new FrameHelper(258, 263, 13, 20));
-            //Swordsman.Add((AnimationType.RunUp, CanBeCanceled), SwordsmanRunUp);
-
-            //List<FrameHelper> SwordsmanRunDown = new List<FrameHelper>();
-
-            //SwordsmanRunDown.Add(new FrameHelper(18, 164, 13, 23));
-            //SwordsmanRunDown.Add(new FrameHelper(66, 165, 13, 22));
-            //SwordsmanRunDown.Add(new FrameHelper(114, 166, 13, 21));
-            //SwordsmanRunDown.Add(new FrameHelper(162, 164, 13, 23));
-            //SwordsmanRunDown.Add(new FrameHelper(210, 165, 13, 22));
-            //SwordsmanRunDown.Add(new FrameHelper(258, 166, 13, 21));
-            //Swordsman.Add((AnimationType.RunDown, CanBeCanceled), SwordsmanRunDown);
-
-
-            //List<FrameHelper> SwordsmanSideAttack = new List<FrameHelper>();
-            //SwordsmanSideAttack.Add(new FrameHelper(19, 359, 16, 20));
-            //SwordsmanSideAttack.Add(new FrameHelper(56, 358, 34, 23, new Rectangle(56, 364, 34, 17)));
-            //SwordsmanSideAttack.Add(new FrameHelper(107, 358, 20, 21, new Rectangle(106, 370, 10, 8)));
-            //SwordsmanSideAttack.Add(new FrameHelper(161, 360, 15, 19));
-            //Swordsman.Add((AnimationType.SideAttack, !CanBeCanceled), SwordsmanSideAttack);
-
-            //List<FrameHelper> SwordsmanUpAttack = new List<FrameHelper>();
-            //SwordsmanUpAttack.Add(new FrameHelper(18, 407, 17, 20));
-            //SwordsmanUpAttack.Add(new FrameHelper(59, 406, 22, 21));
-            //SwordsmanUpAttack.Add(new FrameHelper(108, 407, 19, 20));
-            //SwordsmanUpAttack.Add(new FrameHelper(162, 408, 13, 19));
-            //Swordsman.Add((AnimationType.UpAttack, !CanBeCanceled), SwordsmanUpAttack);
-
-            //List<FrameHelper> SwordsmanDownAttack = new List<FrameHelper>();
-            //SwordsmanDownAttack.Add(new FrameHelper(15, 311, 16, 20));
-            //SwordsmanDownAttack.Add(new FrameHelper(65, 310, 20, 26, new Rectangle(63, 319, 23, 19)));
-            //SwordsmanDownAttack.Add(new FrameHelper(114, 311, 19, 21, new Rectangle(121, 319, 15, 14)));
-            //SwordsmanDownAttack.Add(new FrameHelper(162, 312, 13, 19));
-            //Swordsman.Add((AnimationType.DownAttack, !CanBeCanceled), SwordsmanDownAttack);
-
-            //List<FrameHelper> SwordsmanDeath = new List<FrameHelper>();
-            //SwordsmanDeath.Add(new FrameHelper(18, 457, 16, 18));
-            //SwordsmanDeath.Add(new FrameHelper(18, 457, 16, 18));
-            //SwordsmanDeath.Add(new FrameHelper(66, 459, 17, 16));
-            //SwordsmanDeath.Add(new FrameHelper(66, 459, 17, 16));
-            //SwordsmanDeath.Add(new FrameHelper(66, 459, 17, 16));
-            //SwordsmanDeath.Add(new FrameHelper(113, 462, 21, 13));
-            //SwordsmanDeath.Add(new FrameHelper(113, 462, 21, 13));
-            //SwordsmanDeath.Add(new FrameHelper(113, 462, 21, 13));
-            //Swordsman.Add((AnimationType.Death, !CanBeCanceled), SwordsmanDeath);
-
-            //Animations.Add(CharacterName.Swordsman, Swordsman);
-
-            #endregion
 
             #region Hashashin
             EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
@@ -145,6 +72,12 @@ namespace FightingGame
                 [AnimationType.UltimateAbility1] = new Rectangle(690, 2361, 50, 50),
                 [AnimationType.UltimateAbility2] = new Rectangle(4836, 2743, 50, 50),
                 [AnimationType.UltimateAbility3] = new Rectangle(1601, 2884, 50, 50),
+            };
+
+            Dictionary<CharacterPortrait, Texture2D> HashashinPortraits = new Dictionary<CharacterPortrait, Texture2D>()
+            { 
+                [CharacterPortrait.HashashinBase] = content.Load<Texture2D>("wind_hashashin"),
+                [CharacterPortrait.HashashinElemental] = content.Load<Texture2D>("wind_elemental"),
             };
 
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> Hashashin = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
@@ -335,21 +268,6 @@ namespace FightingGame
             HashashinUltimateAbility2.Add(new FrameHelper(new Rectangle(5304, 2694, 167, 117), new Rectangle(5387, 2689, 97, 125), new Rectangle(5304, 2756, 62, 55), canHit));
             Hashashin.Add((AnimationType.UltimateAbility2, !CanBeCanceled, 0.2f), HashashinUltimateAbility2);
 
-            //List<FrameHelper> UndoTransform = new List<FrameHelper>();
-            //UndoTransform.Add(new FrameHelper(new Rectangle(120, 3268, 59, 56)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(400, 3267, 64, 52), new Rectangle(400, 3267, 64, 52), new Rectangle(419, 3270, 25, 38), canHit));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(665, 3265, 110, 55), new Rectangle(665, 3265, 110, 55), new Rectangle(709, 3274, 24, 38), canHit));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(665, 3265, 110, 55), new Rectangle(665, 3265, 110, 55)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(953, 3269, 112, 51), new Rectangle(953, 3269, 112, 51), new Rectangle(994, 3278, 28, 35), canHit));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(953, 3269, 112, 51), new Rectangle(953, 3269, 112, 51)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(1236, 3270, 121, 51), new Rectangle(1236, 3270, 121, 51), new Rectangle(1283, 3284, 25, 38), canHit));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(1236, 3270, 121, 51), new Rectangle(1236, 3270, 121, 51)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(1520, 3270, 130, 57), new Rectangle(1520, 3270, 130, 57), new Rectangle(1571, 3295, 26, 32), canHit));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(1520, 3270, 130, 57), new Rectangle(1520, 3270, 130, 57)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(1859, 3294, 26, 33)));
-            //UndoTransform.Add(new FrameHelper(new Rectangle(2436, 3290, 26, 37)));
-            //Hashashin.Add((AnimationType.UndoTransform, !CanBeCanceled, 0.17f), UndoTransform);
-
             List<FrameHelper> HashashinUndoTransform = new List<FrameHelper>();
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(120, 3268, 59, 56)));
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(400, 3267, 64, 52)));
@@ -378,9 +296,9 @@ namespace FightingGame
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(3756, 2864, 51, 76)));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(4064, 2864, 47, 75)));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(4642, 2858, 157, 84), new Rectangle(4735, 2849, 76, 98), new Rectangle(4655, 2903, 50, 39), canHit));
-            //HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(4924, 2831, 226, 111), new Rectangle(5073, 2826, 85, 116)));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5218, 2833, 245, 109), new Rectangle(5376, 2826, 93, 113), new Rectangle(5231, 2904, 50, 38), canHit));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5533, 2830, 225, 111), new Rectangle(5681, 2826, 83, 115), new Rectangle(5533, 2905, 46, 36), canHit));
+            HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5874, 2829, 173, 102), new Rectangle(5967, 2826, 84, 109), new Rectangle(5874, 2886, 51, 35), canHit));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5874, 2829, 173, 102), new Rectangle(5967, 2826, 84, 109), new Rectangle(5874, 2886, 51, 35), canHit));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(6168, 2886, 50, 54)));
             Hashashin.Add((AnimationType.UltimateAbility3, !CanBeCanceled, 0.18f), HashashinUltimateAbility3);
@@ -399,6 +317,7 @@ namespace FightingGame
             Animations.Add(EntityName.Hashashin, Hashashin);
             EntityAbilites.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
+            CharacterPortraits.Add(EntityName.Hashashin, HashashinPortraits);
             #endregion
 
             #region Skeleton

@@ -94,6 +94,7 @@ namespace FightingGame
             //{
             //    origin = PreviousFrame.Origin;
             //}
+
             Vector2 origin = PreviousFrame.Origin;
 
             int x = PreviousFrame.CharacterHitbox.X - PreviousFrame.SourceRectangle.X;
@@ -108,6 +109,5 @@ namespace FightingGame
 
             Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, 0, origin, scale, spriteEffect, 1);
         }
-
     }
 }
