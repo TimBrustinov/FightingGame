@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 
 namespace FightingGame
 {
@@ -21,6 +19,7 @@ namespace FightingGame
 
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+        Enemy GhostWarrior = new Enemy(EntityName.GhostWarrior, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.2f, 2f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
@@ -32,7 +31,7 @@ namespace FightingGame
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-            spawnTimer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
+            spawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (spawnTimer >= enemySpawnRate)
             {
                 SpawnEnemies();
@@ -41,6 +40,10 @@ namespace FightingGame
 
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
+                if (enemyPool[i].IsDead)
+                {
+                    SelectedCharacter.XP += enemyPool[i].XPAmmount;
+                }
                 if (enemyPool[i].IsDead || CheckEnemyDistanceToPlayer(enemyPool[i], SelectedCharacter))
                 {
                     reservePool.Add(enemyPool[i]);
@@ -69,7 +72,6 @@ namespace FightingGame
                 if (enemyPool[i].RemainingHealth <= 0)
                 {
                     enemyPool[i].Update(AnimationType.Death, Vector2.Normalize(SelectedCharacter.Position - enemyPool[i].Position));
-                    SelectedCharacter.XP += enemyPool[i].XPAmmount;
                 }
                 else if (CalculateDistance(SelectedCharacter.Position, enemyPool[i].Position) <= 50f && Math.Abs(SelectedCharacter.Position.Y - enemyPool[i].Position.Y) <= 20)
                 {
@@ -107,7 +109,7 @@ namespace FightingGame
             }
             for (int i = 0; i < increaseEnemyPoolAmount; i++)
             {
-                Enemy enemy = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+                Enemy enemy = new Enemy(SkeletonPreset);
                 enemyPool.Add(enemy);
                 enemy.Spawn(GetSpawnLocation());
                 enemy.SetBounds(Tilemap.HitBox);

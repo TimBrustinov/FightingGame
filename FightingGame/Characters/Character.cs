@@ -15,11 +15,25 @@ namespace FightingGame
         public float XP;
         public int Level;
 
-        private float xpToLevelUp;
+        public float xpToLevelUp;
         private float maxXpForCurrentLevel;
 
         private double staminaRegenInterval = 800;
         private double timer;
+
+        public bool InUltimateForm = false;
+        private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
+        {
+            [AnimationType.UltimateTransform] = AnimationType.UltimateTransform,
+            [AnimationType.UndoTransform] = AnimationType.UndoTransform,
+            [AnimationType.BasicAttack] = AnimationType.UltimateBasicAttack,
+            [AnimationType.Ability1] = AnimationType.UltimateAbility1,
+            [AnimationType.Ability2] = AnimationType.UltimateAbility2,
+            [AnimationType.Ability3] = AnimationType.UltimateAbility3,
+            [AnimationType.Run] = AnimationType.UltimateRun,
+            [AnimationType.Dodge] = AnimationType.UltimateDodge,
+            [AnimationType.Stand] = AnimationType.UltimateStand,
+        };
 
         public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites) 
         {
@@ -42,6 +56,33 @@ namespace FightingGame
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
+
+            if (InUltimateForm)
+            {
+                animation = UltimateAblities[animation];
+            }
+
+            if (CheckIfOnCooldown(animation))
+            {
+                if(direction != Vector2.Zero)
+                {
+                    animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
+                }
+                else
+                {
+                    animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
+                }
+            }
+
+            if (animation == AnimationType.UltimateTransform)
+            {
+                InUltimateForm = true;
+            }
+            else if(animation == AnimationType.UndoTransform)
+            {
+                InUltimateForm = false;
+            }
+
             base.Update(animation, direction);
             if (XP >= xpToLevelUp)
             {
@@ -69,7 +110,7 @@ namespace FightingGame
         {
             int width = 75;
             int height = 10;
-            timer += Globals.CurrentTime.ElapsedGameTime.TotalMilliseconds;
+            timer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (timer >= staminaRegenInterval && RemainingStamina < TotalStamina)
             {
@@ -92,6 +133,17 @@ namespace FightingGame
             xpToLevelUp *= 1.25f;
             maxXpForCurrentLevel = xpToLevelUp;
             XP = 0; 
+        }
+        private bool CheckIfOnCooldown(AnimationType animation)
+        {
+            if(AbilityCooldowns.ContainsKey(animation))
+            {
+                if(AbilityCooldowns[animation] != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

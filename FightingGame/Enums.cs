@@ -43,12 +43,22 @@ namespace FightingGame
         Ability1,
         Ability2,
         Ability3,
+
+        UltimateTransform,
+        UndoTransform,
+        UltimateStand,
+        UltimateRun,
+        UltimateDodge,
+        UltimateBasicAttack,
+        UltimateAbility1,
+        UltimateAbility2,
+        UltimateAbility3,
     }
     public enum EntityName
     {
         Hashashin,
+        GhostWarrior,
         Skeleton,
-        Samurai,
     }
     public enum EnemyName
     {

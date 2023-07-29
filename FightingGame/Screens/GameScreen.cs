@@ -19,13 +19,9 @@ namespace FightingGame
         public override Screenum ScreenType { get; protected set; }
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; }
-        private int heartOffsets = 10;
-        private Vector2 healthStartingPosition = new Vector2(20, 25);
 
         Character Hashashin;
-        Character Samurai;
         Character SelectedCharacter;
-        Enemy Skeleton;
 
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
         {
@@ -33,16 +29,17 @@ namespace FightingGame
             [Keys.A] = AnimationType.Run,
             [Keys.D] = AnimationType.Run,
             [Keys.S] = AnimationType.Run,
-            [Keys.J] = AnimationType.Attack,
-            [Keys.K] = AnimationType.Ability1,
-            [Keys.L] = AnimationType.Ability2,
-            [Keys.R] = AnimationType.Ability3,
+            [Keys.I] = AnimationType.BasicAttack,
+            [Keys.J] = AnimationType.Ability1,
+            [Keys.K] = AnimationType.Ability2,
+            [Keys.L] = AnimationType.Ability3,
+            [Keys.R] = AnimationType.UltimateTransform,
+            [Keys.F] = AnimationType.UndoTransform,
             [Keys.Space] = AnimationType.Dodge,
         };
         AnimationType currentAnimation = AnimationType.Stand;
-
-        private Dictionary<EntityName, Character> characterPool = new Dictionary<EntityName, Character>();
-
+        
+        CharacterUIManager CharacterUIManager;
         EnemyManager EnemyManager;
 
         #region DrawableObjects
@@ -58,16 +55,23 @@ namespace FightingGame
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
-            graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1000;
+            //graphics.PreferredBackBufferWidth = 1920;
+            //graphics.PreferredBackBufferHeight = 1000;
+            //graphics.ApplyChanges();
+
+
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+
         }
         public override void Initialize()
         {
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             EnemyManager = new EnemyManager(Tilemap);
-            
+            CharacterUIManager = new CharacterUIManager(SelectedCharacter, Camera);
         }
         public override Screenum Update(MouseState ms)
         {
@@ -84,30 +88,20 @@ namespace FightingGame
                     if(KeysToAnimation.ContainsKey(key))
                     {
                         currentAnimation = KeysToAnimation[key];
-                        if (InputManager.Moving && currentAnimation == AnimationType.Dodge)
+                        if(InputManager.Moving && currentAnimation != AnimationType.Run)
                         {
                             break;
-                        }
-                        if (InputManager.Moving && currentAnimation == AnimationType.Attack)
-                        {
-                            currentAnimation = AnimationType.BasicAttack;
-                            break;
-                        }
-                        if (InputManager.Moving == false && currentAnimation == AnimationType.Attack)
-                        {
-                            currentAnimation = AnimationType.BasicAttack;
                         }
                     }
                 }
             }
-          
             if(SelectedCharacter.RemainingHealth <= 0)
             {
                 currentAnimation = AnimationType.Death;
             }
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
-            Camera.Update(SelectedCharacter.Position, Tilemap.HitBox, 1f);
+            Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             EnemyManager.Update(SelectedCharacter, Camera);
             return Screenum.GameScreen;
         }
@@ -119,6 +113,7 @@ namespace FightingGame
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
             EnemyManager.Draw();
+            CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();
         }

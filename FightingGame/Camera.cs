@@ -17,29 +17,31 @@ namespace FightingGame
         public Rectangle CameraView;
         public float Zoom;
         private Matrix transform;
+        public Vector2 Corner;
+
         public Camera(Viewport viewport)
         {
             Viewport = viewport;
-            viewportCenter = new Vector2(viewport.Width / 2f, viewport.Height / 2f);
+            viewportCenter = new Vector2(viewport.Width / 2, viewport.Height / 2);
             CameraView = new Rectangle(0, 0, viewport.Width, viewport.Height);
+            Corner = Vector2.Zero;
         }
 
-        public void Update(Vector2 targetPosition, Rectangle map, float zoom)
+        public void Update(Vector2 targetPosition, Rectangle map)
         {
-            // Adjust the target position based on the zoom level
-            Zoom = zoom;
-            var adjustedTargetPosition = new Vector2(targetPosition.X * zoom, targetPosition.Y * zoom);
 
             // Clamp the target position to the map boundaries
-            adjustedTargetPosition.X = MathHelper.Clamp(adjustedTargetPosition.X, map.Left + Viewport.Width / (2f * zoom), map.Right - Viewport.Width / (2f * zoom));
-            adjustedTargetPosition.Y = MathHelper.Clamp(adjustedTargetPosition.Y, map.Top + Viewport.Height / (2f * zoom), map.Bottom - Viewport.Height / (2f * zoom));
+            targetPosition.X = MathHelper.Clamp(targetPosition.X, map.Left + Viewport.Width / 2, map.Right - Viewport.Width / 2);
+            targetPosition.Y = MathHelper.Clamp(targetPosition.Y, map.Top + Viewport.Height / 2, map.Bottom - Viewport.Height / 2);
 
-            CameraView.X = (int)adjustedTargetPosition.X;
-            CameraView.Y = (int)adjustedTargetPosition.Y;
-            var translationMatrix = Matrix.CreateTranslation(viewportCenter.X - adjustedTargetPosition.X, viewportCenter.Y - adjustedTargetPosition.Y, 0f);
-            var zoomMatrix = Matrix.CreateScale(zoom);
+            Corner.X = targetPosition.X - CameraView.Width/2;
+            Corner.Y = targetPosition.Y - CameraView.Height/2;
 
-            transform = translationMatrix * zoomMatrix;
+            CameraView.X = (int)targetPosition.X;
+            CameraView.Y = (int)targetPosition.Y;
+            var translationMatrix = Matrix.CreateTranslation(viewportCenter.X - targetPosition.X, viewportCenter.Y - targetPosition.Y, 0f);
+
+            transform = translationMatrix;
         }
 
         public Vector2 ScreenToWorld(Vector2 screenPosition, float zoom)
