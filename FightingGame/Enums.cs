@@ -56,25 +56,40 @@ namespace FightingGame
     }
     public enum EntityName
     {
+        //Characters
         Hashashin,
-        GhostWarrior,
+
+        //Enemies
         Skeleton,
+        SkeletonCat,
+
+        BigCultist,
+        AssassinCultist,
+
+        Enforcer,
+        Prototype,
+
+        Rogue,
+        Executioner,
+
+        //Bosses
+        GhostWarrior,
+        GhostWarrior2,
+
+        EvilWizard,
+
+        NightBorneWarrior,
+
+        Troll,
+        ArmoredExecutioner,
+
+        Demon,
+
     }
     public enum CharacterPortrait
     {
         HashashinElemental,
         HashashinBase,
-    }
-    public enum EnemyName
-    {
-        Skeleton,
-        Mage,
-        DeathMage,
-    }
-    public enum CharacterDirection
-    {
-        Left,
-        Right,
     }
     public enum SideHit
     {

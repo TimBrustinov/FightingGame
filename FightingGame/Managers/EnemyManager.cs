@@ -12,52 +12,77 @@ namespace FightingGame
 
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
+        private int bossSpawnRate = 40000;
+        private double bossSpawnTimer;
+
+        private int MaxEnemyPool = 50;
         private int enemyPoolIndex;
         private int deadEnemies;
         public List<Enemy> EnemyPool;
-        private List<Enemy> ReserveEnemyPool;
+        private List<Enemy> ReservePool;
 
-        public List<Enemy> BossPool;
-        private List<Enemy> ReserveBossPool;
+        private Dictionary<int, (int, List<Enemy>)> EnemyWaves;
+        private Dictionary<int, List<Enemy>> BossWaves;
+        private int currentWave = 0;
 
         #region Enemy Presets
-        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
+        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
+        Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.SkeletonCat]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
             Tilemap = tilemap;
-            ReserveEnemyPool = new List<Enemy>();
+            ReservePool = new List<Enemy>();
             EnemyPool = new List<Enemy>();
+            EnemyWaves = new Dictionary<int, (int, List<Enemy>)>();
+            BossWaves = new Dictionary<int, List<Enemy>>();
+            CreateEnemyWaves();
         }
 
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
+
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (enemySpawnTimer >= enemySpawnRate)
             {
-                SpawnEnemies(EnemyPool, ReserveEnemyPool);
+                int randomNumber = new Random().Next(0, EnemyWaves[currentWave].Item2.Count);
+                SpawnEnemies(EnemyWaves[currentWave].Item2[randomNumber]);
                 enemySpawnTimer = 0;
             }
 
+            bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+            if(bossSpawnTimer >= bossSpawnRate)
+            {
+                SpawnBoss(BossWaves[currentWave][0]);
+                bossSpawnTimer = 0;
+            }
+
+
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
-                UpdateEnemy(EnemyPool, ReserveEnemyPool, EnemyPool[i], SelectedCharacter);
+                UpdateEnemy(EnemyPool[i], SelectedCharacter);
             }
         }
 
-        private void UpdateEnemy(List<Enemy> mainPool, List<Enemy> reservePool, Enemy enemy, Character selectedCharacter)
+        private void UpdateEnemy(Enemy enemy, Character selectedCharacter)
         {
             if (enemy.IsDead)
             {
                 selectedCharacter.XP += enemy.XPAmmount;
             }
 
-            if (enemy.IsDead || CheckEnemyDistanceToPlayer(enemy, selectedCharacter))
+            if(enemy.IsBoss && enemy.IsDead)
             {
-                reservePool.Add(enemy);
-                mainPool.Remove(enemy);
+                EnemyPool.Remove(enemy);
+                bossSpawnTimer = 0;
+                deadEnemies++;
+            }
+            else if (enemy.IsDead || CheckEnemyDistanceToPlayer(enemy, selectedCharacter))
+            {
+                ReservePool.Add(enemy);
+                EnemyPool.Remove(enemy);
                 deadEnemies++;
                 return;
             }
@@ -83,7 +108,7 @@ namespace FightingGame
             {
                 enemy.Update(AnimationType.Death, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
             }
-            else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= 50f && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 20)
+            else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= enemy.AnimationToAbility[AnimationType.BasicAttack].AttackReach && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 40)
             {
                 enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
             }
@@ -92,53 +117,75 @@ namespace FightingGame
                 enemy.Update(AnimationType.Run, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
             }
         }
-
-        public void Draw(List<Enemy> pool)
+        public void Draw()
         {
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
-                if (!pool[i].IsDead)
+                if (!EnemyPool[i].IsDead)
                 {
-                    pool[i].Draw();
+                    EnemyPool[i].Draw();
                 }
             }
         }
-        private void SpawnEnemies(List<Enemy> mainPool, List<Enemy> reservePool)
+        private void SpawnEnemies(Enemy enemy)
         {
-            int increaseEnemyPoolAmount = 1;
-            if (reservePool.Count > 0)
+            int increaseEnemyPoolAmount = EnemyWaves[currentWave].Item1;
+            if (ReservePool.Count > 0)
             {
-                deadEnemies = 0;
-                foreach (var enemy in reservePool)
+                for (int i = 0; i < ReservePool.Count / 2; i++)
                 {
-                    enemy.Reset();
-                    mainPool.Add(enemy);
-                    if (enemy.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                    if(EnemyWaves[currentWave].Item2.Contains(enemy))
                     {
-                        enemy.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                        ReservePool[i].Reset();
+                        EnemyPool.Add(ReservePool[i]);
+                        if (ReservePool[i].AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                        {
+                            ReservePool[i].Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                        }
+                        else
+                        {
+                            ReservePool[i].Spawn(GetSpawnLocation());
+                        }
+                    }
+                    ReservePool.RemoveAt(i);
+                    deadEnemies--;
+                }
+            }
+
+            if(EnemyPool.Count < MaxEnemyPool)
+            {
+                for (int i = 0; i < increaseEnemyPoolAmount; i++)
+                {
+                    Enemy enemySpawn = new Enemy(enemy);
+                    EnemyPool.Add(enemySpawn);
+                    if (enemySpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                    {
+                        enemySpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
                     }
                     else
                     {
-                        enemy.Spawn(GetSpawnLocation());
+                        enemySpawn.Spawn(GetSpawnLocation());
                     }
+                    enemySpawn.SetBounds(Tilemap.HitBox);
                 }
-                reservePool.Clear();
+                enemyPoolIndex += increaseEnemyPoolAmount;
             }
-            for (int i = 0; i < increaseEnemyPoolAmount; i++)
+        }
+        private void SpawnBoss(Enemy boss)
+        {
+            Enemy bossSpawn = new Enemy(boss);
+            bossSpawn.HealthBarColor = Color.Red;
+            EnemyPool.Add(bossSpawn);
+            if (bossSpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
             {
-                Enemy enemy = new Enemy(SkeletonPreset);
-                mainPool.Add(enemy);
-                if(enemy.AnimationToAbility.ContainsKey(AnimationType.Spawn))
-                {
-                    enemy.Spawn(GetSpawnLocation(), AnimationType.Spawn);
-                }
-                else
-                {
-                    enemy.Spawn(GetSpawnLocation());
-                }
-                enemy.SetBounds(Tilemap.HitBox);
+                bossSpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
             }
-            enemyPoolIndex += increaseEnemyPoolAmount;
+            else
+            {
+                bossSpawn.Spawn(GetSpawnLocation());
+            }
+            bossSpawn.SetBounds(Tilemap.HitBox);
+            enemyPoolIndex += 1;
         }
         private Vector2 GetSpawnLocation()
         {
@@ -173,6 +220,24 @@ namespace FightingGame
             float distanceY = playerPosition.Y - enemyPosition.Y;
             float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
             return distance;
+        }
+
+        private void CreateEnemyWaves()
+        {
+            #region Wave 1
+            List<Enemy> wave1Bosses = new List<Enemy>();
+            wave1Bosses.Add(GhostWarriorPreset);
+
+            List<Enemy> wave1Enemies = new List<Enemy>();
+            wave1Enemies.Add(SkeletonCatPreset);
+            wave1Enemies.Add(SkeletonPreset);
+
+            EnemyWaves.Add(0, (3, wave1Enemies));
+            BossWaves.Add(0, wave1Bosses);
+            #endregion 
+
+
+            //add other waves
         }
     }
 }

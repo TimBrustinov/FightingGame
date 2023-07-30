@@ -215,6 +215,7 @@ namespace FightingGame
             savedAnimaton = AnimationType.None;
             RemainingHealth = TotalHealth;
             RemainingStamina = TotalStamina;
+            CurrentAbility = null;
             IsDead = false;
             overrideAnimation = false;
         }

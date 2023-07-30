@@ -13,7 +13,10 @@ namespace FightingGame
     public class Enemy : Entity
     {
         public int XPAmmount = 5;
-        public Enemy(EntityName name, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites)
+        public Color HealthBarColor = Color.Green;
+        public bool IsBoss;
+
+        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             Scale = scale;
@@ -23,6 +26,7 @@ namespace FightingGame
             Speed = speed;
             TotalHealth = health;
             RemainingHealth = TotalHealth;
+            IsBoss = isBoss;
         }
         public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAbilites[enemy.Name])
         {
@@ -46,7 +50,7 @@ namespace FightingGame
             base.Draw();
             float healthPercentage = (float)RemainingHealth / TotalHealth;
             int foregroundWidth = (int)(healthPercentage * 30);
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), Color.Green);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), HealthBarColor);
         }
         public void Spawn(Vector2 position, AnimationType animation)
         {
