@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -19,6 +20,7 @@ namespace FightingGame
         private Camera Camera;
 
         private float portraitScale = 0.7f;
+        float flickerTimer = 0;
 
         public UIManager(Character character, Camera camera)
         {
@@ -34,6 +36,7 @@ namespace FightingGame
             DrawXpBar(spriteBatch, cameraCorner);
             DrawStaminaBar(spriteBatch, cameraCorner);
             DrawIcons(spriteBatch, cameraCorner);
+            DrawUltimateMeter(spriteBatch, cameraCorner);
         }
         private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
@@ -41,6 +44,8 @@ namespace FightingGame
             Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height - 10);
             //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - offset * 3, cameraCorner.Y + Camera.Viewport.Height - offset * 2), new Rectangle(0, 0, offset * 3, offset), new Color(30, 30, 30, 255));
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 137, position.Y - 58), new Rectangle(0, 0, 235, 60), new Color(20, 20, 20, 210));
+            Vector2 dimentions = new Vector2(Portraits[CharacterPortrait.HashashinBase].Width * portraitScale, Portraits[CharacterPortrait.HashashinBase].Height * portraitScale);
+
             if (!character.InUltimateForm)
             {
                 //Draws the portrait 
@@ -51,7 +56,7 @@ namespace FightingGame
                     {
                         //Draws the ability Icon
                         spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(position.X - 75 + i * offset, position.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-                        
+
                         //Draws the cooldown for the ability
                         float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
                         int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
@@ -81,6 +86,16 @@ namespace FightingGame
                     }
                 }
             }
+            DrawUltimateCooldown(spriteBatch, cameraCorner, dimentions);
+        }
+        private void DrawUltimateCooldown(SpriteBatch spriteBatch, Vector2 cameraCorner, Vector2 dimentions)
+        {
+            Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height - 10);
+
+            float cooldownPercentage = (float)character.AbilityCooldowns[AnimationType.UltimateTransform] / character.MaxAbilityCooldowns[AnimationType.UltimateTransform]; // Calculate the percentage of remaining cooldown
+            int foregroundHeight = (int)(cooldownPercentage * dimentions.Y); // Calculate the height of the foreground cooldown bar
+            Vector2 cooldownPosition = new Vector2(position.X - 129, position.Y - dimentions.Y - 7) + new Vector2(0, dimentions.Y - foregroundHeight);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, (int)dimentions.X, foregroundHeight), new Color(30, 30, 30, 180), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
         }
         private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
@@ -122,6 +137,24 @@ namespace FightingGame
             string staminaText = $"{character.RemainingStamina} / {character.TotalStamina}";
             Vector2 staminaTextPosition = new Vector2(position.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(staminaText).X / 2, position.Y + 7); 
             spriteBatch.DrawString(ContentManager.Instance.Font, staminaText, staminaTextPosition, Color.White);
+        }
+        private void DrawUltimateMeter(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        {
+
+            Color baseColor = character.MeterColor;
+            Vector2 position = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
+            float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
+            int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
+
+            if (meterForegroundWidth == 300)
+            {
+                baseColor = Color.Red;
+            }
+
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
+
+            
         }
     }
 }

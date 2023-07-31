@@ -59,7 +59,6 @@ namespace FightingGame
                 bossSpawnTimer = 0;
             }
 
-
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
                 UpdateEnemy(EnemyPool[i], SelectedCharacter);

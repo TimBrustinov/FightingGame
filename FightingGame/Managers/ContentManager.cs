@@ -58,7 +58,7 @@ namespace FightingGame
                 [AnimationType.UltimateAbility1] = new HashashinUltimateAbility1(3),
                 [AnimationType.UltimateAbility2] = new HashashinUltimateAbility2(2),
                 [AnimationType.UltimateAbility3] = new HashashinUltimateAbility3(2),
-                [AnimationType.UltimateTransform] = new HashashinUltimateTransform(0),
+                [AnimationType.UltimateTransform] = new HashashinUltimateTransform(60),
                 [AnimationType.UndoTransform] = new HashashinUndoTransform(0),
                 [AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
                 [AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),

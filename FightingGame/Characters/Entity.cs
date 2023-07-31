@@ -48,6 +48,9 @@ namespace FightingGame
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
+        private bool canPerformAttack = false;
+        public bool staminaSubtracted = false;
+
         private Vector2 minPosition, maxPosition;
 
         public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
@@ -67,11 +70,7 @@ namespace FightingGame
                 MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
                 AbilityCooldowns.Add(item.Key, 0);
             }
-
         }
-        private bool canPerformAttack = false;
-
-        public bool staminaSubtracted = false;
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
@@ -84,7 +83,6 @@ namespace FightingGame
             {
                 savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
                 AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
-
                 if (savedAnimaton == AnimationType.None)
                 {
                     IsDead = CurrentAbility.IsDead;

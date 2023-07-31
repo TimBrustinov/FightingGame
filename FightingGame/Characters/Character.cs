@@ -18,6 +18,12 @@ namespace FightingGame
         public float xpToLevelUp;
         private float maxXpForCurrentLevel;
 
+        public float UltimateMeterMax;
+        public float RemainingUltimateMeter;
+        private float ultimateFillRate;
+        private float ultimateDrainRate;
+        public Color MeterColor;
+
         private double staminaRegenInterval = 800;
         private double timer;
 
@@ -52,6 +58,13 @@ namespace FightingGame
             TotalStamina = 50;
             RemainingStamina = TotalStamina;
 
+
+            UltimateMeterMax = 10;
+            RemainingUltimateMeter = 0;
+            ultimateFillRate = UltimateMeterMax / AnimationToAbility[AnimationType.UltimateTransform].Cooldown;
+            ultimateDrainRate = UltimateMeterMax / 20f;
+            MeterColor = Color.Gold;
+
             XP = 0;
             Level = 1;
             xpToLevelUp = 100;
@@ -63,6 +76,44 @@ namespace FightingGame
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
+
+            if (!InUltimateForm && animation == AnimationType.UndoTransform)
+            {
+                animation = direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
+            }
+
+            if (InUltimateForm)
+            {
+                // Reduce RemainingUltimateMeter by ultimateDrainRate per second
+                RemainingUltimateMeter -= ultimateDrainRate * (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                RemainingUltimateMeter = MathHelper.Clamp(RemainingUltimateMeter, 0, UltimateMeterMax);
+                MeterColor = Color.Red;
+                if (RemainingUltimateMeter <= 0)
+                {
+                    // Exit the ultimate form when the meter is fully drained
+                    RemainingUltimateMeter = 0;
+                    InUltimateForm = false;
+                    animation = AnimationType.UndoTransform;
+                    savedAnimaton = AnimationType.None;
+                }
+            }
+            else
+            {
+                // Increase RemainingUltimateMeter by ultimateFillRate per second
+                RemainingUltimateMeter += ultimateFillRate * (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                RemainingUltimateMeter = MathHelper.Clamp(RemainingUltimateMeter, 0, UltimateMeterMax);
+                MeterColor = Color.Gold;
+                if (RemainingUltimateMeter >= UltimateMeterMax && animation == AnimationType.UltimateTransform)
+                {
+                    InUltimateForm = true;
+                }
+                else if(RemainingUltimateMeter < UltimateMeterMax && animation == AnimationType.UltimateTransform)
+                {
+                    animation = direction != Vector2.Zero? AnimationType.Run : AnimationType.Stand;
+                }
+            }
+
+          
 
             if (InUltimateForm)
             {
@@ -81,14 +132,19 @@ namespace FightingGame
                 }
             }
 
-            if (animation == AnimationType.UltimateTransform)
-            {
-                InUltimateForm = true;
-            }
-            else if(animation == AnimationType.UndoTransform)
+            //if (animation == AnimationType.UltimateTransform)
+            //{
+            //    InUltimateForm = true;
+            //}
+            else if (animation == AnimationType.UndoTransform && InUltimateForm)
             {
                 InUltimateForm = false;
+                RemainingUltimateMeter = 0;
             }
+            //else if(animation == AnimationType.UndoTransform && !InUltimateForm)
+            //{
+            //    animation = AnimationType.Stand;
+            //}    
 
             base.Update(animation, direction);
 
