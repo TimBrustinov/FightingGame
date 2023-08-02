@@ -35,8 +35,8 @@ namespace FightingGame
             DrawHealthBar(spriteBatch, cameraCorner);
             DrawXpBar(spriteBatch, cameraCorner);
             DrawStaminaBar(spriteBatch, cameraCorner);
-            DrawIcons(spriteBatch, cameraCorner);
-            DrawUltimateMeter(spriteBatch, cameraCorner);
+            //DrawIcons(spriteBatch, cameraCorner);
+            //DrawUltimateMeter(spriteBatch, cameraCorner);
         }
         private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
@@ -141,18 +141,18 @@ namespace FightingGame
         private void DrawUltimateMeter(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
 
-            Color baseColor = character.MeterColor;
-            Vector2 position = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
-            int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
+            //Color baseColor = character.MeterColor;
+            //Vector2 position = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
+            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
+            //float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
+            //int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
 
-            if (meterForegroundWidth == 300)
-            {
-                baseColor = Color.Red;
-            }
+            //if (meterForegroundWidth == 300)
+            //{
+            //    baseColor = Color.Red;
+            //}
 
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
+            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
 
             
         }

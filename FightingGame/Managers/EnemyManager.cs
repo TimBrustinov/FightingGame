@@ -94,11 +94,11 @@ namespace FightingGame
                 {
                     enemy.HasBeenHit = false;
                 }
-                if (selectedCharacter.CurrentAbility != null && selectedCharacter.CurrentAbility.CanHit && !enemy.HasBeenHit)
-                {
-                    enemy.TakeDamage(selectedCharacter.AbilityDamage);
-                    enemy.HasBeenHit = true;
-                }
+                //if (selectedCharacter.CurrentAbility != null && selectedCharacter.CurrentAbility.CanHit && !enemy.HasBeenHit)
+                //{
+                //    enemy.TakeDamage(selectedCharacter.AbilityDamage);
+                //    enemy.HasBeenHit = true;
+                //}
             }
             else
             {
@@ -109,10 +109,10 @@ namespace FightingGame
             {
                 enemy.Update(AnimationType.Death, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
             }
-            else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= enemy.AnimationToAbility[AnimationType.BasicAttack].AttackReach && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 40)
-            {
-                enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
+            //else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= enemy.AnimationToAbility[AnimationType.BasicAttack].AttackReach && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 40)
+            //{
+            //    enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
+            //}
             else
             {
                 enemy.Update(AnimationType.Run, Vector2.Normalize(selectedCharacter.Position - enemy.Position));

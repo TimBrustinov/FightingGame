@@ -21,7 +21,7 @@ namespace FightingGame
         public Dictionary<EntityName, Rectangle> EntityTextures;
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets;
         public Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>> Animations;
-        public Dictionary<EntityName, Dictionary<AnimationType, Ability>> EntityAbilites;
+        public Dictionary<EntityName, Dictionary<AnimationType, Action>> EntityAbilites;
 
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
@@ -31,7 +31,7 @@ namespace FightingGame
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
             Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>>();
-            EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Ability>>();
+            EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, Action>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
         }
 
@@ -48,20 +48,21 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
-            Dictionary<AnimationType, Ability> HashashinAbilites = new Dictionary<AnimationType, Ability>()
+            Dictionary<AnimationType, Action> HashashinAbilites = new Dictionary<AnimationType, Action>()
             {
-                [AnimationType.Dodge] = new HashashinDodge(0),
-                [AnimationType.BasicAttack] = new HashashinBasicAttack(0),
-                [AnimationType.Ability1] = new HashashinAbility1(2),
-                [AnimationType.Ability2] = new HashashinAbility2(3),
-                [AnimationType.Ability3] = new HashashinAbility3(2),
-                [AnimationType.UltimateAbility1] = new HashashinUltimateAbility1(3),
-                [AnimationType.UltimateAbility2] = new HashashinUltimateAbility2(2),
-                [AnimationType.UltimateAbility3] = new HashashinUltimateAbility3(2),
-                [AnimationType.UltimateTransform] = new HashashinUltimateTransform(60),
-                [AnimationType.UndoTransform] = new HashashinUndoTransform(0),
-                [AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
-                [AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
+                [AnimationType.BasicAttack] = new BasicAttack(AnimationType.BasicAttack, 0, 0, 10, true),
+                //[AnimationType.Dodge] = new HashashinDodge(0),
+                //[AnimationType.BasicAttack] = new HashashinBasicAttack(0),
+                //[AnimationType.Ability1] = new HashashinAbility1(2),
+                //[AnimationType.Ability2] = new HashashinAbility2(3),
+                //[AnimationType.Ability3] = new HashashinAbility3(2),
+                //[AnimationType.UltimateAbility1] = new HashashinUltimateAbility1(3),
+                //[AnimationType.UltimateAbility2] = new HashashinUltimateAbility2(2),
+                //[AnimationType.UltimateAbility3] = new HashashinUltimateAbility3(2),
+                //[AnimationType.UltimateTransform] = new HashashinUltimateTransform(60),
+                //[AnimationType.UndoTransform] = new HashashinUndoTransform(0),
+                //[AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
+                //[AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
             };
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
@@ -324,12 +325,12 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.Skeleton, content.Load<Texture2D>("Skeleton"));
             EntityTextures.Add(EntityName.Skeleton, new Rectangle(17, 70, 15, 21));
 
-            Dictionary<AnimationType, Ability> SkeletonAbilites = new Dictionary<AnimationType, Ability>()
-            {
-                [AnimationType.BasicAttack] = new SkeletonBasicAttack(0),
-                [AnimationType.Death] = new SkeletonDeath(0),
-                [AnimationType.Spawn] = new SkeletonSpawn(0),
-            };
+            //Dictionary<AnimationType, Ability> SkeletonAbilites = new Dictionary<AnimationType, Ability>()
+            //{
+            //    [AnimationType.BasicAttack] = new SkeletonBasicAttack(0),
+            //    [AnimationType.Death] = new SkeletonDeath(0),
+            //    [AnimationType.Spawn] = new SkeletonSpawn(0),
+            //};
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> Skeleton = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> SkeletonRun = new List<FrameHelper>();
@@ -384,7 +385,7 @@ namespace FightingGame
             Skeleton.Add((AnimationType.Spawn, !CanBeCanceled, 0.2f), SkeletonSpawn);
 
             Animations.Add(EntityName.Skeleton, Skeleton);
-            EntityAbilites.Add(EntityName.Skeleton, SkeletonAbilites);
+            //EntityAbilites.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
             #region SkeletonCat
@@ -392,12 +393,12 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.SkeletonCat, content.Load<Texture2D>("SkeletonCat"));
             EntityTextures.Add(EntityName.SkeletonCat, new Rectangle(33, 27, 32, 26));
 
-            Dictionary<AnimationType, Ability> SkeletonCatAbilites = new Dictionary<AnimationType, Ability>()
-            {
-                [AnimationType.BasicAttack] = new SkeletonCatBasicAttack(0, 70),
-                [AnimationType.Death] = new SkeletonCatDeath(0),
-                [AnimationType.Spawn] = new SkeletonCatSpawn(0),
-            };
+            //Dictionary<AnimationType, Ability> SkeletonCatAbilites = new Dictionary<AnimationType, Ability>()
+            //{
+            //    [AnimationType.BasicAttack] = new SkeletonCatBasicAttack(0, 70),
+            //    [AnimationType.Death] = new SkeletonCatDeath(0),
+            //    [AnimationType.Spawn] = new SkeletonCatSpawn(0),
+            //};
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> SkeletonCat = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> skeletonCatBasicAttack = new List<FrameHelper>();
@@ -451,7 +452,7 @@ namespace FightingGame
             SkeletonCat.Add((AnimationType.Spawn, !CanBeCanceled, 0.2f), SkeletonCatSpawn);
 
             Animations.Add(EntityName.SkeletonCat, SkeletonCat);
-            EntityAbilites.Add(EntityName.SkeletonCat, SkeletonCatAbilites);
+            //EntityAbilites.Add(EntityName.SkeletonCat, SkeletonCatAbilites);
 
             #endregion
 
@@ -459,11 +460,11 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
             EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));
 
-            Dictionary<AnimationType, Ability> GhostWarriorAbilites = new Dictionary<AnimationType, Ability>()
-            {
-                [AnimationType.Death] = new GhostWarriorDeath(0),
-                [AnimationType.BasicAttack] = new GhostWarriorBasicAttack(0, 90),
-            };
+            //Dictionary<AnimationType, Ability> GhostWarriorAbilites = new Dictionary<AnimationType, Ability>()
+            //{
+            //    [AnimationType.Death] = new GhostWarriorDeath(0),
+            //    [AnimationType.BasicAttack] = new GhostWarriorBasicAttack(0, 90),
+            //};
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> GhostWarrior = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> GhostWarriorStand = new List<FrameHelper>();
@@ -511,18 +512,18 @@ namespace FightingGame
             GhostWarrior.Add((AnimationType.Run, CanBeCanceled, 0.4f), GhostWarriorRun);
 
             Animations.Add(EntityName.GhostWarrior, GhostWarrior);
-            EntityAbilites.Add(EntityName.GhostWarrior, GhostWarriorAbilites);
+            //EntityAbilites.Add(EntityName.GhostWarrior, GhostWarriorAbilites);
             #endregion
 
             #region Ghost Warrior 2
             EntitySpriteSheets.Add(EntityName.GhostWarrior2, content.Load<Texture2D>("GhostWarrior2"));
             EntityTextures.Add(EntityName.GhostWarrior2, new Rectangle(49, 130, 77, 56));
 
-            Dictionary<AnimationType, Ability> GhostWarrior2Abilites = new Dictionary<AnimationType, Ability>()
-            {
-                [AnimationType.BasicAttack] = new GhostWarrior2BasicAttack(0, 90),
-                [AnimationType.Death] = new GhostWarrior2Death(0),
-            };
+            //Dictionary<AnimationType, Ability> GhostWarrior2Abilites = new Dictionary<AnimationType, Ability>()
+            //{
+            //    [AnimationType.BasicAttack] = new GhostWarrior2BasicAttack(0, 90),
+            //    [AnimationType.Death] = new GhostWarrior2Death(0),
+            //};
             Dictionary<(AnimationType, bool, float), List<FrameHelper>> GhostWarrior2 = new Dictionary<(AnimationType, bool, float), List<FrameHelper>>();
 
             List<FrameHelper> GhostWarrior2Run = new List<FrameHelper>();
@@ -585,7 +586,7 @@ namespace FightingGame
             GhostWarrior2.Add((AnimationType.Stand, CanBeCanceled, 0.2f), GhostWarrior2Stand);
 
             Animations.Add(EntityName.GhostWarrior2, GhostWarrior2);
-            EntityAbilites.Add(EntityName.GhostWarrior2, GhostWarrior2Abilites);
+            //EntityAbilites.Add(EntityName.GhostWarrior2, GhostWarrior2Abilites);
             #endregion
         }
     }

@@ -14,11 +14,12 @@ namespace FightingGame
     {
         public Rectangle HitBox;
         public Vector2 Position;
+        public Vector2 Direction;
         public Vector2 TopLeft => Position - Dimentions / 2;
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public Ability CurrentAbility;
+        public Action CurrentAbility;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -53,10 +54,10 @@ namespace FightingGame
 
         private Vector2 minPosition, maxPosition;
 
-        public Dictionary<AnimationType, Ability> AnimationToAbility = new Dictionary<AnimationType, Ability>();
+        public Dictionary<AnimationType, Action> AnimationToAbility = new Dictionary<AnimationType, Action>();
         public Dictionary<AnimationType, float> MaxAbilityCooldowns = new Dictionary<AnimationType, float>();
         public Dictionary<AnimationType, float> AbilityCooldowns = new Dictionary<AnimationType, float>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Ability> animationToAbility)
+        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Action> animationToAbility)
         {
             Name = name;
             AnimationToAbility = animationToAbility;
@@ -74,6 +75,7 @@ namespace FightingGame
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
+            Direction = direction;
             Speed += Speed * SpeedMultiplier;
             overrideAnimation = animation == AnimationType.Death;
             currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
@@ -81,11 +83,16 @@ namespace FightingGame
             bool checkedAnimation = CheckAnimation();
             if (checkedAnimation)
             {
-                savedAnimaton = CurrentAbility.Update(animationManager, currentAnimation, ref Position, direction, Speed);
-                AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
-                if (savedAnimaton == AnimationType.None)
+                CurrentAbility.Update(this);
+                savedAnimaton = CurrentAbility.AnimationType;
+                //AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
+                if (animationManager.CurrentAnimation != null && animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
                 {
-                    IsDead = CurrentAbility.IsDead;
+                    if (savedAnimaton == AnimationType.Death)
+                    {
+                        IsDead = true;
+                    }
+                    savedAnimaton = AnimationType.None;
                     currentAnimation = AnimationType.Stand;
                     canPerformAttack = false;
                     staminaSubtracted = false;
@@ -93,9 +100,9 @@ namespace FightingGame
             }
             else
             {
-                if (direction != Vector2.Zero)
+                if (Direction != Vector2.Zero)
                 {
-                    Position += Vector2.Normalize(direction) * Speed;
+                    Position += Vector2.Normalize(Direction) * Speed;
                 }
             }
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
@@ -109,10 +116,10 @@ namespace FightingGame
         {
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, TopLeft, new Rectangle(currFrame.SourceRectangle.X, currFrame.SourceRectangle.Y, (int)(currFrame.SourceRectangle.Width * Scale), (int)(currFrame.SourceRectangle.Height * Scale)),Color.Red);
-            //if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3 || savedAnimaton == AnimationType.UltimateTransform)
-            //{
-            //    Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
-            //}
+            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3 || savedAnimaton == AnimationType.UltimateTransform)
+            {
+                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            }
             animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
             DrawShadow();
            // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
@@ -171,19 +178,20 @@ namespace FightingGame
             if (AnimationToAbility.ContainsKey(currentAnimation))
             {
                 CurrentAbility = AnimationToAbility[currentAnimation];
+                canPerformAttack = true;
                 if (AbilityCooldowns[currentAnimation] <= 0)
                 {
-                    bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
-                    if (CurrentAbility.StaminaDrain == 0)
-                    {
-                        canPerformAttack = true;
-                    }
-                    else if (!staminaSubtracted && hasEnoughStamina)
-                    {
-                        RemainingStamina -= CurrentAbility.StaminaDrain;
-                        staminaSubtracted = true;
-                        canPerformAttack = true;
-                    }
+                    //bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
+                    //if (CurrentAbility.StaminaDrain == 0)
+                    //{
+                    //    canPerformAttack = true;
+                    //}
+                    //else if (!staminaSubtracted && hasEnoughStamina)
+                    //{
+                    //    RemainingStamina -= CurrentAbility.StaminaDrain;
+                    //    staminaSubtracted = true;
+                    //    canPerformAttack = true;
+                    //}
                 }
                 if (staminaSubtracted || canPerformAttack)
                 {
