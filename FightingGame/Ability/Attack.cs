@@ -9,14 +9,17 @@ namespace FightingGame
     public abstract class Attack : EntityAction
     {
         public float AttackRange;
+        public int Cooldown;
         public int AttackDamage;
         public bool CanMove;
         public bool CanHit;
-        protected Attack(AnimationType animationType, float cooldown, float attackRange, int attackDamage, bool canMove) : base(animationType, cooldown)
+        protected Attack(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed, int cooldown, float attackRange, int attackDamage, bool canMove) 
+            : base(animationType, frames, canBeCanceled, animationSpeed)
         {
             AttackRange = attackRange;
             AttackDamage = attackDamage;
             CanMove = canMove;
+            Cooldown = cooldown;
         }
     }
 }

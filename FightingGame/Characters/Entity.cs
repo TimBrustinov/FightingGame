@@ -43,13 +43,14 @@ namespace FightingGame
         public float AbilityDamageMultiplier = 0;
         public float Scale;
 
+        public Animator Animator;
         public AnimationManager animationManager;
         public bool overrideAnimation = false;
         public FrameHelper currFrame;
         public AnimationType currentAnimation;
         public AnimationType savedAnimaton;
 
-        private bool canPerformAttack = false;
+        public bool canPerformAttack = false;
         public bool staminaSubtracted = false;
 
         private Vector2 minPosition, maxPosition;
@@ -66,51 +67,52 @@ namespace FightingGame
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
             }
-            foreach (var item in AnimationToAbility)
-            {
-                MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
-                AbilityCooldowns.Add(item.Key, 0);
-            }
+            Animator = new Animator(this);
+            //foreach (var item in AnimationToAbility)
+            //{
+            //    MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
+            //    AbilityCooldowns.Add(item.Key, 0);
+            //}
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
             Direction = direction;
             Speed += Speed * SpeedMultiplier;
-            overrideAnimation = animation == AnimationType.Death;
-            currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
-            UpdateAnimationCooldowns();
-            bool checkedAnimation = CheckAnimation();
-            if (checkedAnimation)
-            {
-                CurrentAbility.Update(this);
-                savedAnimaton = CurrentAbility.AnimationType;
-                //AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
-                if (animationManager.CurrentAnimation != null && animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
-                {
-                    if (savedAnimaton == AnimationType.Death)
-                    {
-                        IsDead = true;
-                    }
-                    savedAnimaton = AnimationType.None;
-                    currentAnimation = AnimationType.Stand;
-                    canPerformAttack = false;
-                    staminaSubtracted = false;
-                }
-            }
-            else
-            {
-                if (Direction != Vector2.Zero)
-                {
-                    Position += Vector2.Normalize(Direction) * Speed;
-                }
-            }
+            //overrideAnimation = animation == AnimationType.Death;
+            //currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
+            //UpdateAnimationCooldowns();
+            //bool checkedAnimation = CheckAnimation();
+            //if (checkedAnimation)
+            //{
+            //    savedAnimaton = CurrentAbility.AnimationType;
+            //    CurrentAbility.Update(this);
+            //    //AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
+            //    if (animationManager.CurrentAnimation != null && animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
+            //    {
+            //        if (savedAnimaton == AnimationType.Death)
+            //        {
+            //            IsDead = true;
+            //        }
+            //        savedAnimaton = AnimationType.None;
+            //        currentAnimation = AnimationType.Stand;
+            //        canPerformAttack = false;
+            //        staminaSubtracted = false;
+            //    }
+            //}
+            //else
+            //{
+            //    if (Direction != Vector2.Zero)
+            //    {
+            //        Position += Vector2.Normalize(Direction) * Speed;
+            //    }
+            //}
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
-
+            Animator.Update(animation);
             UpdateHitbox();
             UpdateWeapon();
-            animationManager.Update(currentAnimation, overrideAnimation);
-            HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
+            //animationManager.Update(currentAnimation, overrideAnimation);
+            //HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
         public virtual void Draw()
         {
@@ -120,7 +122,8 @@ namespace FightingGame
             {
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             }
-            animationManager.Draw(Position, IsFacingLeft, new Vector2(Scale, Scale), Color.White);
+            Animator.Draw();
+            //animationManager.Draw(Position, IsFacingLeft, Scale, Color.White);
             DrawShadow();
            // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
@@ -177,17 +180,16 @@ namespace FightingGame
             }
             if (AnimationToAbility.ContainsKey(currentAnimation))
             {
-                CurrentAbility = AnimationToAbility[currentAnimation];
-                canPerformAttack = true;
                 if (AbilityCooldowns[currentAnimation] <= 0)
                 {
+                    CurrentAbility = AnimationToAbility[currentAnimation];
                     canPerformAttack = true;
                 }
-                if (canPerformAttack)
-                {
-                    AbilityCooldowns[currentAnimation] = CurrentAbility.Cooldown;
-                    return true;
-                }
+                //if (canPerformAttack)
+                //{
+                //    AbilityCooldowns[currentAnimation] = CurrentAbility.Cooldown;
+                //    return true;
+                //}
             }
             return false;
         }

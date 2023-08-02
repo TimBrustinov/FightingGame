@@ -9,9 +9,15 @@ namespace FightingGame
 {
     public class Ability : Attack
     {
-        public Ability(AnimationType animationType, float cooldown, float attackRange, int attackDamage, bool canMove) : base(animationType, cooldown, attackRange, attackDamage, canMove)
+        public Ability(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed, int cooldown, float attackRange, int attackDamage, bool canMove) 
+            : base(animationType, frames, canBeCanceled, animationSpeed, cooldown, attackRange, attackDamage, canMove)
         {
 
+        }
+
+        public override bool MetCondition(Entity entity)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Update(Entity entity)

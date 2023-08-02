@@ -21,7 +21,7 @@ namespace FightingGame
         public Dictionary<EntityName, Rectangle> EntityTextures;
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets;
         public Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>> Animations;
-        public Dictionary<EntityName, Dictionary<AnimationType, EntityAction>> EntityAbilites;
+        public Dictionary<EntityName, Dictionary<AnimationType, EntityAction>> EntityActions;
 
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
@@ -31,7 +31,7 @@ namespace FightingGame
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
             Animations = new Dictionary<EntityName, Dictionary<(AnimationType, bool, float), List<FrameHelper>>>();
-            EntityAbilites = new Dictionary<EntityName, Dictionary<AnimationType, EntityAction>>();
+            EntityActions = new Dictionary<EntityName, Dictionary<AnimationType, EntityAction>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
         }
 
@@ -48,21 +48,7 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
-            Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
-            {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, 0, default, 5, true),
-                //[AnimationType.Dodge] = new HashashinDodge(0),
-                [AnimationType.Ability1] = new Ability(AnimationType.Ability1, 2, default, 7, true),
-                [AnimationType.Ability2] = new Ability(AnimationType.Ability2, 2, default, 5, true),
-                [AnimationType.Ability3] = new Ability(AnimationType.Ability3, 3, default, 10, false),
-                [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, 1, default, 10, true),
-                [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, 3, default, 10, true),
-                [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, 3, default, 10, true),
-                //[AnimationType.UltimateTransform] = new HashashinUltimateTransform(60),
-                //[AnimationType.UndoTransform] = new HashashinUndoTransform(0),
-                //[AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
-                //[AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
-            };
+           
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
             { 
@@ -314,8 +300,25 @@ namespace FightingGame
             HashashinStand.Add(new FrameHelper(new Rectangle(2147, 91, 34, 36)));
             Hashashin.Add((AnimationType.Stand, CanBeCanceled, 0.28f), HashashinStand);
 
+            Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
+            {
+                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, CanBeCanceled, 0.18f, 0, default, 5, true),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.15f), 
+                //[AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 0, 15, 5),
+                //[AnimationType.Ability1] = new Ability(AnimationType.Ability1, 2, default, 7, true),
+                //[AnimationType.Ability2] = new Ability(AnimationType.Ability2, 2, default, 5, true),
+                //[AnimationType.Ability3] = new Ability(AnimationType.Ability3, 3, default, 10, false),
+                //[AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, 1, default, 10, true),
+                //[AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, 3, default, 10, true),
+                //[AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, 3, default, 10, true),
+                //[AnimationType.UltimateTransform] = new HashashinUltimateTransform(60),
+                //[AnimationType.UndoTransform] = new HashashinUndoTransform(0),
+                //[AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
+                //[AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
+            };
+
             Animations.Add(EntityName.Hashashin, Hashashin);
-            EntityAbilites.Add(EntityName.Hashashin, HashashinAbilites);
+            EntityActions.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
             CharacterPortraits.Add(EntityName.Hashashin, HashashinPortraits);
             #endregion

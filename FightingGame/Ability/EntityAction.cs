@@ -13,7 +13,9 @@ namespace FightingGame
     public abstract class EntityAction
     {
         public AnimationType AnimationType;
-        public float Cooldown;
+        public List<FrameHelper> AnimationFrames;
+        public bool CanBeCanceled;
+        public float AnimationSpeed;
         //public Rectangle CurrentFrame;
         //public int AbilityDamage;
         //public int StaminaDrain;
@@ -21,14 +23,18 @@ namespace FightingGame
         //public bool IsDead = false;
         //public int AttackReach = 50;
 
-        public EntityAction(AnimationType animationType, float cooldown)
+        public EntityAction(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed)
         {
             AnimationType = animationType;
-            Cooldown = cooldown;
+            AnimationFrames = frames;
+            CanBeCanceled = canBeCanceled;
+            AnimationSpeed = animationSpeed;
         }
+
+        public abstract bool MetCondition(Entity entity);
         public abstract void Update(Entity entity);
 
-        protected void Move(Entity entity)
+        protected virtual void Move(Entity entity)
         {
             if (entity.Direction != Vector2.Zero)
             {

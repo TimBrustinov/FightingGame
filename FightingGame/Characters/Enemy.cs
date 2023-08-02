@@ -28,7 +28,7 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
         }
-        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAbilites[enemy.Name])
+        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityActions[enemy.Name])
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
             Scale = enemy.Scale;
