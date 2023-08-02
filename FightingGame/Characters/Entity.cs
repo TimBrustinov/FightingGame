@@ -19,7 +19,7 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public Action CurrentAbility;
+        public EntityAction CurrentAbility;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -54,10 +54,10 @@ namespace FightingGame
 
         private Vector2 minPosition, maxPosition;
 
-        public Dictionary<AnimationType, Action> AnimationToAbility = new Dictionary<AnimationType, Action>();
+        public Dictionary<AnimationType, EntityAction> AnimationToAbility = new Dictionary<AnimationType, EntityAction>();
         public Dictionary<AnimationType, float> MaxAbilityCooldowns = new Dictionary<AnimationType, float>();
         public Dictionary<AnimationType, float> AbilityCooldowns = new Dictionary<AnimationType, float>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, Action> animationToAbility)
+        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> animationToAbility)
         {
             Name = name;
             AnimationToAbility = animationToAbility;
@@ -181,19 +181,9 @@ namespace FightingGame
                 canPerformAttack = true;
                 if (AbilityCooldowns[currentAnimation] <= 0)
                 {
-                    //bool hasEnoughStamina = RemainingStamina >= CurrentAbility.StaminaDrain;
-                    //if (CurrentAbility.StaminaDrain == 0)
-                    //{
-                    //    canPerformAttack = true;
-                    //}
-                    //else if (!staminaSubtracted && hasEnoughStamina)
-                    //{
-                    //    RemainingStamina -= CurrentAbility.StaminaDrain;
-                    //    staminaSubtracted = true;
-                    //    canPerformAttack = true;
-                    //}
+                    canPerformAttack = true;
                 }
-                if (staminaSubtracted || canPerformAttack)
+                if (canPerformAttack)
                 {
                     AbilityCooldowns[currentAnimation] = CurrentAbility.Cooldown;
                     return true;

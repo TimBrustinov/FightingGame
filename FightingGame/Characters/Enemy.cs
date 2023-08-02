@@ -16,7 +16,7 @@ namespace FightingGame
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
 
-        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, Action> abilites) : base(name, texture, abilites)
+        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             Scale = scale;
