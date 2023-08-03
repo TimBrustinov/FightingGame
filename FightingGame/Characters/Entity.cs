@@ -34,8 +34,7 @@ namespace FightingGame
 
         public float TotalHealth;
         public float RemainingHealth;
-        public int TotalStamina;
-        public int RemainingStamina;
+
 
         public float Speed;
         public float SpeedMultiplier = 0;
@@ -214,12 +213,12 @@ namespace FightingGame
             currentAnimation = AnimationType.None;
             savedAnimaton = AnimationType.None;
             RemainingHealth = TotalHealth;
-            RemainingStamina = TotalStamina;
+            remainingStamina = TotalStamina;
             CurrentAbility = null;
             IsDead = false;
             overrideAnimation = false;
         }
-        
+
         public void SetBounds(Rectangle mapSize)
         {
             minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);
@@ -229,6 +228,6 @@ namespace FightingGame
         {
             RemainingHealth -= damage;
         }
- 
+
     }
 }

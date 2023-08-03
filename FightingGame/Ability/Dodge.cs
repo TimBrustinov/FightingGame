@@ -11,7 +11,7 @@ namespace FightingGame
     {
         private int staminaDrain;
         private int dodgeSpeed;
-        public Dodge(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed, int staminaDrain, int dodgeSpeed) 
+        public Dodge(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed, int staminaDrain, int dodgeSpeed)
             : base(animationType, frames, canBeCanceled, animationSpeed)
         {
             this.staminaDrain = staminaDrain;
@@ -20,29 +20,24 @@ namespace FightingGame
 
         public override bool MetCondition(Entity entity)
         {
-            throw new NotImplementedException();
+            //if(entity.Animator.AnimationManager.CurrentAnimation.IsAnimationDone)
+            //{
+            //    return true;
+            //}
+            if (entity.Animator.CurrentAction != this)
+            {
+                entity.remainingStamina -= staminaDrain;
+            }
+            return entity.remainingStamina - staminaDrain > 0;
         }
 
         public override void Update(Entity entity)
-        {
-            if(entity.RemainingStamina - staminaDrain < 0)
-            {
-                entity.canPerformAttack = false;
-                entity.savedAnimaton = AnimationType.None;
-            }
-            else
-            {
-                //entity.RemainingStamina -= staminaDrain;
-                Move(entity);
-                entity.canPerformAttack = true;
-            }
-        }
-        protected override void Move(Entity entity)
         {
             if (entity.Direction != Vector2.Zero)
             {
                 entity.Position += Vector2.Normalize(entity.Direction) * (entity.Speed + dodgeSpeed);
             }
         }
+
     }
 }

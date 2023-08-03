@@ -16,12 +16,6 @@ namespace FightingGame
         public List<FrameHelper> AnimationFrames;
         public bool CanBeCanceled;
         public float AnimationSpeed;
-        //public Rectangle CurrentFrame;
-        //public int AbilityDamage;
-        //public int StaminaDrain;
-        //public bool CanHit;
-        //public bool IsDead = false;
-        //public int AttackReach = 50;
 
         public EntityAction(AnimationType animationType, List<FrameHelper> frames, bool canBeCanceled, float animationSpeed)
         {

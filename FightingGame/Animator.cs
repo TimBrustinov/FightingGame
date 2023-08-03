@@ -32,16 +32,17 @@ namespace FightingGame
             Entity = entity;
         }
 
-        public void Update(AnimationType animation)
+        public void Update(AnimationType wantedAnimation)
         {
-            overrideAnimation = animation == AnimationType.Death;
-            if (AnimationToAction.ContainsKey(animation))
+            overrideAnimation = wantedAnimation == AnimationType.Death;
+            if (AnimationToAction.ContainsKey(wantedAnimation))
             {
-                if (AnimationToAction[animation].MetCondition(Entity))
+                if (AnimationToAction[wantedAnimation].MetCondition(Entity))
                 {
-                    CurrentAction = AnimationToAction[animation];
+                    CurrentAction = AnimationToAction[wantedAnimation];
                 }
             }
+            else throw new ArgumentException("wanted animation does not match any actions");
             CurrentAction.Update(Entity);
             AnimationManager.Update(CurrentAction.AnimationType, overrideAnimation);
         }

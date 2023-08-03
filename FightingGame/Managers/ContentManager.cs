@@ -304,7 +304,7 @@ namespace FightingGame
             {
                 [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.1f, 0, default, 5, true),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
-                //[AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 0, 15, 5),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.13f, 15, 5),
                 [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.13f, 2, default, 7, true),
                 [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
 

@@ -26,6 +26,20 @@ namespace FightingGame
 
         private double staminaRegenInterval = 800;
         private double timer;
+        public int TotalStamina;
+        private int remainingStamina;
+        public int RemainingStamina
+        {
+            get => remainingStamina;
+            set
+            {
+                if (remainingStamina > value || remainingStamina == TotalStamina)
+                {
+                    timer = 0;
+                }
+                remainingStamina = value;
+            }
+        }
 
         public float healthRegenPerSecond; 
         private float timeElapsed = 0f;
@@ -55,7 +69,7 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             TotalStamina = 50;
-            RemainingStamina = TotalStamina;
+            remainingStamina = TotalStamina;
 
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
@@ -191,17 +205,17 @@ namespace FightingGame
             int height = 10;
             timer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (timer >= staminaRegenInterval && RemainingStamina < TotalStamina)
+            if (timer >= staminaRegenInterval && remainingStamina < TotalStamina)
             {
-                RemainingStamina++;
+                remainingStamina++;
             }
 
-            if(RemainingStamina >= TotalStamina || staminaSubtracted)
+            if(remainingStamina >= TotalStamina || staminaSubtracted)
             {
                 timer = 0;
             }
 
-            float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
+            float healthPercentage = (float)remainingStamina / TotalStamina; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - (height * 4) - 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Gray);
         }
