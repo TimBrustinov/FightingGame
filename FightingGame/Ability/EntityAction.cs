@@ -26,7 +26,7 @@ namespace FightingGame
         }
 
         public abstract bool MetCondition(Entity entity);
-        public virtual AnimationType TransitionBack()
+        public virtual AnimationType Transition()
         {
             return AnimationType.Stand;
         }

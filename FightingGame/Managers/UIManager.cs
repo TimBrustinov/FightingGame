@@ -35,8 +35,8 @@ namespace FightingGame
             DrawHealthBar(spriteBatch, cameraCorner);
             DrawXpBar(spriteBatch, cameraCorner);
             DrawStaminaBar(spriteBatch, cameraCorner);
-            //DrawIcons(spriteBatch, cameraCorner);
-            //DrawUltimateMeter(spriteBatch, cameraCorner);
+            DrawIcons(spriteBatch, cameraCorner);
+            DrawUltimateMeter(spriteBatch, cameraCorner);
         }
         private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
@@ -56,12 +56,15 @@ namespace FightingGame
                     {
                         //Draws the ability Icon
                         spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(position.X - 75 + i * offset, position.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-
                         //Draws the cooldown for the ability
-                        float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
-                        int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
-                        Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
-                        spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        if(character.CooldownManager.AnimationCooldown.ContainsKey(item.Key))
+                        {
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[item.Key] / character.CooldownManager.MaxAnimationCooldown[item.Key]; // Calculate the percentage of remaining cooldown
+                            int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
+                            Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
+                            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+                        }
                         i++;
                     }
                 }
@@ -76,17 +79,19 @@ namespace FightingGame
                     if (item.Key == AnimationType.UltimateAbility1 || item.Key == AnimationType.UltimateAbility2 || item.Key == AnimationType.UltimateAbility3)
                     {
                         spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(position.X - 75 + i * offset, position.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-
                         //Draws the cooldown for the ability
-                        float cooldownPercentage = (float)character.AbilityCooldowns[item.Key] / character.MaxAbilityCooldowns[item.Key]; // Calculate the percentage of remaining cooldown
-                        int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
-                        Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
-                        spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        if (character.CooldownManager.AnimationCooldown.ContainsKey(item.Key))
+                        {
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[item.Key] / character.CooldownManager.MaxAnimationCooldown[item.Key]; // Calculate the percentage of remaining cooldown
+                            int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
+                            Vector2 cooldownPosition = new Vector2(position.X - 75 + i * offset, position.Y - offset) + new Vector2(0, 50 - foregroundHeight);
+                            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        }
                         i++;
                     }
                 }
             }
-            DrawUltimateCooldown(spriteBatch, cameraCorner, dimentions);
+            //DrawUltimateCooldown(spriteBatch, cameraCorner, dimentions);
         }
         private void DrawUltimateCooldown(SpriteBatch spriteBatch, Vector2 cameraCorner, Vector2 dimentions)
         {
@@ -141,20 +146,20 @@ namespace FightingGame
         private void DrawUltimateMeter(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
 
-            //Color baseColor = character.MeterColor;
-            //Vector2 position = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            //float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
-            //int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
+            Color baseColor = character.MeterColor;
+            Vector2 position = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
+            float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
+            int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
 
-            //if (meterForegroundWidth == 300)
-            //{
-            //    baseColor = Color.Red;
-            //}
+            if (meterForegroundWidth == 300)
+            {
+                baseColor = Color.Red;
+            }
 
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
 
-            
+
         }
     }
 }

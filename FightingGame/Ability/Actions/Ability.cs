@@ -17,11 +17,22 @@ namespace FightingGame
 
         public override bool MetCondition(Entity entity)
         {
-            return true;
+            if(!entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
+            {
+                entity.CooldownManager.AnimationCooldown.Add(AnimationType, Cooldown);
+                entity.CooldownManager.MaxAnimationCooldown.Add(AnimationType, Cooldown);
+                return true;
+            }
+            else if(entity.CooldownManager.AnimationCooldown[AnimationType] == 0)
+            {
+                entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
+                return true;
+            }
+            return false;
         }
         public override void Update(Entity entity)
         {
-            CanHit = entity.animationManager.CurrentAnimation.CurrerntFrame.CanHit;
+            CanHit = entity.Animator.CurrentAnimation.CurrerntFrame.CanHit;
             if (CanMove)
             {
                 Move(entity);

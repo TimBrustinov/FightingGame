@@ -57,7 +57,7 @@ namespace FightingGame
 
             if (CurrentAnimation.IsAnimationDone && !CurrentAction.CanBeCanceled)
             {
-                wantedAnimation = CurrentAction.TransitionBack();
+                wantedAnimation = CurrentAction.Transition();
             }
 
             if (wantedAnimation != lastAnimation)

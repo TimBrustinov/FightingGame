@@ -59,8 +59,8 @@ namespace FightingGame
 
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
-            //ultimateFillRate = UltimateMeterMax / AnimationToAbility[AnimationType.UltimateTransform].Cooldown;
-            ultimateDrainRate = UltimateMeterMax / 20f;
+            ultimateFillRate = UltimateMeterMax / 60;
+             ultimateDrainRate = UltimateMeterMax / 20f;
             MeterColor = Color.Gold;
 
             XP = 0;
@@ -77,7 +77,7 @@ namespace FightingGame
 
             if (!InUltimateForm && animation == AnimationType.UndoTransform)
             {
-                animation = direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
+                animation = Direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
             }
 
             if (InUltimateForm)
@@ -105,17 +105,22 @@ namespace FightingGame
                 {
                     InUltimateForm = true;
                 }
-                else if(RemainingUltimateMeter < UltimateMeterMax && animation == AnimationType.UltimateTransform)
+                else if (RemainingUltimateMeter < UltimateMeterMax && animation == AnimationType.UltimateTransform)
                 {
-                    animation = direction != Vector2.Zero? AnimationType.Run : AnimationType.Stand;
+                    animation = Direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
                 }
             }
 
-          
 
             if (InUltimateForm)
             {
                 animation = UltimateAblities[animation];
+            }
+
+            if (animation == AnimationType.UndoTransform && InUltimateForm)
+            {
+                InUltimateForm = false;
+                RemainingUltimateMeter = 0;
             }
 
             if (CheckIfOnCooldown(animation))
@@ -128,13 +133,6 @@ namespace FightingGame
                 {
                     animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
                 }
-            }
-
-           
-            else if (animation == AnimationType.UndoTransform && InUltimateForm)
-            {
-                InUltimateForm = false;
-                RemainingUltimateMeter = 0;
             }
             base.Update(animation, direction);
 
@@ -213,6 +211,11 @@ namespace FightingGame
                 }
             }
             return false;
+        }
+        private void HandleUltimateForm(AnimationType animation)
+        {
+           
+
         }
     }
 }

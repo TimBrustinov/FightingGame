@@ -45,6 +45,7 @@ namespace FightingGame
         public float Scale;
 
         public Animator Animator;
+        public CooldownManager CooldownManager;
         public AnimationManager animationManager;
         public bool overrideAnimation = false;
         public FrameHelper currFrame;
@@ -64,6 +65,7 @@ namespace FightingGame
             Name = name;
             AnimationToAbility = animationToAbility;
             animationManager = new AnimationManager();
+            CooldownManager = new CooldownManager();
             foreach (var animation in ContentManager.Instance.Animations[Name])
             {
                 animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
@@ -74,45 +76,15 @@ namespace FightingGame
             //    MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
             //    AbilityCooldowns.Add(item.Key, 0);
             //}
-
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
-
-            //overrideAnimation = animation == AnimationType.Death;
-            //currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
-            //UpdateAnimationCooldowns();
-            //bool checkedAnimation = CheckAnimation();
-            //if (checkedAnimation)
-            //{
-            //    savedAnimaton = CurrentAbility.AnimationType;
-            //    CurrentAbility.Update(this);
-            //    //AbilityDamage = CurrentAbility.AbilityDamage + (CurrentAbility.AbilityDamage * AbilityDamageMultiplier);
-            //    if (animationManager.CurrentAnimation != null && animationManager.CurrentAnimation.IsAnimationDone && animationManager.lastAnimation == savedAnimaton)
-            //    {
-            //        if (savedAnimaton == AnimationType.Death)
-            //        {
-            //            IsDead = true;
-            //        }
-            //        savedAnimaton = AnimationType.None;
-            //        currentAnimation = AnimationType.Stand;
-            //        canPerformAttack = false;
-            //        staminaSubtracted = false;
-            //    }
-            //}
-            //else
-            //{
-            //    if (Direction != Vector2.Zero)
-            //    {
-            //        Position += Vector2.Normalize(Direction) * Speed;
-            //    }
-            //}
-
             Direction = direction;
             Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             Animator.Update(animation);
+            CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
             //animationManager.Update(currentAnimation, overrideAnimation);
@@ -120,17 +92,9 @@ namespace FightingGame
         }
         public virtual void Draw()
         {
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, TopLeft, new Rectangle(currFrame.SourceRectangle.X, currFrame.SourceRectangle.Y, (int)(currFrame.SourceRectangle.Width * Scale), (int)(currFrame.SourceRectangle.Height * Scale)),Color.Red);
-            if (savedAnimaton == AnimationType.BasicAttack || savedAnimaton == AnimationType.Ability1 || savedAnimaton == AnimationType.Ability2 || savedAnimaton == AnimationType.Ability3 || savedAnimaton == AnimationType.UltimateTransform)
-            {
-                Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
-            }
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             Animator.Draw();
             DrawShadow();
-            //animationManager.Draw(Position, IsFacingLeft, Scale, Color.White);
-            // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 
         private void UpdateHitbox()
@@ -140,7 +104,7 @@ namespace FightingGame
                 Dimentions = Vector2.Zero;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
-            else if (animationManager.CurrentAnimation != null)
+            else if (Animator.CurrentAnimation != null)
             {
                 currFrame = Animator.CurrentAnimation.PreviousFrame;
                 Dimentions.X = currFrame.CharacterHitbox.Width * Scale;
