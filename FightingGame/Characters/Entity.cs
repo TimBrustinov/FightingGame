@@ -34,7 +34,9 @@ namespace FightingGame
 
         public float TotalHealth;
         public float RemainingHealth;
-
+        public float TotalStamina;
+        public float RemainingStamina;
+        public double staminaTimer;
 
         public float Speed;
         public float SpeedMultiplier = 0;
@@ -72,6 +74,7 @@ namespace FightingGame
             //    MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
             //    AbilityCooldowns.Add(item.Key, 0);
             //}
+
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
@@ -139,7 +142,7 @@ namespace FightingGame
             }
             else if (animationManager.CurrentAnimation != null)
             {
-                currFrame = Animator.AnimationManager.CurrentAnimation.PreviousFrame;
+                currFrame = Animator.CurrentAnimation.PreviousFrame;
                 Dimentions.X = currFrame.CharacterHitbox.Width * Scale;
                 Dimentions.Y = currFrame.CharacterHitbox.Height * Scale;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
@@ -213,7 +216,7 @@ namespace FightingGame
             currentAnimation = AnimationType.None;
             savedAnimaton = AnimationType.None;
             RemainingHealth = TotalHealth;
-            remainingStamina = TotalStamina;
+            RemainingStamina = TotalStamina;
             CurrentAbility = null;
             IsDead = false;
             overrideAnimation = false;

@@ -302,14 +302,14 @@ namespace FightingGame
 
             Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
             {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.1f, 0, default, 5, true),
+                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.07f, 0, default, 5, true),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
-                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.13f, 15, 5),
-                [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.13f, 2, default, 7, true),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.1f, 15, 5),
+                [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.115f, 2, default, 7, true),
+                [AnimationType.Ability2] = new Ability(AnimationType.Ability2, HashashinAbility2, !CanBeCanceled, 0.1f, 2, default, 5, true),
+                [AnimationType.Ability3] = new Ability(AnimationType.Ability3, HashashinAbility3, !CanBeCanceled, 0.065f, 3, default, 8, false),
                 [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
-
-                //[AnimationType.Ability2] = new Ability(AnimationType.Ability2, 2, default, 5, true),
-                //[AnimationType.Ability3] = new Ability(AnimationType.Ability3, 3, default, 10, false),
+        
                 //[AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, 1, default, 10, true),
                 //[AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, 3, default, 10, true),
                 //[AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, 3, default, 10, true),

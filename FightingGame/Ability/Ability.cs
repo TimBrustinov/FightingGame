@@ -19,7 +19,6 @@ namespace FightingGame
         {
             return true;
         }
-
         public override void Update(Entity entity)
         {
             CanHit = entity.animationManager.CurrentAnimation.CurrerntFrame.CanHit;

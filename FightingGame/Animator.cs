@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,14 @@ namespace FightingGame
         public EntityAction CurrentAction;
         public Dictionary<AnimationType, EntityAction> AnimationToAction = new Dictionary<AnimationType, EntityAction>();
 
-        public AnimationType currentAnimation;
-        public AnimationType savedAnimaton;
+
+        public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
+        public AnimationType lastAnimation;
+        public Animation CurrentAnimation;
+        public Rectangle CurrentFrame;
+        public Rectangle PreviousFrame;
+        public bool IsAnimationDone;
+
         public bool canPerformAction = false;
         private bool overrideAnimation = false;
 
@@ -25,30 +32,53 @@ namespace FightingGame
         {
             AnimationManager = new AnimationManager();
             AnimationToAction = ContentManager.Instance.EntityActions[entity.Name];
-            foreach(var item in ContentManager.Instance.EntityActions[entity.Name].Values)
+            foreach (var item in ContentManager.Instance.EntityActions[entity.Name].Values)
             {
-                AnimationManager.AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
+                AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
             }
             Entity = entity;
+        }
+        private void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
+        {
+            if (Animations.ContainsKey(animation))
+            {
+                return;
+            }
+            Animation animationSprite = new Animation(texture, canBeCanceled, timePerFrame, sourceRectangles);
+            Animations.Add(animation, animationSprite);
+            lastAnimation = animation;
         }
 
         public void Update(AnimationType wantedAnimation)
         {
+
             overrideAnimation = wantedAnimation == AnimationType.Death;
-            if (AnimationToAction.ContainsKey(wantedAnimation))
+            CurrentAnimation = Animations[lastAnimation];
+
+            if (CurrentAnimation.IsAnimationDone && !CurrentAction.CanBeCanceled)
             {
-                if (AnimationToAction[wantedAnimation].MetCondition(Entity))
+                wantedAnimation = CurrentAction.TransitionBack();
+            }
+
+            if (wantedAnimation != lastAnimation)
+            {
+                if (AnimationToAction[wantedAnimation].MetCondition(Entity) && (CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone || overrideAnimation))
                 {
                     CurrentAction = AnimationToAction[wantedAnimation];
+                    Animations[lastAnimation].Restart();
+                    lastAnimation = wantedAnimation;
+                    CurrentAnimation = Animations[lastAnimation];
+                    Animations[lastAnimation].Start();
                 }
             }
-            else throw new ArgumentException("wanted animation does not match any actions");
             CurrentAction.Update(Entity);
-            AnimationManager.Update(CurrentAction.AnimationType, overrideAnimation);
+            Animations[lastAnimation].Update();
+            CurrentFrame = Animations[lastAnimation].CurrerntFrame.SourceRectangle;
+            PreviousFrame = Animations[lastAnimation].PreviousFrame.SourceRectangle;
         }
         public void Draw()
         {
-            AnimationManager.Draw(Entity.Position, InputManager.IsMovingLeft, Entity.Scale, Color.White);
+            Animations[lastAnimation].Draw(Entity.Position, InputManager.IsMovingLeft, Entity.Scale, Color.White);
         }
 
     }
@@ -75,9 +105,9 @@ namespace FightingGame
     //        this.AnimationType = animationType;
     //        Neighbors = new List<AnimationVertex>();
     //    }
-           
+
     //}
-        
+
 }
 
 

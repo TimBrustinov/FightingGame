@@ -26,6 +26,10 @@ namespace FightingGame
         }
 
         public abstract bool MetCondition(Entity entity);
+        public virtual AnimationType TransitionBack()
+        {
+            return AnimationType.Stand;
+        }
         public abstract void Update(Entity entity);
 
         protected virtual void Move(Entity entity)

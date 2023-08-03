@@ -20,17 +20,18 @@ namespace FightingGame
 
         public override bool MetCondition(Entity entity)
         {
-            //if(entity.Animator.AnimationManager.CurrentAnimation.IsAnimationDone)
-            //{
-            //    return true;
-            //}
-            if (entity.Animator.CurrentAction != this)
+            if(entity.RemainingStamina - staminaDrain > 0)
             {
-                entity.remainingStamina -= staminaDrain;
+                if (entity.Animator.CurrentAction != this)
+                {
+                    entity.RemainingStamina -= staminaDrain;
+                    entity.staminaTimer = 0;
+                }
+                return true;
             }
-            return entity.remainingStamina - staminaDrain > 0;
+            return false;
+            
         }
-
         public override void Update(Entity entity)
         {
             if (entity.Direction != Vector2.Zero)

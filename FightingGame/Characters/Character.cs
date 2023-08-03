@@ -24,22 +24,8 @@ namespace FightingGame
         private float ultimateDrainRate;
         public Color MeterColor;
 
-        private double staminaRegenInterval = 800;
-        private double timer;
-        public int TotalStamina;
-        private int remainingStamina;
-        public int RemainingStamina
-        {
-            get => remainingStamina;
-            set
-            {
-                if (remainingStamina > value || remainingStamina == TotalStamina)
-                {
-                    timer = 0;
-                }
-                remainingStamina = value;
-            }
-        }
+        private double staminaRegenInterval = 1500;
+        
 
         public float healthRegenPerSecond; 
         private float timeElapsed = 0f;
@@ -69,7 +55,7 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             TotalStamina = 50;
-            remainingStamina = TotalStamina;
+            RemainingStamina = TotalStamina;
 
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
@@ -144,20 +130,12 @@ namespace FightingGame
                 }
             }
 
-            //if (animation == AnimationType.UltimateTransform)
-            //{
-            //    InUltimateForm = true;
-            //}
+           
             else if (animation == AnimationType.UndoTransform && InUltimateForm)
             {
                 InUltimateForm = false;
                 RemainingUltimateMeter = 0;
             }
-            //else if(animation == AnimationType.UndoTransform && !InUltimateForm)
-            //{
-            //    animation = AnimationType.Stand;
-            //}    
-
             base.Update(animation, direction);
 
             if (XP >= xpToLevelUp)
@@ -170,7 +148,6 @@ namespace FightingGame
         public override void Draw()
         {
             base.Draw();
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             DrawHealthBar(Globals.SpriteBatch);
             DrawStaminaBar();
         }
@@ -203,19 +180,19 @@ namespace FightingGame
         {
             int width = 75;
             int height = 10;
-            timer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+            staminaTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (timer >= staminaRegenInterval && remainingStamina < TotalStamina)
+            if (staminaTimer >= staminaRegenInterval && RemainingStamina < TotalStamina)
             {
-                remainingStamina++;
+                RemainingStamina++;
             }
 
-            if(remainingStamina >= TotalStamina || staminaSubtracted)
+            if(RemainingStamina >= TotalStamina)
             {
-                timer = 0;
+                staminaTimer = 0;
             }
 
-            float healthPercentage = (float)remainingStamina / TotalStamina; // Calculate the percentage of remaining health
+            float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
             int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - (height * 4) - 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Gray);
         }

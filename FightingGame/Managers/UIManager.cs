@@ -129,12 +129,12 @@ namespace FightingGame
             Vector2 position = new Vector2(cameraCorner.X + 320, cameraCorner.Y + 35);
 
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X, position.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float staminaPercentage = (float)character.remainingStamina / character.TotalStamina; // Calculate the percentage of remaining stamina
+            float staminaPercentage = (float)character.RemainingStamina / character.TotalStamina; // Calculate the percentage of remaining stamina
             int staminaForegroundWidth = (int)(staminaPercentage * 300); // Calculate the width of the foreground stamina bar
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + 5, position.Y + 5), new Rectangle(0, 0, staminaForegroundWidth, 20), Color.Gray);
 
             // Draw stamina progress text
-            string staminaText = $"{character.remainingStamina} / {character.TotalStamina}";
+            string staminaText = $"{character.RemainingStamina} / {character.TotalStamina}";
             Vector2 staminaTextPosition = new Vector2(position.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(staminaText).X / 2, position.Y + 7); 
             spriteBatch.DrawString(ContentManager.Instance.Font, staminaText, staminaTextPosition, Color.White);
         }
