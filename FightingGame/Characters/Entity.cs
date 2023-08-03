@@ -77,8 +77,7 @@ namespace FightingGame
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
-            Direction = direction;
-            Speed += Speed * SpeedMultiplier;
+
             //overrideAnimation = animation == AnimationType.Death;
             //currentAnimation = savedAnimaton != AnimationType.None ? savedAnimaton : animation;
             //UpdateAnimationCooldowns();
@@ -107,6 +106,9 @@ namespace FightingGame
             //        Position += Vector2.Normalize(Direction) * Speed;
             //    }
             //}
+
+            Direction = direction;
+            Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             Animator.Update(animation);
             UpdateHitbox();
@@ -123,9 +125,9 @@ namespace FightingGame
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
             }
             Animator.Draw();
-            //animationManager.Draw(Position, IsFacingLeft, Scale, Color.White);
             DrawShadow();
-           // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
+            //animationManager.Draw(Position, IsFacingLeft, Scale, Color.White);
+            // Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(HitBox.X + HitBox.Width / 2, HitBox.Y + HitBox.Height / 2), new Rectangle(0, 0, 4, 4), Color.Red);
             //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Position, new Rectangle(0, 0, 5, 5), Color.Cyan);
         }
 
@@ -138,7 +140,7 @@ namespace FightingGame
             }
             else if (animationManager.CurrentAnimation != null)
             {
-                currFrame = animationManager.CurrentAnimation.PreviousFrame;
+                currFrame = Animator.AnimationManager.CurrentAnimation.PreviousFrame;
                 Dimentions.X = currFrame.CharacterHitbox.Width * Scale;
                 Dimentions.Y = currFrame.CharacterHitbox.Height * Scale;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);

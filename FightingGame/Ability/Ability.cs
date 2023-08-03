@@ -17,7 +17,7 @@ namespace FightingGame
 
         public override bool MetCondition(Entity entity)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public override void Update(Entity entity)

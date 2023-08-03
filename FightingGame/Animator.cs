@@ -42,6 +42,7 @@ namespace FightingGame
                     CurrentAction = AnimationToAction[animation];
                 }
             }
+            CurrentAction.Update(Entity);
             AnimationManager.Update(CurrentAction.AnimationType, overrideAnimation);
         }
         public void Draw()
