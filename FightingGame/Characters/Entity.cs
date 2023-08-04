@@ -110,7 +110,7 @@ namespace FightingGame
             weaponHorizontalOffset = offsets.Item1;
             WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * EntityScale);
             WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * EntityScale);
-            if (InputManager.IsMovingLeft)
+            if (IsFacingLeft)
             {
                 WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
             }

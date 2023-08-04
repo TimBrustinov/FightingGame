@@ -115,7 +115,7 @@ namespace FightingGame
             {
                 foreach (var attack in Attacks.Values)
                 {
-                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange)
+                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
                     {
                         return attack.AnimationType;
                     }

@@ -547,12 +547,15 @@ namespace FightingGame
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(548, 280, 40, 84)));
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(708, 279, 43, 83)));
 
-            //Dictionary<AnimationType, Ability> GhostWarrior2Abilites = new Dictionary<AnimationType, Ability>()
-            //{
-            //    [AnimationType.BasicAttack] = new GhostWarrior2BasicAttack(0, 90),
-            //    [AnimationType.Death] = new GhostWarrior2Death(0),
-            //};
+            Dictionary<AnimationType, EntityAction> GhostWarrior2Actions = new Dictionary<AnimationType, EntityAction>()
+            {
+                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, GhostWarrior2BasicAttack, !CanBeCanceled, 0.1f, 0, 90, 20, false),
+                [AnimationType.Death] = new Death(AnimationType.Death, GhostWarrior2Death, !CanBeCanceled, 0.16f),
+                [AnimationType.Run] = new Run(AnimationType.Run, GhostWarrior2Run, CanBeCanceled, 0.2f),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarrior2Stand, CanBeCanceled, 0.1f),
+            };
 
+            EntityActions.Add(EntityName.GhostWarrior2, GhostWarrior2Actions);
             #endregion
         }
     }

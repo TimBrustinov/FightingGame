@@ -28,11 +28,8 @@ namespace FightingGame
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.Skeleton]);
         Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 1f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);   
-
-        //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
-        //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 100, 1.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
-        //Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
+        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
@@ -47,7 +44,7 @@ namespace FightingGame
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-
+            
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (enemySpawnTimer >= enemySpawnRate)
             {
@@ -192,7 +189,7 @@ namespace FightingGame
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
             wave1Bosses.Add(GhostWarriorPreset);
-            //wave1Bosses.Add(GhostWarrior2Preset);
+            wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
             wave1Enemies.Add(SkeletonCatPreset);
