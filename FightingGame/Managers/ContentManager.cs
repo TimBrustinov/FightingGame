@@ -395,6 +395,7 @@ namespace FightingGame
                 //[AnimationType.Death] = new SkeletonDeath(0),
                 //[AnimationType.Spawn] = new SkeletonSpawn(0),
                 [AnimationType.Run] = new Run(AnimationType.Run, SkeletonRun, CanBeCanceled, 0.1f),
+                [AnimationType.Death] = new Death(AnimationType.Death, SkeletonDeath, !CanBeCanceled, 0.1f),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand, SkeletonStand, CanBeCanceled, 0.1f),
             };
 

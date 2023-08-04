@@ -45,11 +45,11 @@ namespace FightingGame
             direction = Vector2.Normalize(character.Position - Position);
             if (character.WeaponHitBox.Intersects(HitBox))
             {
-                //if (character.HasFrameChanged)
-                //{
-                //    HasBeenHit = false;
-                //}
-                if(character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
+                if (character.HasFrameChanged)
+                {
+                    HasBeenHit = false;
+                }
+                if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
                     TakeDamage(character.CurrentAttack.AttackDamage);
                     HasBeenHit = true;

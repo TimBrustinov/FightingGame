@@ -28,6 +28,7 @@ namespace FightingGame
         public bool IsDead = false;
         public bool IsFacingLeft;
         public bool HasBeenHit;
+        public bool HasFrameChanged;
 
         public EntityName Name;
         public float TotalHealth;
@@ -78,6 +79,7 @@ namespace FightingGame
             CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
+            HasFrameChanged = Animator.CurrentAnimation.hasFrameChanged;
         }
         public virtual void Draw()
         {

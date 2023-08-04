@@ -12,25 +12,20 @@ namespace FightingGame
     {
         private Entity Entity;
 
-        public AnimationManager AnimationManager;
         public EntityAction CurrentAction;
-        public Dictionary<AnimationType, EntityAction> AnimationToAction = new Dictionary<AnimationType, EntityAction>();
-
-
-        public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
         public AnimationType CurrentAnimationType;
-        public Animation CurrentAnimation;
-        public Rectangle CurrentFrame;
-        public Rectangle PreviousFrame;
+        public Animation CurrentAnimation; 
+        public Dictionary<AnimationType, EntityAction> AnimationToAction = new Dictionary<AnimationType, EntityAction>();
+        public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
+
+
         public bool IsAnimationDone;
 
-        public bool canPerformAction = false;
         private bool overrideAnimation = false;
 
 
         public Animator(Entity entity)
         {
-            AnimationManager = new AnimationManager();
             AnimationToAction = ContentManager.Instance.EntityActions[entity.Name];
             foreach (var item in ContentManager.Instance.EntityActions[entity.Name].Values)
             {
@@ -66,15 +61,13 @@ namespace FightingGame
                 {
                     CurrentAction = AnimationToAction[wantedAnimation];
                     Animations[CurrentAnimationType].Restart();
-                    CurrentAnimationType = wantedAnimation;
+                    CurrentAnimationType = CurrentAction.AnimationType;
                     CurrentAnimation = Animations[CurrentAnimationType];
                     Animations[CurrentAnimationType].Start();
                 }
             }
             CurrentAction.Update(Entity);
             Animations[CurrentAnimationType].Update();
-            CurrentFrame = Animations[CurrentAnimationType].CurrerntFrame.SourceRectangle;
-            PreviousFrame = Animations[CurrentAnimationType].PreviousFrame.SourceRectangle;
         }
         public void Draw()
         {
