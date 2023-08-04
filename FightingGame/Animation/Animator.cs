@@ -78,7 +78,7 @@ namespace FightingGame
         }
         public void Draw()
         {
-            Animations[lastAnimation].Draw(Entity.Position, InputManager.IsMovingLeft, Entity.Scale, Color.White);
+            Animations[lastAnimation].Draw(Entity.Position, Entity.IsFacingLeft, Entity.Scale, Color.White);
         }
 
     }

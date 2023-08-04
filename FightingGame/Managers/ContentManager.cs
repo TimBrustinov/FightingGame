@@ -314,16 +314,10 @@ namespace FightingGame
                 [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, HashashinUltimateAbility1, !CanBeCanceled, 0.08f, 3, default, 8, true),
                 [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, HashashinUltimateAbility2, !CanBeCanceled, 0.08f, 3, default, 8, true),
                 [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, HashashinUltimateAbility3, !CanBeCanceled, 0.08f, 3, default, 8, true),
-                [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 3, default, 8, true),
+                [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 0, default, 8, true),
                 [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, HashashinUltimateDodge, !CanBeCanceled, 0.1f, 15, 5),
                 [AnimationType.UndoTransform] = new Ability(AnimationType.UndoTransform, HashashinUndoTransform, !CanBeCanceled, 0.1f, 5, 0, 0, false),
                 [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
-
-                //[AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, 3, default, 10, true),
-                //[AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, 3, default, 10, true),
-                //[AnimationType.UndoTransform] = new HashashinUndoTransform(0),
-                //[AnimationType.UltimateDodge] = new HashashinUltimateDodge(0),
-                //[AnimationType.UltimateBasicAttack] = new HashashinUltimateBasicAttack(0),
             };
 
             Animations.Add(EntityName.Hashashin, Hashashin);
@@ -395,8 +389,17 @@ namespace FightingGame
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(137, 272, 32, 33)));
             Skeleton.Add((AnimationType.Spawn, !CanBeCanceled, 0.2f), SkeletonSpawn);
 
+            Dictionary<AnimationType, EntityAction> SkeletonAbilites = new Dictionary<AnimationType, EntityAction>()
+            {
+                //[AnimationType.BasicAttack] = 
+                //[AnimationType.Death] = new SkeletonDeath(0),
+                //[AnimationType.Spawn] = new SkeletonSpawn(0),
+                [AnimationType.Run] = new Run(AnimationType.Run, SkeletonRun, CanBeCanceled, 0.1f),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand, SkeletonStand, CanBeCanceled, 0.1f),
+            };
+
             Animations.Add(EntityName.Skeleton, Skeleton);
-            //EntityAbilites.Add(EntityName.Skeleton, SkeletonAbilites);
+            EntityActions.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
             #region SkeletonCat

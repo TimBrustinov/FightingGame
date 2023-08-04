@@ -123,7 +123,7 @@ namespace FightingGame
                 RemainingUltimateMeter = 0;
             }
 
-            if (CheckIfOnCooldown(animation))
+            if (CooldownManager.AnimationCooldown[animation] != 0)
             {
                 if(direction != Vector2.Zero)
                 {
@@ -201,17 +201,7 @@ namespace FightingGame
             maxXpForCurrentLevel = xpToLevelUp;
             XP = 0; 
         }
-        private bool CheckIfOnCooldown(AnimationType animation)
-        {
-            if(AbilityCooldowns.ContainsKey(animation))
-            {
-                if(AbilityCooldowns[animation] != 0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+      
         private void HandleUltimateForm(AnimationType animation)
         {
            

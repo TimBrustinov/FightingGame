@@ -91,16 +91,6 @@ namespace FightingGame
                     }
                 }
             }
-            //DrawUltimateCooldown(spriteBatch, cameraCorner, dimentions);
-        }
-        private void DrawUltimateCooldown(SpriteBatch spriteBatch, Vector2 cameraCorner, Vector2 dimentions)
-        {
-            Vector2 position = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height - 10);
-
-            float cooldownPercentage = (float)character.AbilityCooldowns[AnimationType.UltimateTransform] / character.MaxAbilityCooldowns[AnimationType.UltimateTransform]; // Calculate the percentage of remaining cooldown
-            int foregroundHeight = (int)(cooldownPercentage * dimentions.Y); // Calculate the height of the foreground cooldown bar
-            Vector2 cooldownPosition = new Vector2(position.X - 129, position.Y - dimentions.Y - 7) + new Vector2(0, dimentions.Y - foregroundHeight);
-            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, (int)dimentions.X, foregroundHeight), new Color(30, 30, 30, 180), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
         }
         private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {

@@ -19,7 +19,7 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public EntityAction CurrentAbility;
+        public EntityAction CurrentAction;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -57,19 +57,15 @@ namespace FightingGame
 
         private Vector2 minPosition, maxPosition;
 
-        public Dictionary<AnimationType, EntityAction> AnimationToAbility = new Dictionary<AnimationType, EntityAction>();
-        public Dictionary<AnimationType, float> MaxAbilityCooldowns = new Dictionary<AnimationType, float>();
-        public Dictionary<AnimationType, float> AbilityCooldowns = new Dictionary<AnimationType, float>();
+        public Dictionary<AnimationType, EntityAction> AnimationToEntityAction = new Dictionary<AnimationType, EntityAction>();
+        public Dictionary<AnimationType, Attack> Attacks = new Dictionary<AnimationType, Attack>();
+
         public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> animationToAbility)
         {
             Name = name;
-            AnimationToAbility = animationToAbility;
+            AnimationToEntityAction = animationToAbility;
             animationManager = new AnimationManager();
             CooldownManager = new CooldownManager();
-            foreach (var animation in ContentManager.Instance.Animations[Name])
-            {
-                animationManager.AddAnimation(animation.Key.Item1, animation.Key.Item2, texture, animation.Value, animation.Key.Item3);
-            }
             Animator = new Animator(this);
             //foreach (var item in AnimationToAbility)
             //{
@@ -84,6 +80,7 @@ namespace FightingGame
             Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             Animator.Update(animation);
+            CurrentAction = Animator.CurrentAction;
             CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
@@ -140,48 +137,13 @@ namespace FightingGame
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, HitBox.Y + HitBox.Height - 2, HitBox.Width, 10), new Color(255, 255, 255, 100));
             }
         }
-        public bool CheckAnimation()
-        {
-            if (overrideAnimation)
-            {
-                currentAnimation = AnimationType.Death;
-            }
-            if (AnimationToAbility.ContainsKey(currentAnimation))
-            {
-                if (AbilityCooldowns[currentAnimation] <= 0)
-                {
-                    CurrentAbility = AnimationToAbility[currentAnimation];
-                    canPerformAttack = true;
-                }
-                //if (canPerformAttack)
-                //{
-                //    AbilityCooldowns[currentAnimation] = CurrentAbility.Cooldown;
-                //    return true;
-                //}
-            }
-            return false;
-        }
-        public void UpdateAnimationCooldowns()
-        {
-            foreach (var ability in AbilityCooldowns.Keys)
-            {
-                if (AbilityCooldowns[ability] > 0)
-                {
-                    AbilityCooldowns[ability] -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-                }
-                else
-                {
-                    AbilityCooldowns[ability] = 0;
-                }
-            }
-        }
         public void Reset()
         {
             currentAnimation = AnimationType.None;
             savedAnimaton = AnimationType.None;
             RemainingHealth = TotalHealth;
             RemainingStamina = TotalStamina;
-            CurrentAbility = null;
+            CurrentAction = null;
             IsDead = false;
             overrideAnimation = false;
         }

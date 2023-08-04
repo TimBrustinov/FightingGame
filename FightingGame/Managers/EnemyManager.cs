@@ -27,9 +27,9 @@ namespace FightingGame
 
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.Skeleton]);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
-        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 100, 1.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
-        Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
+        //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
+        //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 100, 1.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
+        //Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
@@ -88,35 +88,7 @@ namespace FightingGame
                 return;
             }
 
-            if (selectedCharacter.WeaponHitBox.Intersects(enemy.HitBox))
-            {
-                if (selectedCharacter.HasFrameChanged)
-                {
-                    enemy.HasBeenHit = false;
-                }
-                //if (selectedCharacter.CurrentAbility != null && selectedCharacter.CurrentAbility.CanHit && !enemy.HasBeenHit)
-                //{
-                //    enemy.TakeDamage(selectedCharacter.AbilityDamage);
-                //    enemy.HasBeenHit = true;
-                //}
-            }
-            else
-            {
-                enemy.HasBeenHit = false;
-            }
-
-            if (enemy.RemainingHealth <= 0)
-            {
-                enemy.Update(AnimationType.Death, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
-            //else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= enemy.AnimationToAbility[AnimationType.BasicAttack].AttackReach && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 40)
-            //{
-            //    enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            //}
-            else
-            {
-                enemy.Update(AnimationType.Run, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
+            
         }
         public void Draw()
         {
@@ -139,7 +111,7 @@ namespace FightingGame
                     {
                         ReservePool[i].Reset();
                         EnemyPool.Add(ReservePool[i]);
-                        if (ReservePool[i].AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                        if (ReservePool[i].AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                         {
                             ReservePool[i].Spawn(GetSpawnLocation(), AnimationType.Spawn);
                         }
@@ -159,7 +131,7 @@ namespace FightingGame
                 {
                     Enemy enemySpawn = new Enemy(enemy);
                     EnemyPool.Add(enemySpawn);
-                    if (enemySpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                    if (enemySpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                     {
                         enemySpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
                     }
@@ -177,7 +149,7 @@ namespace FightingGame
             Enemy bossSpawn = new Enemy(boss);
             bossSpawn.HealthBarColor = Color.Red;
             EnemyPool.Add(bossSpawn);
-            if (bossSpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+            if (bossSpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
             {
                 bossSpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
             }
@@ -227,11 +199,11 @@ namespace FightingGame
         {
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
-            wave1Bosses.Add(GhostWarriorPreset);
-            wave1Bosses.Add(GhostWarrior2Preset);
+            //wave1Bosses.Add(GhostWarriorPreset);
+            //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            wave1Enemies.Add(SkeletonCatPreset);
+            //wave1Enemies.Add(SkeletonCatPreset);
             wave1Enemies.Add(SkeletonPreset);
 
             EnemyWaves.Add(0, (3, wave1Enemies));

@@ -19,11 +19,18 @@ namespace FightingGame
         {
             if(!entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
-                entity.CooldownManager.AnimationCooldown.Add(AnimationType, Cooldown);
+                if(!entity.Animator.CurrentAnimation.CanBeCanceled)
+                {
+                    entity.CooldownManager.AnimationCooldown.Add(AnimationType, 0);
+                }
+                else
+                {
+                    entity.CooldownManager.AnimationCooldown.Add(AnimationType, Cooldown);
+                }
                 entity.CooldownManager.MaxAnimationCooldown.Add(AnimationType, Cooldown);
                 return true;
             }
-            else if(entity.CooldownManager.AnimationCooldown[AnimationType] == 0)
+            else if(entity.CooldownManager.AnimationCooldown[AnimationType] == 0 && entity.Animator.CurrentAnimation.CanBeCanceled)
             {
                 entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
                 return true;

@@ -15,7 +15,8 @@ namespace FightingGame
         public int XPAmmount = 5;
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
-
+        private AnimationType wantedAnimation;
+        private List<Attack> attacks;
         public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
@@ -27,6 +28,14 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
+
+            foreach (var item in Animator.AnimationToAction)
+            {
+                if(item.Value.GetType() == typeof(Attack))
+                {
+                    attacks.Add((Attack)item.Value);
+                }
+            }
         }
         public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityActions[enemy.Name])
         {
@@ -39,11 +48,56 @@ namespace FightingGame
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
         }
-        public override void Update(AnimationType animation, Vector2 direction)
+        public void Update(Character character, Vector2 direction)
         {
+            Direction = direction;
+
+            if (character.WeaponHitBox.Intersects(HitBox))
+            {
+                if (character.HasFrameChanged)
+                {
+                    HasBeenHit = false;
+                }
+                if(character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
+                {
+                }
+                //if (character.CurrentAction != null && character.Animator && !enemHasBeenHit)
+                //{
+                //    enemy.TakeDamage(selectedCharacter.AbilityDamage);
+                //    enemy.HasBeenHit = true;
+                //}
+            }
+            else
+            {
+                HasBeenHit = false;
+            }
+
+            if (IsDead)
+            {
+                character.XP += XPAmmount;
+            }
+
+            if(RemainingHealth <= 0)
+            {
+                wantedAnimation = AnimationType.Death;
+            }
+            else
+            {
+                foreach (var attack in attacks)
+                {
+                    if(CalculateDistance(character.Position, Position) <= attack.AttackRange)
+                    {
+                        wantedAnimation = attack.AnimationType;
+                    }
+                    else
+                    {
+                        wantedAnimation = AnimationType.Run;
+                    }
+                }
+            }
             IsFacingLeft = direction.X < 0;
-            base.Update(animation, direction);
-            animationManager.Update(currentAnimation, overrideAnimation);
+            base.Update(wantedAnimation, direction);
+            //animationManager.Update(currentAnimation, overrideAnimation);
         }
         public override void Draw()
         {
@@ -61,6 +115,12 @@ namespace FightingGame
         {
             Position = position;
         }
-
+        private float CalculateDistance(Vector2 playerPosition, Vector2 enemyPosition)
+        {
+            float distanceX = playerPosition.X - enemyPosition.X;
+            float distanceY = playerPosition.Y - enemyPosition.Y;
+            float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
+            return distance;
+        }
     }
 }
