@@ -18,7 +18,7 @@ namespace FightingGame
 
 
         public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
-        public AnimationType lastAnimation;
+        public AnimationType CurrentAnimationType;
         public Animation CurrentAnimation;
         public Rectangle CurrentFrame;
         public Rectangle PreviousFrame;
@@ -38,7 +38,7 @@ namespace FightingGame
             }
             Entity = entity;
         }
-        private void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
+        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
         {
             if (Animations.ContainsKey(animation))
             {
@@ -46,39 +46,39 @@ namespace FightingGame
             }
             Animation animationSprite = new Animation(texture, canBeCanceled, timePerFrame, sourceRectangles);
             Animations.Add(animation, animationSprite);
-            lastAnimation = animation;
+            CurrentAnimationType = animation;
         }
 
         public void Update(AnimationType wantedAnimation)
         {
 
             overrideAnimation = wantedAnimation == AnimationType.Death;
-            CurrentAnimation = Animations[lastAnimation];
+            CurrentAnimation = Animations[CurrentAnimationType];
 
             if (CurrentAnimation.IsAnimationDone && !CurrentAction.CanBeCanceled)
             {
                 wantedAnimation = CurrentAction.Transition();
             }
 
-            if (wantedAnimation != lastAnimation)
+            if (wantedAnimation != CurrentAnimationType)
             {
                 if (AnimationToAction[wantedAnimation].MetCondition(Entity) && (CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone || overrideAnimation))
                 {
                     CurrentAction = AnimationToAction[wantedAnimation];
-                    Animations[lastAnimation].Restart();
-                    lastAnimation = wantedAnimation;
-                    CurrentAnimation = Animations[lastAnimation];
-                    Animations[lastAnimation].Start();
+                    Animations[CurrentAnimationType].Restart();
+                    CurrentAnimationType = wantedAnimation;
+                    CurrentAnimation = Animations[CurrentAnimationType];
+                    Animations[CurrentAnimationType].Start();
                 }
             }
             CurrentAction.Update(Entity);
-            Animations[lastAnimation].Update();
-            CurrentFrame = Animations[lastAnimation].CurrerntFrame.SourceRectangle;
-            PreviousFrame = Animations[lastAnimation].PreviousFrame.SourceRectangle;
+            Animations[CurrentAnimationType].Update();
+            CurrentFrame = Animations[CurrentAnimationType].CurrerntFrame.SourceRectangle;
+            PreviousFrame = Animations[CurrentAnimationType].PreviousFrame.SourceRectangle;
         }
         public void Draw()
         {
-            Animations[lastAnimation].Draw(Entity.Position, Entity.IsFacingLeft, Entity.Scale, Color.White);
+            Animations[CurrentAnimationType].Draw(Entity.Position, Entity.IsFacingLeft, Entity.EntityScale, Color.White);
         }
 
     }

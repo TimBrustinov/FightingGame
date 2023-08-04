@@ -20,58 +20,48 @@ namespace FightingGame
         public Vector2 Dimentions;
 
         public EntityAction CurrentAction;
+        public Attack CurrentAttack;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
 
-        public bool IsActive = false;
         public bool IsDead = false;
         public bool IsFacingLeft;
         public bool HasBeenHit;
-        public bool HasFrameChanged;
 
         public EntityName Name;
-
         public float TotalHealth;
         public float RemainingHealth;
         public float TotalStamina;
         public float RemainingStamina;
         public double staminaTimer;
-
         public float Speed;
         public float SpeedMultiplier = 0;
-        public float AbilityDamage;
         public float AbilityDamageMultiplier = 0;
-        public float Scale;
+        public float EntityScale;
 
         public Animator Animator;
         public CooldownManager CooldownManager;
-        public AnimationManager animationManager;
         public bool overrideAnimation = false;
         public FrameHelper currFrame;
-        public AnimationType currentAnimation;
-        public AnimationType savedAnimaton;
-
-        public bool canPerformAttack = false;
-        public bool staminaSubtracted = false;
 
         private Vector2 minPosition, maxPosition;
-
         public Dictionary<AnimationType, EntityAction> AnimationToEntityAction = new Dictionary<AnimationType, EntityAction>();
         public Dictionary<AnimationType, Attack> Attacks = new Dictionary<AnimationType, Attack>();
-
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> animationToAbility)
+        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> entityActions)
         {
             Name = name;
-            AnimationToEntityAction = animationToAbility;
-            animationManager = new AnimationManager();
+            AnimationToEntityAction = entityActions;
             CooldownManager = new CooldownManager();
             Animator = new Animator(this);
-            //foreach (var item in AnimationToAbility)
-            //{
-            //    MaxAbilityCooldowns.Add(item.Key, animationToAbility[item.Key].Cooldown);
-            //    AbilityCooldowns.Add(item.Key, 0);
-            //}
+            foreach (var item in ContentManager.Instance.EntityActions[Name])
+            {
+                Animator.AddAnimation(item.Value.AnimationType, item.Value.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[Name], item.Value.AnimationFrames, item.Value.AnimationSpeed);
+                if(item.Value is Attack)
+                {
+                    Attacks.Add(item.Key, (Attack)item.Value);
+                }
+            }
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
@@ -81,11 +71,13 @@ namespace FightingGame
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             Animator.Update(animation);
             CurrentAction = Animator.CurrentAction;
+            if(Attacks.ContainsKey(CurrentAction.AnimationType))
+            {
+                CurrentAttack = Attacks[CurrentAction.AnimationType];
+            }
             CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
-            //animationManager.Update(currentAnimation, overrideAnimation);
-            //HasFrameChanged = animationManager.CurrentAnimation.hasFrameChanged;
         }
         public virtual void Draw()
         {
@@ -96,7 +88,7 @@ namespace FightingGame
 
         private void UpdateHitbox()
         {
-            if (currentAnimation == AnimationType.Dodge || currentAnimation == AnimationType.UltimateDodge)
+            if (Animator.CurrentAnimationType == AnimationType.Dodge || Animator.CurrentAnimationType == AnimationType.UltimateDodge)
             {
                 Dimentions = Vector2.Zero;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
@@ -104,8 +96,8 @@ namespace FightingGame
             else if (Animator.CurrentAnimation != null)
             {
                 currFrame = Animator.CurrentAnimation.PreviousFrame;
-                Dimentions.X = currFrame.CharacterHitbox.Width * Scale;
-                Dimentions.Y = currFrame.CharacterHitbox.Height * Scale;
+                Dimentions.X = currFrame.CharacterHitbox.Width * EntityScale;
+                Dimentions.Y = currFrame.CharacterHitbox.Height * EntityScale;
                 HitBox = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)Dimentions.X, (int)Dimentions.Y);
             }
         }
@@ -114,8 +106,8 @@ namespace FightingGame
             (int, int) offsets = currFrame.GetWeaponHitboxOffsets();
             weaponVerticalOffset = offsets.Item2;
             weaponHorizontalOffset = offsets.Item1;
-            WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * Scale);
-            WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * Scale);
+            WeaponHitBox.Width = (int)(currFrame.AttackHitbox.Width * EntityScale);
+            WeaponHitBox.Height = (int)(currFrame.AttackHitbox.Height * EntityScale);
             if (InputManager.IsMovingLeft)
             {
                 WeaponHitBox.X = (int)(TopRight.X - WeaponHitBox.Width) - weaponHorizontalOffset;
@@ -124,11 +116,11 @@ namespace FightingGame
             {
                 WeaponHitBox.X = (int)(TopLeft.X + weaponHorizontalOffset);
             }
-            WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * Scale);
+            WeaponHitBox.Y = (int)(TopLeft.Y + weaponVerticalOffset * EntityScale);
         }
         private void DrawShadow()
         {
-            if (currentAnimation == AnimationType.Dodge || currentAnimation == AnimationType.UltimateDodge)
+            if (Animator.CurrentAnimationType == AnimationType.Dodge || Animator.CurrentAnimationType == AnimationType.UltimateDodge)
             {
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle((int)Position.X - currFrame.SourceRectangle.Width / 2, ((int)Position.Y + currFrame.SourceRectangle.Height / 2) + 5, currFrame.SourceRectangle.Width, 10), new Color(255, 255, 255, 100));
             }
@@ -139,8 +131,6 @@ namespace FightingGame
         }
         public void Reset()
         {
-            currentAnimation = AnimationType.None;
-            savedAnimaton = AnimationType.None;
             RemainingHealth = TotalHealth;
             RemainingStamina = TotalStamina;
             CurrentAction = null;

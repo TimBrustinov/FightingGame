@@ -48,9 +48,9 @@ namespace FightingGame
         public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
-            Scale = scale;
+            EntityScale = scale;
             Position = new Vector2(500, 350);
-            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * Scale;
+            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
             Speed = speed;
             TotalHealth = health;
             RemainingHealth = TotalHealth;
@@ -92,7 +92,6 @@ namespace FightingGame
                     RemainingUltimateMeter = 0;
                     InUltimateForm = false;
                     animation = AnimationType.UndoTransform;
-                    savedAnimaton = AnimationType.None;
                 }
             }
             else
@@ -123,24 +122,23 @@ namespace FightingGame
                 RemainingUltimateMeter = 0;
             }
 
-            if (CooldownManager.AnimationCooldown[animation] != 0)
-            {
-                if(direction != Vector2.Zero)
-                {
-                    animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
-                }
-                else
-                {
-                    animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
-                }
-            }
+            //if (CooldownManager.AnimationCooldown[animation] != 0)
+            //{
+            //    if(direction != Vector2.Zero)
+            //    {
+            //        animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
+            //    }
+            //    else
+            //    {
+            //        animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
+            //    }
+            //}
             base.Update(animation, direction);
 
             if (XP >= xpToLevelUp)
             {
                 LevelUp();
             }
-            animationManager.Update(currentAnimation, overrideAnimation);
         }
         
         public override void Draw()

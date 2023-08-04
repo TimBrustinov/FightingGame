@@ -69,11 +69,6 @@ namespace FightingGame
 
         private void UpdateEnemy(Enemy enemy, Character selectedCharacter)
         {
-            if (enemy.IsDead)
-            {
-                selectedCharacter.XP += enemy.XPAmmount;
-            }
-
             if(enemy.IsBoss && enemy.IsDead)
             {
                 EnemyPool.Remove(enemy);
@@ -88,6 +83,7 @@ namespace FightingGame
                 return;
             }
 
+            enemy.Update(selectedCharacter);
             
         }
         public void Draw()
@@ -206,7 +202,7 @@ namespace FightingGame
             //wave1Enemies.Add(SkeletonCatPreset);
             wave1Enemies.Add(SkeletonPreset);
 
-            EnemyWaves.Add(0, (3, wave1Enemies));
+            EnemyWaves.Add(0, (1, wave1Enemies));
             BossWaves.Add(0, wave1Bosses);
             #endregion 
 
