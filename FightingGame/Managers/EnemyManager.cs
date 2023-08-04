@@ -12,7 +12,7 @@ namespace FightingGame
 
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
-        private int bossSpawnRate = 40000;
+        private int bossSpawnRate = 4000;
         private double bossSpawnTimer;
 
         private int MaxEnemyPool = 50;
@@ -27,6 +27,9 @@ namespace FightingGame
 
         #region Enemy Presets
         Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.Skeleton]);
+        Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 1f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);   
+
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
         //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 100, 1.5f, 1.3f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
         //Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.SkeletonCat]);
@@ -80,9 +83,10 @@ namespace FightingGame
                 ReservePool.Add(enemy);
                 EnemyPool.Remove(enemy);
                 deadEnemies++;
-                return;
             }
 
+           
+            
             enemy.Update(selectedCharacter);
             
         }
@@ -109,7 +113,7 @@ namespace FightingGame
                         EnemyPool.Add(ReservePool[i]);
                         if (ReservePool[i].AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                         {
-                            ReservePool[i].Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                            ReservePool[i].SpawnWithAnimation(GetSpawnLocation());
                         }
                         else
                         {
@@ -129,7 +133,7 @@ namespace FightingGame
                     EnemyPool.Add(enemySpawn);
                     if (enemySpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                     {
-                        enemySpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                        enemySpawn.SpawnWithAnimation(GetSpawnLocation());
                     }
                     else
                     {
@@ -147,7 +151,7 @@ namespace FightingGame
             EnemyPool.Add(bossSpawn);
             if (bossSpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
             {
-                bossSpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                bossSpawn.SpawnWithAnimation(GetSpawnLocation());
             }
             else
             {
@@ -183,29 +187,20 @@ namespace FightingGame
 
             return false;
         }
-        private float CalculateDistance(Vector2 playerPosition, Vector2 enemyPosition)
-        {
-            float distanceX = playerPosition.X - enemyPosition.X;
-            float distanceY = playerPosition.Y - enemyPosition.Y;
-            float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
-            return distance;
-        }
-
         private void CreateEnemyWaves()
         {
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
-            //wave1Bosses.Add(GhostWarriorPreset);
+            wave1Bosses.Add(GhostWarriorPreset);
             //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            //wave1Enemies.Add(SkeletonCatPreset);
+            wave1Enemies.Add(SkeletonCatPreset);
             wave1Enemies.Add(SkeletonPreset);
 
             EnemyWaves.Add(0, (1, wave1Enemies));
             BossWaves.Add(0, wave1Bosses);
             #endregion 
-
 
             //add other waves
         }

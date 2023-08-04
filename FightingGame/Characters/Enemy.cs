@@ -13,6 +13,7 @@ namespace FightingGame
     public class Enemy : Entity
     {
         public int XPAmmount = 5;
+        public bool IsSpawning;
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
         private AnimationType wantedAnimation;
@@ -43,6 +44,12 @@ namespace FightingGame
         public void Update(Character character)
         {
             direction = Vector2.Normalize(character.Position - Position);
+
+            if(IsDead)
+            {
+                character.XP += XPAmmount;
+            }
+
             if (character.WeaponHitBox.Intersects(HitBox))
             {
                 if (character.HasFrameChanged)
@@ -59,42 +66,14 @@ namespace FightingGame
             {
                 HasBeenHit = false;
             }
-
-            if (IsDead)
-            {
-                character.XP += XPAmmount;
-            }
-
-            if(RemainingHealth <= 0)
-            {
-                wantedAnimation = AnimationType.Death;
-            }
-            else if(direction == Vector2.Zero)
-            {
-                wantedAnimation = AnimationType.Stand;
-            }
-            else if(Attacks.Count > 0)
-            {
-                foreach (var attack in Attacks.Values)
-                {
-                    if(CalculateDistance(character.Position, Position) <= attack.AttackRange)
-                    {
-                        wantedAnimation = attack.AnimationType;
-                    }
-                   
-                }
-            }
-            else if(direction != Vector2.Zero)
-            {
-                wantedAnimation = AnimationType.Run;
-            }
-            else
-            {
-                wantedAnimation = AnimationType.Stand;
-            }
-
+            
+            wantedAnimation = GetWantedAnimation(character);
             IsFacingLeft = direction.X < 0;
             base.Update(wantedAnimation, direction);
+            if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
+            {
+                IsDead = true;
+            }
             //animationManager.Update(currentAnimation, overrideAnimation);
         }
         public override void Draw()
@@ -104,15 +83,14 @@ namespace FightingGame
             int foregroundWidth = (int)(healthPercentage * 30);
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), HealthBarColor);
         }
-        public void Spawn(Vector2 position, AnimationType animation)
+        public void SpawnWithAnimation(Vector2 position)
         {
             Position = position;
-            wantedAnimation = AnimationType.Stand;
+            IsSpawning = true;
         }
         public void Spawn(Vector2 position)
         {
             Position = position;
-            wantedAnimation = AnimationType.Stand;
         }
         private float CalculateDistance(Vector2 playerPosition, Vector2 enemyPosition)
         {
@@ -120,6 +98,37 @@ namespace FightingGame
             float distanceY = playerPosition.Y - enemyPosition.Y;
             float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
             return distance;
+        }
+        private AnimationType GetWantedAnimation(Character character)
+        {
+            if(IsSpawning)
+            {
+                IsSpawning = false;
+                return AnimationType.Spawn;
+
+            }
+            if (RemainingHealth <= 0)
+            {
+                return AnimationType.Death;
+            }
+            if(Attacks.Count > 0)
+            {
+                foreach (var attack in Attacks.Values)
+                {
+                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange)
+                    {
+                        return attack.AnimationType;
+                    }
+                }
+            }
+            if (direction != Vector2.Zero)
+            {
+                return AnimationType.Run;
+            }
+            else
+            {
+                return AnimationType.Stand;
+            }
         }
     }
 }
