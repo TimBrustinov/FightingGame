@@ -50,7 +50,7 @@ namespace FightingGame
         {
             Graphics = graphics;
             Tilemap = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920 * 1.8f, 1920 * 1.8f), Color.White);
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Hashashin]);
+            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.5f, ContentManager.Instance.EntityActions[EntityName.Hashashin]);
             Hashashin.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)

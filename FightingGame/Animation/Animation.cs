@@ -70,7 +70,7 @@ namespace FightingGame
                 }
             }
         }
-        public void Draw(Vector2 position, bool isMovingLeft, Vector2 scale, Color color)
+        public void Draw(Vector2 position, bool isMovingLeft, float scale, Color color)
         {
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 

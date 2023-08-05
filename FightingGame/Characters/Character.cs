@@ -24,8 +24,8 @@ namespace FightingGame
         private float ultimateDrainRate;
         public Color MeterColor;
 
-        private double staminaRegenInterval = 800;
-        private double timer;
+        private double staminaRegenInterval = 1500;
+        
 
         public float healthRegenPerSecond; 
         private float timeElapsed = 0f;
@@ -45,24 +45,22 @@ namespace FightingGame
             [AnimationType.Stand] = AnimationType.UltimateStand,
         };
 
-        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, Ability> abilites) : base(name, texture, abilites) 
+        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
-            Scale = scale;
+            EntityScale = scale;
             Position = new Vector2(500, 350);
-            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * Scale;
-
+            Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
             Speed = speed;
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             TotalStamina = 50;
             RemainingStamina = TotalStamina;
 
-
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
-            ultimateFillRate = UltimateMeterMax / AnimationToAbility[AnimationType.UltimateTransform].Cooldown;
-            ultimateDrainRate = UltimateMeterMax / 20f;
+            ultimateFillRate = UltimateMeterMax / 60;
+             ultimateDrainRate = UltimateMeterMax / 20f;
             MeterColor = Color.Gold;
 
             XP = 0;
@@ -79,7 +77,7 @@ namespace FightingGame
 
             if (!InUltimateForm && animation == AnimationType.UndoTransform)
             {
-                animation = direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
+                animation = Direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
             }
 
             if (InUltimateForm)
@@ -94,7 +92,6 @@ namespace FightingGame
                     RemainingUltimateMeter = 0;
                     InUltimateForm = false;
                     animation = AnimationType.UndoTransform;
-                    savedAnimaton = AnimationType.None;
                 }
             }
             else
@@ -107,58 +104,46 @@ namespace FightingGame
                 {
                     InUltimateForm = true;
                 }
-                else if(RemainingUltimateMeter < UltimateMeterMax && animation == AnimationType.UltimateTransform)
+                else if (RemainingUltimateMeter < UltimateMeterMax && animation == AnimationType.UltimateTransform)
                 {
-                    animation = direction != Vector2.Zero? AnimationType.Run : AnimationType.Stand;
+                    animation = Direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
                 }
             }
 
-          
 
             if (InUltimateForm)
             {
                 animation = UltimateAblities[animation];
             }
 
-            if (CheckIfOnCooldown(animation))
-            {
-                if(direction != Vector2.Zero)
-                {
-                    animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
-                }
-                else
-                {
-                    animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
-                }
-            }
-
-            //if (animation == AnimationType.UltimateTransform)
-            //{
-            //    InUltimateForm = true;
-            //}
-            else if (animation == AnimationType.UndoTransform && InUltimateForm)
+            if (animation == AnimationType.UndoTransform && InUltimateForm)
             {
                 InUltimateForm = false;
                 RemainingUltimateMeter = 0;
             }
-            //else if(animation == AnimationType.UndoTransform && !InUltimateForm)
-            //{
-            //    animation = AnimationType.Stand;
-            //}    
 
+            //if (CooldownManager.AnimationCooldown[animation] != 0)
+            //{
+            //    if(direction != Vector2.Zero)
+            //    {
+            //        animation = InUltimateForm ? AnimationType.UltimateRun : AnimationType.Run;
+            //    }
+            //    else
+            //    {
+            //        animation = InUltimateForm ?AnimationType.UltimateStand : AnimationType.Stand;
+            //    }
+            //}
             base.Update(animation, direction);
 
             if (XP >= xpToLevelUp)
             {
                 LevelUp();
             }
-            animationManager.Update(currentAnimation, overrideAnimation);
         }
         
         public override void Draw()
         {
             base.Draw();
-            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             DrawHealthBar(Globals.SpriteBatch);
             DrawStaminaBar();
         }
@@ -191,16 +176,16 @@ namespace FightingGame
         {
             int width = 75;
             int height = 10;
-            timer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+            staminaTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (timer >= staminaRegenInterval && RemainingStamina < TotalStamina)
+            if (staminaTimer >= staminaRegenInterval && RemainingStamina < TotalStamina)
             {
                 RemainingStamina++;
             }
 
-            if(RemainingStamina >= TotalStamina || staminaSubtracted)
+            if(RemainingStamina >= TotalStamina)
             {
-                timer = 0;
+                staminaTimer = 0;
             }
 
             float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
@@ -214,16 +199,11 @@ namespace FightingGame
             maxXpForCurrentLevel = xpToLevelUp;
             XP = 0; 
         }
-        private bool CheckIfOnCooldown(AnimationType animation)
+      
+        private void HandleUltimateForm(AnimationType animation)
         {
-            if(AbilityCooldowns.ContainsKey(animation))
-            {
-                if(AbilityCooldowns[animation] != 0)
-                {
-                    return true;
-                }
-            }
-            return false;
+           
+
         }
     }
 }

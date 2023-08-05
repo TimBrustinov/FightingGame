@@ -26,10 +26,9 @@ namespace FightingGame
         private int currentWave = 0;
 
         #region Enemy Presets
-        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.Skeleton]);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 100, 0.5f, 1.3f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior]);
-        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 100, 1.5f, 1.3f, ContentManager.Instance.EntityAbilites[EntityName.GhostWarrior2]);
-        Enemy SkeletonCatPreset = new Enemy(EntityName.SkeletonCat, false, ContentManager.Instance.EntitySpriteSheets[EntityName.SkeletonCat], 30, 2.5f, 1.5f, ContentManager.Instance.EntityAbilites[EntityName.SkeletonCat]);
+        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.Skeleton]);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
+        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
@@ -44,7 +43,7 @@ namespace FightingGame
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-
+            
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (enemySpawnTimer >= enemySpawnRate)
             {
@@ -69,11 +68,6 @@ namespace FightingGame
 
         private void UpdateEnemy(Enemy enemy, Character selectedCharacter)
         {
-            if (enemy.IsDead)
-            {
-                selectedCharacter.XP += enemy.XPAmmount;
-            }
-
             if(enemy.IsBoss && enemy.IsDead)
             {
                 EnemyPool.Remove(enemy);
@@ -85,38 +79,12 @@ namespace FightingGame
                 ReservePool.Add(enemy);
                 EnemyPool.Remove(enemy);
                 deadEnemies++;
-                return;
             }
 
-            if (selectedCharacter.WeaponHitBox.Intersects(enemy.HitBox))
-            {
-                if (selectedCharacter.HasFrameChanged)
-                {
-                    enemy.HasBeenHit = false;
-                }
-                if (selectedCharacter.CurrentAbility != null && selectedCharacter.CurrentAbility.CanHit && !enemy.HasBeenHit)
-                {
-                    enemy.TakeDamage(selectedCharacter.AbilityDamage);
-                    enemy.HasBeenHit = true;
-                }
-            }
-            else
-            {
-                enemy.HasBeenHit = false;
-            }
-
-            if (enemy.RemainingHealth <= 0)
-            {
-                enemy.Update(AnimationType.Death, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
-            else if (CalculateDistance(selectedCharacter.Position, enemy.Position) <= enemy.AnimationToAbility[AnimationType.BasicAttack].AttackReach && Math.Abs(selectedCharacter.Position.Y - enemy.Position.Y) <= 40)
-            {
-                enemy.Update(AnimationType.BasicAttack, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
-            else
-            {
-                enemy.Update(AnimationType.Run, Vector2.Normalize(selectedCharacter.Position - enemy.Position));
-            }
+           
+            
+            enemy.Update(selectedCharacter);
+            
         }
         public void Draw()
         {
@@ -139,9 +107,9 @@ namespace FightingGame
                     {
                         ReservePool[i].Reset();
                         EnemyPool.Add(ReservePool[i]);
-                        if (ReservePool[i].AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                        if (ReservePool[i].AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                         {
-                            ReservePool[i].Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                            ReservePool[i].SpawnWithAnimation(GetSpawnLocation());
                         }
                         else
                         {
@@ -159,9 +127,9 @@ namespace FightingGame
                 {
                     Enemy enemySpawn = new Enemy(enemy);
                     EnemyPool.Add(enemySpawn);
-                    if (enemySpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+                    if (enemySpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
                     {
-                        enemySpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                        enemySpawn.SpawnWithAnimation(GetSpawnLocation());
                     }
                     else
                     {
@@ -177,9 +145,9 @@ namespace FightingGame
             Enemy bossSpawn = new Enemy(boss);
             bossSpawn.HealthBarColor = Color.Red;
             EnemyPool.Add(bossSpawn);
-            if (bossSpawn.AnimationToAbility.ContainsKey(AnimationType.Spawn))
+            if (bossSpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
             {
-                bossSpawn.Spawn(GetSpawnLocation(), AnimationType.Spawn);
+                bossSpawn.SpawnWithAnimation(GetSpawnLocation());
             }
             else
             {
@@ -215,14 +183,6 @@ namespace FightingGame
 
             return false;
         }
-        private float CalculateDistance(Vector2 playerPosition, Vector2 enemyPosition)
-        {
-            float distanceX = playerPosition.X - enemyPosition.X;
-            float distanceY = playerPosition.Y - enemyPosition.Y;
-            float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
-            return distance;
-        }
-
         private void CreateEnemyWaves()
         {
             #region Wave 1
@@ -231,14 +191,11 @@ namespace FightingGame
             wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            wave1Enemies.Add(SkeletonCatPreset);
             wave1Enemies.Add(SkeletonPreset);
 
             EnemyWaves.Add(0, (3, wave1Enemies));
             BossWaves.Add(0, wave1Bosses);
             #endregion 
-
-
             //add other waves
         }
     }
