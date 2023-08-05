@@ -364,75 +364,6 @@ namespace FightingGame
             EntityActions.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
-            #region SkeletonCat
-
-            EntitySpriteSheets.Add(EntityName.SkeletonCat, content.Load<Texture2D>("SkeletonCat"));
-            EntityTextures.Add(EntityName.SkeletonCat, new Rectangle(33, 27, 32, 26));
-
-            List<FrameHelper> SkeletonCatBasicAttack = new List<FrameHelper>();
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(33, 27, 32, 26)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(127, 28, 33, 25)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(221, 30, 34, 23)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(312, 34, 39, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(408, 34, 39, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(504, 34, 39, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(600, 34, 39, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(696, 34, 39, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(796, 34, 35, 19)));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(901, 35, 41, 18), new Rectangle(914, 41, 34, 12), canHit));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(997, 35, 43, 18), new Rectangle(1018, 40, 26, 13), canHit));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(1091, 35, 46, 18), new Rectangle(114, 40, 27, 13), canHit));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(1187, 35, 34, 18), new Rectangle(1211, 41, 13, 10), canHit));
-            SkeletonCatBasicAttack.Add(new FrameHelper(new Rectangle(1283, 35, 34, 18), new Rectangle(1308, 41, 13, 9), canHit));
-
-            List<FrameHelper> SkeletonCatDeath = new List<FrameHelper>();
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(33, 207, 32, 26)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(129, 207, 32, 26)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(225, 208, 32, 25)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(321, 210, 32, 23)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(418, 212, 32, 21)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(515, 219, 30, 14)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(611, 221, 30, 12)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(705, 222, 32, 11)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(803, 222, 30, 11)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(705, 222, 32, 11)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(803, 222, 30, 11)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(899, 223, 30, 10)));
-            SkeletonCatDeath.Add(new FrameHelper(new Rectangle(995, 225, 30, 8)));
-
-            List<FrameHelper> SkeletonCatRun = new List<FrameHelper>();
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(19, 138, 47, 13)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(114, 135, 47, 16)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(211, 134, 45, 17)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(309, 133, 44, 18)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(404, 136, 49, 15)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(498, 137, 48, 14)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(594, 137, 46, 14)));
-            SkeletonCatRun.Add(new FrameHelper(new Rectangle(691, 137, 46, 14)));
-
-            List<FrameHelper> SkeletonCatSpawn = new List<FrameHelper>();
-            SkeletonCatSpawn.Add(new FrameHelper(new Rectangle(514, 308, 32, 26)));
-            SkeletonCatSpawn.Add(new FrameHelper(new Rectangle(706, 308, 32, 26)));
-            SkeletonCatSpawn.Add(new FrameHelper(new Rectangle(802, 308, 32, 26)));
-
-            List<FrameHelper> SkeletonCatStand = new List<FrameHelper>();
-            SkeletonCatStand.Add(new FrameHelper(new Rectangle(33, 27, 32, 26)));
-            SkeletonCatStand.Add(new FrameHelper(new Rectangle(127, 28, 33, 25)));
-            SkeletonCatStand.Add(new FrameHelper(new Rectangle(221, 30, 34, 23)));
-
-
-            Dictionary<AnimationType, EntityAction> SkeletonCatActions = new Dictionary<AnimationType, EntityAction>()
-            {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, SkeletonCatBasicAttack, !CanBeCanceled, 0.1f, 0, 30, 10, false),
-                [AnimationType.Death] = new Death(AnimationType.Death, SkeletonCatDeath, !CanBeCanceled, 0.16f),
-                [AnimationType.Spawn] = new Spawn(AnimationType.Spawn, SkeletonCatSpawn, !CanBeCanceled, 0.1f),
-                [AnimationType.Run] = new Run(AnimationType.Run, SkeletonCatRun, CanBeCanceled, 0.1f),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, SkeletonCatStand, CanBeCanceled, 0.1f),
-            };
-
-            EntityActions.Add(EntityName.SkeletonCat, SkeletonCatActions);
-            #endregion
-
             #region Ghost Warrior
             EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
             EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));
@@ -550,13 +481,15 @@ namespace FightingGame
             Dictionary<AnimationType, EntityAction> GhostWarrior2Actions = new Dictionary<AnimationType, EntityAction>()
             {
                 [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, GhostWarrior2BasicAttack, !CanBeCanceled, 0.1f, 0, 90, 20, false),
-                [AnimationType.Death] = new Death(AnimationType.Death, GhostWarrior2Death, !CanBeCanceled, 0.16f),
+                [AnimationType.Death] = new Death(AnimationType.Death, GhostWarrior2Death, !CanBeCanceled, 0.1f),
                 [AnimationType.Run] = new Run(AnimationType.Run, GhostWarrior2Run, CanBeCanceled, 0.2f),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarrior2Stand, CanBeCanceled, 0.1f),
             };
 
             EntityActions.Add(EntityName.GhostWarrior2, GhostWarrior2Actions);
             #endregion
+
+
         }
     }
 }

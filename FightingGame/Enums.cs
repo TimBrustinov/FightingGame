@@ -61,7 +61,6 @@ namespace FightingGame
 
         //Enemies
         Skeleton,
-        SkeletonCat,
 
         BigCultist,
         AssassinCultist,

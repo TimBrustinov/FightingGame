@@ -18,11 +18,8 @@ namespace FightingGame
         public Dictionary<AnimationType, EntityAction> AnimationToAction = new Dictionary<AnimationType, EntityAction>();
         public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
 
-
         public bool IsAnimationDone;
-
         private bool overrideAnimation = false;
-
 
         public Animator(Entity entity)
         {
