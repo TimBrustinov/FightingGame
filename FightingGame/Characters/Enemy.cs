@@ -18,7 +18,7 @@ namespace FightingGame
         public bool IsBoss;
         private AnimationType wantedAnimation;
         private Vector2 direction;
-        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites)
+        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name, texture, abilites)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -30,7 +30,7 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
         }
-        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityActions[enemy.Name])
+        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAnimationBehaviours[enemy.Name])
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
             EntityScale = enemy.EntityScale;
@@ -58,7 +58,7 @@ namespace FightingGame
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAttack.AttackDamage);
+                    //TakeDamage(character.CurrentAttack.AttackDamage);
                     HasBeenHit = true;
                 }
             }
@@ -67,13 +67,13 @@ namespace FightingGame
                 HasBeenHit = false;
             }
             
-            wantedAnimation = GetWantedAnimation(character);
+            //wantedAnimation = GetWantedAnimation(character);
             IsFacingLeft = direction.X < 0;
             base.Update(wantedAnimation, direction);
-            if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
-            {
-                IsDead = true;
-            }
+            //if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
+            //{
+            //    IsDead = true;
+            //}
             //animationManager.Update(currentAnimation, overrideAnimation);
         }
         public override void Draw()
@@ -99,36 +99,36 @@ namespace FightingGame
             float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
             return distance;
         }
-        private AnimationType GetWantedAnimation(Character character)
-        {
-            if(IsSpawning)
-            {
-                IsSpawning = false;
-                return AnimationType.Spawn;
+        //private AnimationType GetWantedAnimation(Character character)
+        //{
+        //    //if(IsSpawning)
+        //    //{
+        //    //    IsSpawning = false;
+        //    //    return AnimationType.Spawn;
 
-            }
-            if (RemainingHealth <= 0)
-            {
-                return AnimationType.Death;
-            }
-            if(Attacks.Count > 0)
-            {
-                foreach (var attack in Attacks.Values)
-                {
-                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
-                    {
-                        return attack.AnimationType;
-                    }
-                }
-            }
-            if (direction != Vector2.Zero)
-            {
-                return AnimationType.Run;
-            }
-            else
-            {
-                return AnimationType.Stand;
-            }
-        }
+        //    //}
+        //    //if (RemainingHealth <= 0)
+        //    //{
+        //    //    return AnimationType.Death;
+        //    //}
+        //    //if(Attacks.Count > 0)
+        //    //{
+        //    //    foreach (var attack in Attacks.Values)
+        //    //    {
+        //    //        if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
+        //    //        {
+        //    //            return attack.AnimationType;
+        //    //        }
+        //    //    }
+        //    //}
+        //    //if (direction != Vector2.Zero)
+        //    //{
+        //    //    return AnimationType.Run;
+        //    //}
+        //    //else
+        //    //{
+        //    //    return AnimationType.Stand;
+        //    //}
+        //}
     }
 }

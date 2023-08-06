@@ -50,7 +50,7 @@ namespace FightingGame
         {
             Graphics = graphics;
             Tilemap = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920 * 1.8f, 1920 * 1.8f), Color.White);
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.5f, ContentManager.Instance.EntityActions[EntityName.Hashashin]);
+            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.Hashashin]);
             Hashashin.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
@@ -69,7 +69,7 @@ namespace FightingGame
         {
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
-            EnemyManager = new EnemyManager(Tilemap);
+           // EnemyManager = new EnemyManager(Tilemap);
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
         }
         public override Screenum Update(MouseState ms)
@@ -101,7 +101,7 @@ namespace FightingGame
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
-            EnemyManager.Update(SelectedCharacter, Camera);
+            //EnemyManager.Update(SelectedCharacter, Camera);
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -111,7 +111,7 @@ namespace FightingGame
 
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
-            EnemyManager.Draw();
+            //EnemyManager.Draw();
             CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();

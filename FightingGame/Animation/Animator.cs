@@ -10,94 +10,81 @@ namespace FightingGame
 {
     public class Animator
     {
-        private Entity Entity;
-
-        public EntityAction CurrentAction;
+        public Entity Entity;
         public AnimationType CurrentAnimationType;
-        public Animation CurrentAnimation; 
-        public Dictionary<AnimationType, EntityAction> AnimationToAction = new Dictionary<AnimationType, EntityAction>();
+        public Animation CurrentAnimation { get; private set; } 
         public Dictionary<AnimationType, Animation> Animations = new Dictionary<AnimationType, Animation>();
-
+        public Dictionary<AnimationType, AnimationBehaviour> AnimationBehaviours = new Dictionary<AnimationType, AnimationBehaviour>();
         public bool IsAnimationDone;
-        private bool overrideAnimation = false;
 
         public Animator(Entity entity)
         {
-            AnimationToAction = ContentManager.Instance.EntityActions[entity.Name];
-            foreach (var item in ContentManager.Instance.EntityActions[entity.Name].Values)
-            {
-                AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
-            }
+            //foreach (var item in ContentManager.Instance.EntityActions[entity.Name].Values)
+            //{
+            //    AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
+            //}
             Entity = entity;
         }
-        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
+        public void AddAnimation(AnimationType animationType, Animation animation)
         {
-            if (Animations.ContainsKey(animation))
+            if (Animations.ContainsKey(animationType))
             {
                 return;
             }
-            Animation animationSprite = new Animation(texture, canBeCanceled, timePerFrame, sourceRectangles);
-            Animations.Add(animation, animationSprite);
-            CurrentAnimationType = animation;
+            Animations.Add(animationType, animation);
+            CurrentAnimation = animation;
+            CurrentAnimationType = animationType;
         }
 
-        public void Update(AnimationType wantedAnimation)
+        public void Update()
         {
+            //overrideAnimation = wantedAnimation == AnimationType.Death;
+            //CurrentAnimation = Animations[CurrentAnimationType];
 
-            overrideAnimation = wantedAnimation == AnimationType.Death;
-            CurrentAnimation = Animations[CurrentAnimationType];
+            //if (CurrentAnimation.IsAnimationDone && !CurrentAction.CanBeCanceled)
+            //{
+            //    wantedAnimation = CurrentAction.Transition();
+            //}
 
-            if (CurrentAnimation.IsAnimationDone && !CurrentAction.CanBeCanceled)
-            {
-                wantedAnimation = CurrentAction.Transition();
-            }
-
-            if (wantedAnimation != CurrentAnimationType)
-            {
-                if (AnimationToAction[wantedAnimation].MetCondition(Entity) && (CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone || overrideAnimation))
-                {
-                    CurrentAction = AnimationToAction[wantedAnimation];
-                    Animations[CurrentAnimationType].Restart();
-                    CurrentAnimationType = CurrentAction.AnimationType;
-                    CurrentAnimation = Animations[CurrentAnimationType];
-                    Animations[CurrentAnimationType].Start();
-                }
-            }
-            CurrentAction.Update(Entity);
+            //if (wantedAnimation != CurrentAnimationType)
+            //{
+            //    if (AnimationToAction[wantedAnimation].MetCondition(Entity) && (CurrentAnimation.CanBeCanceled || CurrentAnimation.IsAnimationDone || overrideAnimation))
+            //    {
+            //        CurrentAction = AnimationToAction[wantedAnimation];
+            //        Animations[CurrentAnimationType].Restart();
+            //        CurrentAnimationType = CurrentAction.AnimationType;
+            //        CurrentAnimation = Animations[CurrentAnimationType];
+            //        Animations[CurrentAnimationType].Start();
+            //    }
+            //}
+            //CurrentAction.Update(Entity);
+            //Animations[CurrentAnimationType].Update();
             Animations[CurrentAnimationType].Update();
+            AnimationBehaviours[CurrentAnimationType].OnStateUpdate(this);
+            if(CurrentAnimation.IsAnimationDone)
+            {
+                OnStateExit();
+            }
         }
         public void Draw()
         {
+            //Animations[CurrentAnimationType].Draw(Entity.Position, Entity.IsFacingLeft, Entity.EntityScale, Color.White);
             Animations[CurrentAnimationType].Draw(Entity.Position, Entity.IsFacingLeft, Entity.EntityScale, Color.White);
         }
 
+        public void SetAnimation(AnimationType animationType)
+        {
+            CurrentAnimationType = animationType;
+            CurrentAnimation.Restart();
+            CurrentAnimation = Animations[CurrentAnimationType];
+            AnimationBehaviours[CurrentAnimationType].OnStateEnter(this);
+            CurrentAnimation.Start();
+        }
+        public void OnStateExit()
+        {
+            AnimationBehaviours[CurrentAnimationType].OnStateExit(this);
+        }
     }
-
-
-    //public class AnimationTree
-    //{
-    //    public AnimationVertex SentinalHead; 
-
-    //    public void AddBoolTransition(AnimationVertex animationVertex, bool condition)
-    //    {
-
-    //    }
-    //}
-
-
-    //public class AnimationVertex
-    //{
-    //    AnimationType AnimationType;
-    //    List<AnimationVertex> Neighbors;
-
-    //    public AnimationVertex(AnimationType animationType)
-    //    {
-    //        this.AnimationType = animationType;
-    //        Neighbors = new List<AnimationVertex>();
-    //    }
-
-    //}
-
 }
 
 

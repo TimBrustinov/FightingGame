@@ -45,7 +45,7 @@ namespace FightingGame
             [AnimationType.Stand] = AnimationType.UltimateStand,
         };
 
-        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites) 
+        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name, texture, abilites) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;

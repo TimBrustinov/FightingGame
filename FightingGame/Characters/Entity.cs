@@ -19,8 +19,8 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public EntityAction CurrentAction;
-        public Attack CurrentAttack;
+        public AnimationBehaviour CurrentAction;
+       // public Attack CurrentAttack;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -47,21 +47,23 @@ namespace FightingGame
         public FrameHelper currFrame;
 
         private Vector2 minPosition, maxPosition;
-        public Dictionary<AnimationType, EntityAction> AnimationToEntityAction = new Dictionary<AnimationType, EntityAction>();
-        public Dictionary<AnimationType, Attack> Attacks = new Dictionary<AnimationType, Attack>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> entityActions)
+        public Dictionary<AnimationType, AnimationBehaviour> AnimationToEntityAction = new Dictionary<AnimationType, AnimationBehaviour>();
+        //public Dictionary<AnimationType, Attack> Attacks = new Dictionary<AnimationType, Attack>();
+        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, AnimationBehaviour> entityActions)
         {
             Name = name;
             AnimationToEntityAction = entityActions;
             CooldownManager = new CooldownManager();
             Animator = new Animator(this);
-            foreach (var item in ContentManager.Instance.EntityActions[Name])
+            Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
+            foreach (var item in ContentManager.Instance.EntityAnimationBehaviours[Name])
             {
-                Animator.AddAnimation(item.Value.AnimationType, item.Value.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[Name], item.Value.AnimationFrames, item.Value.AnimationSpeed);
-                if(item.Value is Attack)
-                {
-                    Attacks.Add(item.Key, (Attack)item.Value);
-                }
+                Animator.AddAnimation(item.Key, item.Value.Animation);
+                //Animator.AddAnimation(item.Value.AnimationType, item.Value.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[Name], item.Value.AnimationFrames, item.Value.AnimationSpeed);
+                //if(item.Value is Attack)
+                //{
+                //    Attacks.Add(item.Key, (Attack)item.Value);
+                //}
             }
         }
 
@@ -70,12 +72,16 @@ namespace FightingGame
             Direction = direction;
             Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
-            Animator.Update(animation);
-            CurrentAction = Animator.CurrentAction;
-            if(Attacks.ContainsKey(CurrentAction.AnimationType))
+            if (!Animator.Animations[animation].CanBeCanceled)
             {
-                CurrentAttack = Attacks[CurrentAction.AnimationType];
+                Animator.SetAnimation(animation);
             }
+            Animator.Update();
+            //CurrentAction = Animator.CurrentAction;
+            //if(Attacks.ContainsKey(CurrentAction.AnimationType))
+            //{
+            //    CurrentAttack = Attacks[CurrentAction.AnimationType];
+            //}
             CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
@@ -84,6 +90,7 @@ namespace FightingGame
         public virtual void Draw()
         {
             Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             Animator.Draw();
             DrawShadow();
         }
