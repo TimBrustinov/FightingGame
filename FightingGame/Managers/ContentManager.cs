@@ -43,8 +43,8 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Hashashin
-
-            EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
+            Texture2D HashashinTexture = content.Load<Texture2D>("HashashinFullSpritesheet");
+            EntitySpriteSheets.Add(EntityName.Hashashin, HashashinTexture);
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
@@ -280,9 +280,22 @@ namespace FightingGame
 
             Dictionary<AnimationType, AnimationBehaviour> HashashinAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.Run] = new Run(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.Hashashin], CanBeCanceled, 0.1f, HashashinRun)),
-                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, new Animation(EntitySpriteSheets[EntityName.Hashashin], !CanBeCanceled, 0.1f, HashashinDodge), 5),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.Hashashin], CanBeCanceled, 0.1f, HashashinStand)),
+                [AnimationType.Run] = new Run(AnimationType.Run, new Animation(HashashinTexture, CanBeCanceled, 0.1f, HashashinRun)),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinDodge), 5, 15),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinBasicAttack), 7, 0, 0),
+                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinAbility1), 10, 0, 2),
+                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinAbility2), 5, 0, 3),
+                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinAbility3), 7, 0, 2),
+                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateTransformation), 6, 0, 0),
+                [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand, new Animation(HashashinTexture, CanBeCanceled, 0.1f, HashashinUltimateStand)),
+                [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun, new Animation(HashashinTexture, CanBeCanceled, 0.1f, HashashinUltimateRun)),
+                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateBasicAttack), 7, 0, 0),
+                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateAbility1), 5, 0, 1),
+                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateAbility2), 10, 0, 3),
+                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateAbility3), 5, 0, 4),
+                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUltimateDodge), 6, 12),
+                [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform, new Animation(HashashinTexture, !CanBeCanceled, 0.1f, HashashinUndoTransform)),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand, new Animation(HashashinTexture, CanBeCanceled, 0.1f, HashashinStand)),
             };
             //Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
             //{
@@ -359,16 +372,15 @@ namespace FightingGame
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(73, 272, 32, 33)));
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(137, 272, 32, 33)));
 
-            //Dictionary<AnimationType, EntityAction> SkeletonAbilites = new Dictionary<AnimationType, EntityAction>()
-            //{
-            //    [AnimationType.Run] = new Run(AnimationType.Run, SkeletonRun, CanBeCanceled, 0.1f),
-            //    [AnimationType.Death] = new Death(AnimationType.Death, SkeletonDeath, !CanBeCanceled, 0.18f),
-            //    [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, SkeletonBasicAttack, !CanBeCanceled, 0.1f, 0, 60, 5, false),
-            //    [AnimationType.Spawn] = new Spawn(AnimationType.Spawn, SkeletonSpawn, !CanBeCanceled, 0.12f),
-            //    [AnimationType.Stand] = new Stand(AnimationType.Stand, SkeletonStand, CanBeCanceled, 0.1f),
-            //};
-
-            //EntityActions.Add(EntityName.Skeleton, SkeletonAbilites);
+            Dictionary<AnimationType, AnimationBehaviour> SkeletonAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.Run] = new Run(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.Skeleton], CanBeCanceled, 0.1f, SkeletonRun)),
+                //[AnimationType.Death] = new Death(AnimationType.Death, SkeletonDeath, !CanBeCanceled, 0.18f),
+                //[AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, SkeletonBasicAttack, !CanBeCanceled, 0.1f, 0, 60, 5, false),
+                //[AnimationType.Spawn] = new Spawn(AnimationType.Spawn, SkeletonSpawn, !CanBeCanceled, 0.12f),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.Skeleton], CanBeCanceled, 0.1f, SkeletonStand)),
+            };
+            EntityAnimationBehaviours.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
             #region Ghost Warrior

@@ -16,9 +16,9 @@ namespace FightingGame
         public bool IsSpawning;
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
-        private AnimationType wantedAnimation;
         private Vector2 direction;
-        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name, texture, abilites)
+
+        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name, texture, abilites, 0)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -30,21 +30,28 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
         }
-        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAnimationBehaviours[enemy.Name])
+        public Enemy(Enemy enemy, int num) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAnimationBehaviours[enemy.Name], num)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
             EntityScale = enemy.EntityScale;
             Position = new Vector2(1000, 350);
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
-
             Speed = enemy.Speed;
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
+
+
         }
         public void Update(Character character)
         {
+            Console.WriteLine($"in {NUM} update");
+            if(NUM == 0)
+            {
+             
+                //Console.WriteLine(Position);
+                //Console.WriteLine(Vector2.Normalize(character.Position - Position));
+            }
             direction = Vector2.Normalize(character.Position - Position);
-
             if(IsDead)
             {
                 character.XP += XPAmmount;
@@ -58,7 +65,7 @@ namespace FightingGame
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    //TakeDamage(character.CurrentAttack.AttackDamage);
+                    TakeDamage(character.CurrentAttackDamage);
                     HasBeenHit = true;
                 }
             }
@@ -67,9 +74,8 @@ namespace FightingGame
                 HasBeenHit = false;
             }
             
-            //wantedAnimation = GetWantedAnimation(character);
             IsFacingLeft = direction.X < 0;
-            base.Update(wantedAnimation, direction);
+            base.Update(GetWantedAnimation(character), direction);
             //if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
             //{
             //    IsDead = true;
@@ -99,36 +105,36 @@ namespace FightingGame
             float distance = (float)Math.Sqrt(distanceX * distanceX + distanceY * distanceY);
             return distance;
         }
-        //private AnimationType GetWantedAnimation(Character character)
-        //{
-        //    //if(IsSpawning)
-        //    //{
-        //    //    IsSpawning = false;
-        //    //    return AnimationType.Spawn;
+        private AnimationType GetWantedAnimation(Character character)
+        {
+            if (IsSpawning)
+            {
+                IsSpawning = false;
+                return AnimationType.Spawn;
 
-        //    //}
-        //    //if (RemainingHealth <= 0)
-        //    //{
-        //    //    return AnimationType.Death;
-        //    //}
-        //    //if(Attacks.Count > 0)
-        //    //{
-        //    //    foreach (var attack in Attacks.Values)
-        //    //    {
-        //    //        if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
-        //    //        {
-        //    //            return attack.AnimationType;
-        //    //        }
-        //    //    }
-        //    //}
-        //    //if (direction != Vector2.Zero)
-        //    //{
-        //    //    return AnimationType.Run;
-        //    //}
-        //    //else
-        //    //{
-        //    //    return AnimationType.Stand;
-        //    //}
-        //}
+            }
+            if (RemainingHealth <= 0)
+            {
+                return AnimationType.Death;
+            }
+            if (Attacks.Count > 0)
+            {
+                foreach (var attack in Attacks.Values)
+                {
+                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
+                    {
+                        return attack.AnimationType;
+                    }
+                }
+            }
+            if (direction != Vector2.Zero)
+            {
+                return AnimationType.Run;
+            }
+            else
+            {
+                return AnimationType.Stand;
+            }
+        }
     }
 }

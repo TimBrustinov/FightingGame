@@ -29,5 +29,13 @@ namespace FightingGame
                 }
             }
         }
+        public void AddCooldown(AnimationType animationType, float cooldown)
+        {
+            if(!AnimationCooldown.ContainsKey(animationType))
+            {
+                AnimationCooldown.Add(animationType, cooldown);
+                MaxAnimationCooldown.Add(animationType, cooldown);
+            }
+        }
     }
 }

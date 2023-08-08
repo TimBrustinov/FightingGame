@@ -18,7 +18,7 @@ namespace FightingGame
         public bool CanBeCanceled = true;
         public bool hasFrameChanged;
         public int animationFramesIndex = 0;
-        private float frameTime;
+        public float frameTime;
         private bool active = true;
         private float frameTimer = 0;
 
@@ -38,6 +38,7 @@ namespace FightingGame
         public void Start()
         {
             active = true;
+            PreviousFrame = CurrerntFrame;
         }
         public void Stop()
         {

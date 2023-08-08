@@ -20,9 +20,17 @@ namespace FightingGame
         }
         public override void OnStateUpdate(Animator animator)
         {
-            if (animator.Entity.Direction == Vector2.Zero)
+            //if (animator.Entity.Direction == Vector2.Zero)
+            //{
+            //    animator.SetAnimation(AnimationType.Stand);
+            //}
+            //else
+            //{
+            //    entity.Position += Vector2.Normalize(entity.Direction) * entity.Speed;
+            //}
+            if (entity.WantedAnimation != AnimationType && entity.CheckTransition(entity.WantedAnimation))
             {
-                animator.SetAnimation(AnimationType.Stand);
+                animator.SetAnimation(entity.WantedAnimation);
             }
             else
             {
@@ -32,7 +40,7 @@ namespace FightingGame
 
         public override void OnStateExit(Animator animator)
         {
-            if(animator.Entity.Direction == Vector2.Zero)
+            if(entity.Direction == Vector2.Zero)
             {
                 animator.SetAnimation(AnimationType.Stand);
             }

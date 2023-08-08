@@ -7,12 +7,12 @@ using Microsoft.Xna.Framework;
 
 namespace FightingGame
 {
-    public class Dodge : AnimationBehaviour
+    public class UltimateDodge : AnimationBehaviour
     {
         Entity entity;
         float dodgeSpeed;
         public int StaminaDrain;
-        public Dodge(AnimationType animationType, Animation animation, float dodgeSpeed, int staminaDrain) : base(animationType, animation)
+        public UltimateDodge(AnimationType animationType, Animation animation, float dodgeSpeed, int staminaDrain) : base(animationType, animation)
         {
             this.dodgeSpeed = dodgeSpeed;
             StaminaDrain = staminaDrain;
@@ -21,9 +21,9 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
-            if(entity.RemainingStamina - StaminaDrain <= 0)
+            if (entity.RemainingStamina - StaminaDrain <= 0)
             {
-                animator.SetAnimation(AnimationType.Stand);
+                animator.SetAnimation(AnimationType.UltimateStand);
             }
             else
             {
@@ -42,9 +42,9 @@ namespace FightingGame
 
         public override void OnStateExit(Animator animator)
         {
-            animator.SetAnimation(AnimationType.Stand);
+            animator.SetAnimation(AnimationType.UltimateStand);
         }
 
-        
+
     }
 }
