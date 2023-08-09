@@ -74,27 +74,6 @@ namespace FightingGame
         {
             SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-            //Vector2 adjustedPosition;
-            //float offsetX = (PreviousFrame.SourceRectangle.Width - PreviousFrame.CharacterHitbox.Width) / 2;
-            //float offsetY = (PreviousFrame.SourceRectangle.Height - PreviousFrame.CharacterHitbox.Height) / 2;
-
-            //if (isMovingLeft)
-            //{
-            //    adjustedPosition = position - new Vector2(offsetX, offsetY);
-            //}
-            //else
-            //{
-            //    adjustedPosition = position + new Vector2(offsetX, -offsetY);
-            //}
-            //if(PreviousFrame.SourceRectangle != PreviousFrame.CharacterHitbox)
-            //{
-            //    origin = new Vector2(PreviousFrame.CharacterHitbox.Width / 2, PreviousFrame.CharacterHitbox.Height / 2);
-            //}
-            //else
-            //{
-            //    origin = PreviousFrame.Origin;
-            //}
-
             Vector2 origin = PreviousFrame.Origin;
 
             int x = PreviousFrame.CharacterHitbox.X - PreviousFrame.SourceRectangle.X;
@@ -109,5 +88,24 @@ namespace FightingGame
 
             Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, 0, origin, scale, spriteEffect, 1);
         }
+        public void Draw(Vector2 position, bool isMovingLeft, float scale, float rotationAngle, Color color)
+        {
+            SpriteEffects spriteEffect = isMovingLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+            Vector2 origin = PreviousFrame.Origin;
+
+            int x = PreviousFrame.CharacterHitbox.X - PreviousFrame.SourceRectangle.X;
+            int y = PreviousFrame.CharacterHitbox.Y - PreviousFrame.SourceRectangle.Y;
+            Vector2 defaultOrigin = new Vector2(x + PreviousFrame.CharacterHitbox.Width / 2, y + PreviousFrame.CharacterHitbox.Height / 2);
+            Vector2 flippedOrigin = new Vector2(PreviousFrame.SourceRectangle.Width - (x + PreviousFrame.CharacterHitbox.Width / 2), y + PreviousFrame.CharacterHitbox.Height / 2);
+
+            if (PreviousFrame.CharacterHitbox != PreviousFrame.SourceRectangle)
+            {
+                origin = isMovingLeft ? flippedOrigin : defaultOrigin;
+            }
+
+            Globals.SpriteBatch.Draw(Texture, position, PreviousFrame.SourceRectangle, color, rotationAngle, origin, scale, spriteEffect, 1);
+        }
+
     }
 }

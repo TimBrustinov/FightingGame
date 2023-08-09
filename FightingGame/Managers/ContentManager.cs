@@ -604,7 +604,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> RangedCultistBehaviour = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Animation(rangedCultistSprite, 0.1f, CultistFireball), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 150, 0, false),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Animation(rangedCultistSprite, 0.1f, CultistFireball), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 

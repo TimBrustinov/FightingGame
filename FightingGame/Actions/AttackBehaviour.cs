@@ -12,6 +12,7 @@ namespace FightingGame
         public int AttackRange;
         public int Cooldown;
         protected bool canMove;
+        public bool IsRanged = false;
         public AttackBehaviour(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType)
         {
             Damage = damage;

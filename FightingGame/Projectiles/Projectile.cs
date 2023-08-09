@@ -50,7 +50,8 @@ namespace FightingGame
         public void Draw()
         {
             movingLeft = Direction.X < 0;
-            Animation.Draw(Position, movingLeft, 1f, Color.White);
+            float rotationAngle = (float)Math.Atan2(Direction.Y, Direction.X);
+            Animation.Draw(Position, true, 1f, rotationAngle, Color.White);
         }
     }
 }

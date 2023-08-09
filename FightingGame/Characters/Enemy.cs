@@ -17,8 +17,9 @@ namespace FightingGame
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
         private Vector2 direction;
+        public bool leftFacingSprite;
 
-        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale) : base(name)
+        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -29,6 +30,7 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
+            this.leftFacingSprite = leftFacingSprite;
         }
         public Enemy(Enemy enemy) : base(enemy.Name)
         {
@@ -39,6 +41,7 @@ namespace FightingGame
             Speed = enemy.Speed;
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
+            this.leftFacingSprite = enemy.leftFacingSprite;
         }
         public void Update(Character character)
         {
@@ -64,8 +67,15 @@ namespace FightingGame
             {
                 HasBeenHit = false;
             }
-            
-            IsFacingLeft = direction.X < 0;
+
+            if (leftFacingSprite)
+            {
+                IsFacingLeft = direction.X > 0;
+            }
+            else
+            {
+                IsFacingLeft = direction.X < 0;
+            }
             base.Update(GetWantedAnimation(character), direction);
             //if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
             //{
@@ -112,9 +122,12 @@ namespace FightingGame
             {
                 foreach (var attack in Attacks.Values)
                 {
-                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
+                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && CooldownManager.AnimationCooldown[attack.AnimationType] == 0)
                     {
-                        return attack.AnimationType;
+                        if(attack.IsRanged || Math.Abs(character.Position.Y - Position.Y) <= 30)
+                        {
+                            return attack.AnimationType;
+                        }
                     }
                 }
             }

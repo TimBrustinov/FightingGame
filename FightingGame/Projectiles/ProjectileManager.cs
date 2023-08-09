@@ -9,6 +9,7 @@ namespace FightingGame
     public class ProjectileManager
     {
         private List<Projectile> Projectiles;
+        public List<Projectile> ReserveProjectiles;
 
         public ProjectileManager()
         {

@@ -22,17 +22,21 @@ namespace FightingGame
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
             animation = projectileAnimation;
+            IsRanged = true;
         }
         public override void OnStateEnter(Animator animator)
         {
             projectile = new Projectile(Damage, ContentManager.Instance.EntitySpriteSheets[animator.Entity.Name], animation.frameTime, animation.AnimationFrames);
+            if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
+            {
+                animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
+            }
             return;
         }
         public override void OnStateUpdate(Animator animator)
         {
             if(animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame && !projectile.IsActive)
             {
-
                 Vector2 relativePosition = Vector2.Zero;
                 if(animator.Entity.IsFacingLeft)
                 {
