@@ -50,27 +50,42 @@ namespace FightingGame
         public FrameHelper currFrame;
 
         private Vector2 minPosition, maxPosition;
-        public Dictionary<AnimationType, AnimationBehaviour> AnimationToEntityAction = new Dictionary<AnimationType, AnimationBehaviour>();
-        public Dictionary<AnimationType, AttackBehaviour> Attacks = new Dictionary<AnimationType, AttackBehaviour>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, AnimationBehaviour> entityActions, int num)
+
+
+        public Dictionary<AnimationType, AttackBehaviour> Attacks;
+
+        public Entity(EntityName name)
         {
-            NUM = num;
             Name = name;
-            AnimationToEntityAction = entityActions;
             CooldownManager = new CooldownManager();
             Animator = new Animator(this);
-            //Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
-            foreach (var animationBehaviour in ContentManager.Instance.EntityAnimationBehaviours[Name])
+            Attacks = new Dictionary<AnimationType, AttackBehaviour>();
+            foreach (var animation in ContentManager.Instance.EntityAnimations[name])
             {
-                Animator.AddAnimation(animationBehaviour.Key, animationBehaviour.Value.Animation);
-                Animator.AnimationBehaviours.Add(animationBehaviour.Key, animationBehaviour.Value);
-                if (animationBehaviour.Value is AttackBehaviour)
+                Animator.AddAnimation(animation.Key, animation.Value.Texture, animation.Value.frameTime, animation.Value.AnimationFrames);
+            }
+            foreach (var behaviour in ContentManager.Instance.EntityAnimationBehaviours[name])
+            {
+                Animator.AnimationBehaviours.Add(behaviour.Key, behaviour.Value.Clone());
+                if(behaviour.Value is AttackBehaviour)
                 {
-                    var attack = (AttackBehaviour)animationBehaviour.Value;
-                    Attacks.Add(attack.AnimationType, attack);
+                    var attack = (AttackBehaviour)behaviour.Value;
+                    Attacks.Add(attack.AnimationType, (AttackBehaviour)attack.Clone());
                     CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
                 }
             }
+            //Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
+            //foreach (var animationBehaviour in ContentManager.Instance.EntityAnimationBehaviours[Name])
+            //{
+            //    Animator.AddAnimation(animationBehaviour.Key, animationBehaviour.Value.Animation);
+            //    Animator.AnimationBehaviours.Add(animationBehaviour.Key, animationBehaviour.Value);
+            //    if (animationBehaviour.Value is AttackBehaviour)
+            //    {
+            //        var attack = (AttackBehaviour)animationBehaviour.Value;
+            //        Attacks.Add(attack.AnimationType, attack);
+            //        CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
+            //    }
+            //}
             ;
         }
 

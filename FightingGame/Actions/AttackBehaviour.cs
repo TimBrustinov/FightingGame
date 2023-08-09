@@ -11,11 +11,13 @@ namespace FightingGame
         public int Damage;
         public int AttackRange;
         public int Cooldown;
-        public AttackBehaviour(AnimationType animationType, Animation animation, int damage, int attackRange, int cooldown) : base(animationType, animation)
+        protected bool canMove;
+        public AttackBehaviour(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType)
         {
             Damage = damage;
             AttackRange = attackRange;
             Cooldown = cooldown;
+            this.canMove = canMove;
         }
 
         public override void OnStateEnter(Animator animator) { }

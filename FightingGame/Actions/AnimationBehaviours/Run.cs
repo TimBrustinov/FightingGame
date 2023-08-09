@@ -10,7 +10,7 @@ namespace FightingGame
     public class Run : AnimationBehaviour
     {
         Entity entity;
-        public Run(AnimationType animationType, Animation animation) : base(animationType, animation)
+        public Run(AnimationType animationType ) : base(animationType)
         {
         }
 
@@ -46,6 +46,9 @@ namespace FightingGame
             }
         }
 
-        
+        public override AnimationBehaviour Clone()
+        {
+            return new Run(AnimationType);
+        }
     }
 }

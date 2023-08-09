@@ -26,7 +26,9 @@ namespace FightingGame
         private int currentWave = 0;
 
         #region Enemy Presets
-        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.Skeleton]);
+        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.5f);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f);
+        Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1f);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);
         //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior2]);
         #endregion
@@ -52,13 +54,12 @@ namespace FightingGame
             }
 
             bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if(bossSpawnTimer >= bossSpawnRate)
+            if (bossSpawnTimer >= bossSpawnRate)
             {
                 int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
                 SpawnBoss(BossWaves[currentWave][randomNumber]);
                 bossSpawnTimer = 0;
             }
-
             for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
             {
                 UpdateEnemy(EnemyPool[i], SelectedCharacter);
@@ -106,7 +107,7 @@ namespace FightingGame
                     {
                         ReservePool[i].Reset();
                         EnemyPool.Add(ReservePool[i]);
-                        if (ReservePool[i].AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
+                        if (ReservePool[i].Animator.AnimationBehaviours.ContainsKey(AnimationType.Spawn))
                         {
                             ReservePool[i].SpawnWithAnimation(GetSpawnLocation());
                         }
@@ -124,9 +125,9 @@ namespace FightingGame
             {
                 for (int i = 0; i < increaseEnemyPoolAmount; i++)
                 {
-                    Enemy enemySpawn = new Enemy(enemy, enemyPoolIndex);
+                    Enemy enemySpawn = new Enemy(enemy);
                     EnemyPool.Add(enemySpawn);
-                    if (enemySpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
+                    if (enemySpawn.Animator.AnimationBehaviours.ContainsKey(AnimationType.Spawn))
                     {
                         enemySpawn.SpawnWithAnimation(GetSpawnLocation());
                     }
@@ -141,10 +142,10 @@ namespace FightingGame
         }
         private void SpawnBoss(Enemy boss)
         {
-            Enemy bossSpawn = new Enemy(boss , 0);
+            Enemy bossSpawn = new Enemy(boss);
             bossSpawn.HealthBarColor = Color.Red;
             EnemyPool.Add(bossSpawn);
-            if (bossSpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
+            if (bossSpawn.Animator.AnimationBehaviours.ContainsKey(AnimationType.Spawn))
             {
                 bossSpawn.SpawnWithAnimation(GetSpawnLocation());
             }
@@ -186,13 +187,14 @@ namespace FightingGame
         {
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
-           // wave1Bosses.Add(GhostWarriorPreset);
+            wave1Bosses.Add(GhostWarriorPreset);
             //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            wave1Enemies.Add(SkeletonPreset);
+            //wave1Enemies.Add(SkeletonPreset);
+            wave1Enemies.Add(RangedCultistPreset);
 
-            EnemyWaves.Add(0, (1, wave1Enemies));
+            EnemyWaves.Add(0, (3, wave1Enemies));
             BossWaves.Add(0, wave1Bosses);
             #endregion 
             //add other waves

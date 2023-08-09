@@ -12,7 +12,7 @@ namespace FightingGame
         Entity entity;
         float dodgeSpeed;
         public int StaminaDrain;
-        public Dodge(AnimationType animationType, Animation animation, float dodgeSpeed, int staminaDrain) : base(animationType, animation)
+        public Dodge(AnimationType animationType, float dodgeSpeed, int staminaDrain) : base(animationType)
         {
             this.dodgeSpeed = dodgeSpeed;
             StaminaDrain = staminaDrain;
@@ -45,6 +45,9 @@ namespace FightingGame
             animator.SetAnimation(AnimationType.Stand);
         }
 
-        
+        public override AnimationBehaviour Clone()
+        {
+            return new Dodge(this.AnimationType, this.dodgeSpeed, this.StaminaDrain);
+        }
     }
 }

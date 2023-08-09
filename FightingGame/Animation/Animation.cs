@@ -22,10 +22,9 @@ namespace FightingGame
         private bool active = true;
         private float frameTimer = 0;
 
-        public Animation(Texture2D texture, bool canBeCanceled, float frametime, List<FrameHelper> sourceRectangles)
+        public Animation(Texture2D texture, float frametime, List<FrameHelper> sourceRectangles)
         {
             Texture = texture;
-            CanBeCanceled = canBeCanceled;
             AnimationFrames = new List<FrameHelper>();
             frameTime = frametime;
             foreach (var frame in sourceRectangles)

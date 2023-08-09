@@ -12,7 +12,7 @@ namespace FightingGame
         Entity entity;
         float dodgeSpeed;
         public int StaminaDrain;
-        public UltimateDodge(AnimationType animationType, Animation animation, float dodgeSpeed, int staminaDrain) : base(animationType, animation)
+        public UltimateDodge(AnimationType animationType, float dodgeSpeed, int staminaDrain) : base(animationType)
         {
             this.dodgeSpeed = dodgeSpeed;
             StaminaDrain = staminaDrain;
@@ -45,6 +45,9 @@ namespace FightingGame
             animator.SetAnimation(AnimationType.UltimateStand);
         }
 
-
+        public override AnimationBehaviour Clone()
+        {
+            return new UltimateDodge(AnimationType, dodgeSpeed, StaminaDrain);
+        }
     }
 }

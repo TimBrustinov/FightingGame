@@ -10,7 +10,7 @@ namespace FightingGame
     public class Stand : AnimationBehaviour
     {
         Entity entity;
-        public Stand(AnimationType animationType, Animation animation) : base(animationType, animation)
+        public Stand(AnimationType animationType) : base(animationType)
         {
         }
 
@@ -33,6 +33,11 @@ namespace FightingGame
         public override void OnStateExit(Animator animator)
         {
             return;
+        }
+
+        public override AnimationBehaviour Clone()
+        {
+            return new Stand(AnimationType);
         }
     }
 }

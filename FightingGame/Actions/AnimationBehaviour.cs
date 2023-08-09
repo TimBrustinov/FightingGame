@@ -12,16 +12,15 @@ namespace FightingGame
 {
     public abstract class AnimationBehaviour
     {
-        public Animation Animation;
         public AnimationType AnimationType;
-        public AnimationBehaviour(AnimationType animationType, Animation animation)
+        public AnimationBehaviour(AnimationType animationType)
         {
             AnimationType = animationType;
-            Animation = animation;
         }
         public abstract void OnStateEnter(Animator animator);
         public abstract void OnStateUpdate(Animator animator);
         public abstract void OnStateExit(Animator animator);
+        public abstract AnimationBehaviour Clone();
 
     }
 }

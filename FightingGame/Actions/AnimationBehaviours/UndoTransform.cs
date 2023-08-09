@@ -8,7 +8,7 @@ namespace FightingGame
 {
     public class UndoTransform : AnimationBehaviour
     {
-        public UndoTransform(AnimationType animationType, Animation animation) : base(animationType, animation)
+        public UndoTransform(AnimationType animationType) : base(animationType)
         {
         }
 
@@ -25,6 +25,9 @@ namespace FightingGame
             animator.SetAnimation(AnimationType.Stand);
         }
 
-       
+        public override AnimationBehaviour Clone()
+        {
+            return new UndoTransform(AnimationType);
+        }
     }
 }

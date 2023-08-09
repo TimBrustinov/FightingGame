@@ -41,6 +41,7 @@ namespace FightingGame
         
         UIManager CharacterUIManager;
         EnemyManager EnemyManager;
+        ProjectileManager ProjectileManager;
 
         #region DrawableObjects
         DrawableObject Tilemap;
@@ -70,7 +71,11 @@ namespace FightingGame
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             EnemyManager = new EnemyManager(Tilemap);
+            ProjectileManager = new ProjectileManager();
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
+            GameObjects.Instance.EnemyManager = EnemyManager;
+            GameObjects.Instance.SelectedCharacter = SelectedCharacter;
+            GameObjects.Instance.ProjectileManager = ProjectileManager;
         }
         public override Screenum Update(MouseState ms)
         {
@@ -102,6 +107,7 @@ namespace FightingGame
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             EnemyManager.Update(SelectedCharacter, Camera);
+            ProjectileManager.Update();
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -112,6 +118,7 @@ namespace FightingGame
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
             EnemyManager.Draw();
+            ProjectileManager.Draw();
             CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();

@@ -26,23 +26,29 @@ namespace FightingGame
             //    AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
             //}
             Entity = entity;
+            CurrentAnimationType = AnimationType.Stand;
          }
-        public void AddAnimation(AnimationType animationType, Animation animation)
+        public void AddAnimation(AnimationType animationType, Texture2D texture, float frameTime, List<FrameHelper> sourceRectangles)
         {
             if (Animations.ContainsKey(animationType))
             {
                 return;
             }
-            Animations.Add(animationType, animation);
-            CurrentAnimation = animation;
-            CurrentAnimationType = animationType;
+            Animations.Add(animationType, new Animation(texture, frameTime, sourceRectangles));
+            //CurrentAnimation = Animations[animationType];
+            //CurrentAnimationType = animationType;
         }
 
         public void Update()
         {
             Animations[CurrentAnimationType].Update();
-            AnimationBehaviours[CurrentAnimationType].OnStateUpdate(this);
-            if(CurrentAnimation.IsAnimationDone)
+            CurrentAnimation = Animations[CurrentAnimationType];
+            if(AnimationBehaviours.ContainsKey(CurrentAnimationType))
+            {
+                AnimationBehaviours[CurrentAnimationType].OnStateUpdate(this);
+            }
+
+            if (Animations[CurrentAnimationType].IsAnimationDone)
             {
                 OnStateExit();
             }
@@ -58,12 +64,18 @@ namespace FightingGame
             CurrentAnimationType = animationType;
             CurrentAnimation.Restart();
             CurrentAnimation = Animations[CurrentAnimationType];
-            AnimationBehaviours[CurrentAnimationType].OnStateEnter(this);
+            if(AnimationBehaviours.ContainsKey(animationType))
+            {
+                AnimationBehaviours[CurrentAnimationType].OnStateEnter(this);
+            }
             CurrentAnimation.Start();
         }
         public void OnStateExit()
         {
-            AnimationBehaviours[CurrentAnimationType].OnStateExit(this);
+            if(AnimationBehaviours.ContainsKey(CurrentAnimationType))
+            {
+                AnimationBehaviours[CurrentAnimationType].OnStateExit(this);
+            }
         }
     }
 }

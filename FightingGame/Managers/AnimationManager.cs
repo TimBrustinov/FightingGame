@@ -17,13 +17,13 @@ namespace FightingGame
         public bool IsAnimationDone;
 
         public AnimationType lastAnimation;
-        public void AddAnimation(AnimationType animation, bool canBeCanceled, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
+        public void AddAnimation(AnimationType animation, Texture2D texture, List<FrameHelper> sourceRectangles, float timePerFrame)
         {
             if(Animations.ContainsKey(animation))
             {
                 return;
             }
-            Animation animationSprite = new Animation(texture, canBeCanceled, timePerFrame, sourceRectangles);
+            Animation animationSprite = new Animation(texture, timePerFrame, sourceRectangles);
             Animations.Add(animation, animationSprite);
             lastAnimation = animation;
         }

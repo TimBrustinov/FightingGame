@@ -8,10 +8,9 @@ namespace FightingGame
 {
     public class UltimateTransform : AttackBehaviour
     {
-        public UltimateTransform(AnimationType animationType, Animation animation, int damage, int attackRange, int cooldown) : base(animationType, animation, damage, attackRange, cooldown)
+        public UltimateTransform(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
         }
-
         public override void OnStateEnter(Animator animator)
         {
             Entity entity = animator.Entity;
@@ -31,5 +30,10 @@ namespace FightingGame
         {
             return ;
         }
+        public override AnimationBehaviour Clone()
+        {
+            return new UltimateTransform(AnimationType, Damage, AttackRange, Cooldown, canMove);
+        }
+
     }
 }

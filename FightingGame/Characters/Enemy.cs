@@ -18,7 +18,7 @@ namespace FightingGame
         public bool IsBoss;
         private Vector2 direction;
 
-        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name, texture, abilites, 0)
+        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -30,7 +30,7 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
         }
-        public Enemy(Enemy enemy, int num) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityAnimationBehaviours[enemy.Name], num)
+        public Enemy(Enemy enemy) : base(enemy.Name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
             EntityScale = enemy.EntityScale;
@@ -39,18 +39,9 @@ namespace FightingGame
             Speed = enemy.Speed;
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
-
-
         }
         public void Update(Character character)
         {
-            Console.WriteLine($"in {NUM} update");
-            if(NUM == 0)
-            {
-             
-                //Console.WriteLine(Position);
-                //Console.WriteLine(Vector2.Normalize(character.Position - Position));
-            }
             direction = Vector2.Normalize(character.Position - Position);
             if(IsDead)
             {
