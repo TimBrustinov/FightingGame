@@ -10,26 +10,35 @@ namespace FightingGame
 {
     public class Projectile
     {
-        public Animation Animation;
+        public Texture2D ProjectileTexture;
+        public Animation FlightAnimation;
+        public Animation HitAnimation;
+        public Rectangle Hitbox;
         public Vector2 Direction;
         public Vector2 Position;
+        public Point Dimensions;
         public float Speed;
         
         public int Damage;
         public bool IsActive;
-        private bool movingLeft;
+        public bool HasHit;
 
-        public Projectile(int damage, Texture2D projectileTexture, float animationSpeed, List<FrameHelper> frames)
+        public Projectile(int damage, Texture2D projectileTexture, float animationSpeed, List<FrameHelper> frames, List<FrameHelper> hitFrames)
         {
             Damage = damage;
-            Animation = new Animation(projectileTexture, animationSpeed, frames);
+            FlightAnimation = new Animation(projectileTexture, animationSpeed, frames);
+            Dimensions = new Point(frames[0].SourceRectangle.Width, frames[0].SourceRectangle.Height);
+            HitAnimation = new Animation(projectileTexture, animationSpeed, hitFrames);
+            ProjectileTexture = projectileTexture;
             IsActive = false;
         }
 
         public Projectile(Projectile projectile)
         {
             Damage = projectile.Damage;
-            Animation = projectile.Animation;
+            FlightAnimation = new Animation(projectile.FlightAnimation.Texture, projectile.FlightAnimation.frameTime, projectile.FlightAnimation.AnimationFrames);
+            HitAnimation = new Animation(projectile.HitAnimation.Texture, projectile.HitAnimation.frameTime, projectile.HitAnimation.AnimationFrames);
+            Dimensions = projectile.Dimensions;
             IsActive = false;
         }
 
@@ -37,21 +46,43 @@ namespace FightingGame
         {
             Position = position;
             Direction = direction;
+            Hitbox = new Rectangle((int)position.X, (int)position.Y, Dimensions.X, Dimensions.Y);
             Speed = speed;
             IsActive = true;
         }
 
         public void Update()
         {
-            Position += Direction * Speed;
-            Animation.Update();
+
+            Hitbox.X = (int)Position.X;
+            Hitbox.Y = (int)Position.Y;
+            if (!HasHit)
+            {
+                Position += Direction * Speed;
+                FlightAnimation.Update();
+            }
+            else
+            {
+                HitAnimation.Update();
+            }
+            
         }
 
         public void Draw()
         {
-            movingLeft = Direction.X < 0;
             float rotationAngle = (float)Math.Atan2(Direction.Y, Direction.X);
-            Animation.Draw(Position, true, 1f, rotationAngle, Color.White);
+            if(HasHit)
+            {
+                HitAnimation.Draw(Position, true, 1f, rotationAngle, Color.White);
+                if(HitAnimation.IsAnimationDone == true)
+                {
+                    IsActive = false;
+                }
+            }
+            else
+            {
+                FlightAnimation.Draw(Position, true, 1f, rotationAngle, Color.White);
+            }
         }
     }
 }

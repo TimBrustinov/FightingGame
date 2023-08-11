@@ -3,37 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace FightingGame
 {
     public class ProjectileManager
     {
-        private List<Projectile> Projectiles;
-        public List<Projectile> ReserveProjectiles;
+        private List<Projectile> EnemyProjectiles;
+        public List<Projectile> ReserveEnemyProjectiles;
 
         public ProjectileManager()
         {
-            Projectiles = new List<Projectile>();
+            EnemyProjectiles = new List<Projectile>();
+            ReserveEnemyProjectiles = new List<Projectile>();
         }
-        public void AddProjectile(Projectile projectile)
+        public void AddEnemyProjectile(Projectile projectile)
         {
-            Projectiles.Add(projectile);
+            EnemyProjectiles.Add(projectile);
         }
 
-        public void Update()
+        public void UpdateEnemyProjectiles()
         {
-            foreach (var projectile in Projectiles)
+
+            for (int i = 0; i < EnemyProjectiles.Count; i++)
             {
-                if(projectile.IsActive)
+                if (EnemyProjectiles[i].IsActive)
                 {
-                    projectile.Update();
+                    EnemyProjectiles[i].Update();
+
+                    if (EnemyProjectiles[i].Hitbox.Intersects(GameObjects.Instance.SelectedCharacter.HitBox))
+                    {
+                        EnemyProjectiles[i].HasHit = true;
+                        
+                    }
+                }
+                else
+                {
+                    ReserveEnemyProjectiles.Add(EnemyProjectiles[i]);
+                    EnemyProjectiles.Remove(EnemyProjectiles[i]);
                 }
             }
+            
         }
 
-        public void Draw()
+        public void DrawEnemyProjectiles()
         {
-            foreach (var projectile in Projectiles)
+            foreach (var projectile in EnemyProjectiles)
             {
                 if(projectile.IsActive)
                 {

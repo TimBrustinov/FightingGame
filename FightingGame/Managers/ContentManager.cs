@@ -593,6 +593,11 @@ namespace FightingGame
             CultistFireball.Add(new FrameHelper(new Rectangle(63, 225, 18, 11)));
             CultistFireball.Add(new FrameHelper(new Rectangle(108, 226, 18, 10)));
 
+            List<FrameHelper> CultistFireBallImpact = new List<FrameHelper>();
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(18, 263, 20, 15)));
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(62, 262, 19, 17)));
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(112, 261, 14, 19)));
+
             List<FrameHelper> RangedCultistStand = new List<FrameHelper>();
             RangedCultistStand.Add(new FrameHelper(new Rectangle(8, 6, 31, 36)));
             RangedCultistStand.Add(new FrameHelper(new Rectangle(54, 5, 30, 37)));
@@ -604,7 +609,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> RangedCultistBehaviour = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Animation(rangedCultistSprite, 0.1f, CultistFireball), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Projectile(5, rangedCultistSprite, 0.1f, CultistFireball, CultistFireBallImpact), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 

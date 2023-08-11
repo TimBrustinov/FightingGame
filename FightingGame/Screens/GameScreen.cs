@@ -107,7 +107,7 @@ namespace FightingGame
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             EnemyManager.Update(SelectedCharacter, Camera);
-            ProjectileManager.Update();
+            ProjectileManager.UpdateEnemyProjectiles();
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -118,7 +118,7 @@ namespace FightingGame
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
             EnemyManager.Draw();
-            ProjectileManager.Draw();
+            ProjectileManager.DrawEnemyProjectiles();
             CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();

@@ -11,22 +11,21 @@ namespace FightingGame
     public class EnemyRangedAttack : AttackBehaviour
     {
         Projectile projectile;
-        private Animation animation;
         Vector2 projectileAttachmentPoint;
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
 
-        public EnemyRangedAttack(AnimationType animationType, Animation projectileAnimation, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public EnemyRangedAttack(AnimationType animationType, Projectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             this.projectileAttachmentPoint = projectileAttachmentPoint;
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
-            animation = projectileAnimation;
+            this.projectile = projectile;
             IsRanged = true;
         }
         public override void OnStateEnter(Animator animator)
         {
-            projectile = new Projectile(Damage, ContentManager.Instance.EntitySpriteSheets[animator.Entity.Name], animation.frameTime, animation.AnimationFrames);
+            projectile = new Projectile(projectile);
             if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
@@ -51,7 +50,7 @@ namespace FightingGame
 
                 Console.WriteLine(GameObjects.Instance.SelectedCharacter.Position);
                 Vector2 projectileDirection = Vector2.Normalize(GameObjects.Instance.SelectedCharacter.Position - attachmentPointRelative);
-                GameObjects.Instance.ProjectileManager.AddProjectile(projectile);
+                GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectile);
                 projectile.Activate(attachmentPointRelative, projectileDirection, projectileSpeed);
             }
         }
@@ -61,7 +60,7 @@ namespace FightingGame
         }
         public override AnimationBehaviour Clone()
         {
-            return new EnemyRangedAttack(AnimationType, animation, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
+            return new EnemyRangedAttack(AnimationType, projectile, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
         }
     }
 }

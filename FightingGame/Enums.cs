@@ -53,6 +53,10 @@ namespace FightingGame
         UltimateAbility1,
         UltimateAbility2,
         UltimateAbility3,
+
+        ProjectileFlight,
+        ProjectileHit,
+
     }
     public enum EntityName
     {
