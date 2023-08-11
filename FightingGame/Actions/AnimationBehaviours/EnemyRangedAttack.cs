@@ -25,7 +25,7 @@ namespace FightingGame
         }
         public override void OnStateEnter(Animator animator)
         {
-            projectile = new Projectile(projectile);
+            GetProjectile();
             if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
@@ -48,7 +48,6 @@ namespace FightingGame
                 relativePosition.Y = animator.Entity.TopLeft.Y - projectileTriggerFrame.Y;
                 Vector2 attachmentPointRelative = projectileAttachmentPoint + relativePosition;
 
-                Console.WriteLine(GameObjects.Instance.SelectedCharacter.Position);
                 Vector2 projectileDirection = Vector2.Normalize(GameObjects.Instance.SelectedCharacter.Position - attachmentPointRelative);
                 GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectile);
                 projectile.Activate(attachmentPointRelative, projectileDirection, projectileSpeed);
@@ -61,6 +60,25 @@ namespace FightingGame
         public override AnimationBehaviour Clone()
         {
             return new EnemyRangedAttack(AnimationType, projectile, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
+        }
+
+
+        public void GetProjectile()
+        {
+            if (GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Count > 0)
+            {
+                foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles)
+                {
+                    if (projectile.ProjectileType == this.projectile.ProjectileType)
+                    {
+                        this.projectile = projectile;
+                        this.projectile.Reset();
+                        GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Remove(projectile);
+                        return;
+                    }
+                }
+            }
+            projectile = new Projectile(projectile);
         }
     }
 }

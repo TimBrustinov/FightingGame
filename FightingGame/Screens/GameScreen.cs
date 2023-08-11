@@ -70,6 +70,7 @@ namespace FightingGame
         {
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
+            Globals.Camera = Camera;
             EnemyManager = new EnemyManager(Tilemap);
             ProjectileManager = new ProjectileManager();
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);

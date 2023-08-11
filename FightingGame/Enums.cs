@@ -103,4 +103,9 @@ namespace FightingGame
         Bottom,
         None,
     }
+
+    public enum ProjectileType
+    {
+        CultistFireBall,
+    }
 }

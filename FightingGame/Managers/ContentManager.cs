@@ -598,6 +598,17 @@ namespace FightingGame
             CultistFireBallImpact.Add(new FrameHelper(new Rectangle(62, 262, 19, 17)));
             CultistFireBallImpact.Add(new FrameHelper(new Rectangle(112, 261, 14, 19)));
 
+            List<FrameHelper> RangedCultistDeath = new List<FrameHelper>();
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(13, 3240, 24, 38)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(58, 341, 23, 37)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(103, 343, 22, 35)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(142, 350, 37, 28)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(183, 360, 41, 18)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(1, 401, 43, 19)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(46, 414, 42, 6)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(91, 415, 43, 5)));
+            RangedCultist.Add(AnimationType.Death, new Animation(rangedCultistSprite, 0.1f, RangedCultistDeath));
+
             List<FrameHelper> RangedCultistStand = new List<FrameHelper>();
             RangedCultistStand.Add(new FrameHelper(new Rectangle(8, 6, 31, 36)));
             RangedCultistStand.Add(new FrameHelper(new Rectangle(54, 5, 30, 37)));
@@ -609,7 +620,8 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> RangedCultistBehaviour = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Projectile(5, rangedCultistSprite, 0.1f, CultistFireball, CultistFireBallImpact), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Projectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, 0.1f, CultistFireball, CultistFireBallImpact, 1.5f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
