@@ -34,7 +34,10 @@ namespace FightingGame
             }
             else
             {
-                entity.Position += Vector2.Normalize(entity.Direction) * entity.Speed;
+                if(entity.Direction != Vector2.Zero)
+                {
+                    entity.Position += Vector2.Normalize(entity.Direction) * entity.Speed;
+                }
             }
         }
 
