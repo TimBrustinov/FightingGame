@@ -421,6 +421,82 @@ namespace FightingGame
             EntityAnimationBehaviours.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
+            #region BringerOfDeath
+            var BringerOfDeathTexture = content.Load<Texture2D>("Bringer-of-Death-SpritSheet");
+            EntitySpriteSheets.Add(EntityName.BringerOfDeath, BringerOfDeathTexture);
+            EntityTextures.Add(EntityName.BringerOfDeath, new Rectangle(86, 38, 40, 54));
+
+            Dictionary<AnimationType, Animation> BringerOfDeath = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> BringerOfDeathRun = new List<FrameHelper>();
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(215, 133, 56, 52)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(354, 131, 56, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(495, 130, 54, 55)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(637, 131, 48, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(778, 133, 46, 52)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(920, 131, 45, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(1056, 130, 50, 55)));
+            BringerOfDeath.Add(AnimationType.Run, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathRun));
+
+            List<FrameHelper> BringerOfDeathDeath = new List<FrameHelper>();
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(785, 318, 40, 53)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(922, 317, 45, 54)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(1061, 317, 48, 54)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(81, 408, 49, 56)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(222, 406, 51, 58)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(365, 404, 50, 60)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(506, 400, 48, 59)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(645, 399, 48, 52)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(788, 397, 40, 49)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(936, 397, 33, 40)));
+            BringerOfDeath.Add(AnimationType.Death, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathDeath));
+
+            List<FrameHelper> BringerOfDeathAttack = new List<FrameHelper>();
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(84, 224, 44, 54)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(218, 224, 60, 54)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(353, 209, 61, 69)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(495, 209, 62, 69)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(565, 202, 133, 76), new Rectangle(565, 202, 133, 76), new Rectangle(617, 234, 62, 44), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(700, 195, 140, 83), new Rectangle(700, 195, 140, 83), new Rectangle(761, 235, 58, 43), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(984, 193, 126, 85), new Rectangle(984, 193, 126, 85), new Rectangle(1056, 231, 42, 47), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(6, 289, 112, 82), new Rectangle(6, 289, 112, 82), new Rectangle(77, 321, 41, 50), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(226, 318, 37, 53)));
+            BringerOfDeath.Add(AnimationType.BasicAttack, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAttack));
+
+            List<FrameHelper> BringerOfDeathPortalSummon = new List<FrameHelper>();
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(471, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(614, 593, 29, 23)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(752, 593, 31, 36)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 593, 31, 53)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(1032, 593, 31, 57)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(51, 686, 33, 57)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(190, 686, 34, 57)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 688, 35, 55)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(470, 688, 36, 55)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(609, 686, 34, 57)));
+
+            List<FrameHelper> BringerOfDeathStand = new List<FrameHelper>();
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(86, 38, 40, 54)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(226, 37, 40, 55)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(365, 36, 41, 56)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(504, 36, 41, 56)));
+            BringerOfDeath.Add(AnimationType.Stand, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> BringerofDeathBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new Projectile(ProjectileType.BringerOfDeathPortalSummon, 10, BringerOfDeathTexture, 0.1f, BringerOfDeathPortalSummon, ))
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+            EntityAnimations.Add(EntityName.BringerOfDeath, BringerOfDeath);
+            EntityAnimationBehaviours.Add(EntityName.BringerOfDeath, BringerofDeathBehaviours);
+
+            #endregion
+
             #region Ghost Warrior
             EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
             EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));

@@ -24,6 +24,7 @@ namespace FightingGame
 
         public override void OnStateExit(Animator animator)
         {
+            animator.SetAnimation(AnimationType.Stand);
             animator.Entity.IsDead = true;
         }
 

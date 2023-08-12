@@ -65,6 +65,7 @@ namespace FightingGame
 
         //Enemies
         Skeleton,
+        BringerOfDeath,
 
         RangedCultist,
         BigCultist,
@@ -107,5 +108,6 @@ namespace FightingGame
     public enum ProjectileType
     {
         CultistFireBall,
+        BringerOfDeathPortalSummon;
     }
 }

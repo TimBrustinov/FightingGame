@@ -18,7 +18,6 @@ namespace FightingGame
         public Vector2 Direction;
         public Vector2 Position;
         private Vector2 startPosition;
-        public Point Dimensions;
         public float Speed;
         private float scale;
         
@@ -31,7 +30,6 @@ namespace FightingGame
             ProjectileType = projectileType;
             Damage = damage;
             FlightAnimation = new Animation(projectileTexture, animationSpeed, frames);
-            Dimensions = new Point(frames[0].SourceRectangle.Width, frames[0].SourceRectangle.Height);
             HitAnimation = new Animation(projectileTexture, animationSpeed, hitFrames);
             ProjectileTexture = projectileTexture;
             IsActive = false;
@@ -44,7 +42,6 @@ namespace FightingGame
             Damage = projectile.Damage;
             FlightAnimation = new Animation(projectile.FlightAnimation.Texture, projectile.FlightAnimation.frameTime, projectile.FlightAnimation.AnimationFrames);
             HitAnimation = new Animation(projectile.HitAnimation.Texture, projectile.HitAnimation.frameTime, projectile.HitAnimation.AnimationFrames);
-            Dimensions = projectile.Dimensions;
             IsActive = false;
             scale = projectile.scale;
         }
@@ -54,7 +51,6 @@ namespace FightingGame
             Position = position;
             startPosition = position;
             Direction = direction;
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, Dimensions.X, Dimensions.Y);
             Speed = speed;
             IsActive = true;
         }
@@ -65,9 +61,7 @@ namespace FightingGame
             {
                 HasHit = true;
             }
-
-            Hitbox.X = (int)Position.X;
-            Hitbox.Y = (int)Position.Y;
+            UpdateHitbox();
             if (!HasHit)
             {
                 Position += Direction * Speed;
@@ -105,6 +99,17 @@ namespace FightingGame
             startPosition = Vector2.Zero;
             FlightAnimation.Restart();
             HitAnimation.Restart();
+        }
+        private void UpdateHitbox()
+        {
+            if(HasHit)
+            {
+                Hitbox = new Rectangle((int)Position.X, (int)Position.Y, HitAnimation.PreviousFrame.SourceRectangle.Width, HitAnimation.PreviousFrame.SourceRectangle.Height);
+            }
+            else
+            {
+                Hitbox = new Rectangle((int)Position.X, (int)Position.Y, FlightAnimation.PreviousFrame.SourceRectangle.Width, FlightAnimation.PreviousFrame.SourceRectangle.Height);
+            }
         }
     }
 }

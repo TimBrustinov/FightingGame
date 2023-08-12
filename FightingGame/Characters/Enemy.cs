@@ -12,6 +12,7 @@ namespace FightingGame
 {
     public class Enemy : Entity
     {
+        public int WaveNum;
         public int XPAmmount = 5;
         public bool IsSpawning;
         public Color HealthBarColor = Color.Green;
@@ -19,7 +20,7 @@ namespace FightingGame
         private Vector2 direction;
         public bool leftFacingSprite;
 
-        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite) : base(name)
+        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -31,6 +32,7 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
             this.leftFacingSprite = leftFacingSprite;
+            WaveNum = waveNum;
         }
         public Enemy(Enemy enemy) : base(enemy.Name)
         {
@@ -42,15 +44,11 @@ namespace FightingGame
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
             this.leftFacingSprite = enemy.leftFacingSprite;
+            WaveNum = enemy.WaveNum;
         }
         public void Update(Character character)
         {
             direction = Vector2.Normalize(character.Position - Position);
-            if(IsDead)
-            {
-                character.XP += XPAmmount;
-            }
-
             if (character.WeaponHitBox.Intersects(HitBox))
             {
                 if (character.HasFrameChanged)

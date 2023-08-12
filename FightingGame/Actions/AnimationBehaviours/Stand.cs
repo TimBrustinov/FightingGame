@@ -9,21 +9,16 @@ namespace FightingGame
 {
     public class Stand : AnimationBehaviour
     {
-        Entity entity;
         public Stand(AnimationType animationType) : base(animationType)
         {
         }
 
         public override void OnStateEnter(Animator animator)
         {
-            entity = animator.Entity;
+            return;
         }
         public override void OnStateUpdate(Animator animator)
         {
-            //if (animator.Entity.Direction != Vector2.Zero)
-            //{
-            //    animator.SetAnimation(AnimationType.Run);
-            //}
             if (animator.Entity.WantedAnimation != AnimationType && animator.Entity.CheckTransition(animator.Entity.WantedAnimation))
             {
                 animator.SetAnimation(animator.Entity.WantedAnimation);
