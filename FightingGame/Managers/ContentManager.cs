@@ -463,6 +463,17 @@ namespace FightingGame
             BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(226, 318, 37, 53)));
             BringerOfDeath.Add(AnimationType.BasicAttack, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAttack));
 
+            List<FrameHelper> BringerOfDeathAbility1 = new List<FrameHelper>();
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(1058, 412, 48, 52)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(78, 506, 48, 51)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(219, 507, 46, 50)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(357, 507, 48, 50)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(495, 508, 50, 49)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(634, 465, 51, 92)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(774, 465, 51, 92)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(913, 466, 52, 91)));
+            BringerOfDeath.Add(AnimationType.Ability1, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAbility1));
+
             List<FrameHelper> BringerOfDeathPortalSummon = new List<FrameHelper>();
             BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
             BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
@@ -488,7 +499,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
-                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new Projectile(ProjectileType.BringerOfDeathPortalSummon, 10, BringerOfDeathTexture, 0.1f, BringerOfDeathPortalSummon, ))
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -697,7 +708,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Death] = new Death(AnimationType.Death),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new Projectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, 0.1f, CultistFireball, CultistFireBallImpact, 1.5f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 

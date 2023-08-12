@@ -10,12 +10,12 @@ namespace FightingGame
    
     public class EnemyRangedAttack : AttackBehaviour
     {
-        Projectile projectile;
+        MovingProjectile projectile;
         Vector2 projectileAttachmentPoint;
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
 
-        public EnemyRangedAttack(AnimationType animationType, Projectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public EnemyRangedAttack(AnimationType animationType, MovingProjectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             this.projectileAttachmentPoint = projectileAttachmentPoint;
             this.projectileTriggerFrame = projectileTriggerFrame;
@@ -67,16 +67,16 @@ namespace FightingGame
             {
                 foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles)
                 {
-                    if (projectile.ProjectileType == this.projectile.ProjectileType)
+                    if (projectile.ProjectileType == this.projectile.ProjectileType && projectile.GetType() == typeof(MovingProjectile))
                     {
-                        this.projectile = projectile;
+                        this.projectile = (MovingProjectile)projectile;
                         this.projectile.Reset();
                         GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Remove(projectile);
                         return;
                     }
                 }
             }
-            projectile = new Projectile(projectile);
+            projectile = (MovingProjectile)projectile.Clone();
         }
     }
 }

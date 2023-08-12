@@ -108,6 +108,6 @@ namespace FightingGame
     public enum ProjectileType
     {
         CultistFireBall,
-        BringerOfDeathPortalSummon;
+        BringerOfDeathPortalSummon,
     }
 }

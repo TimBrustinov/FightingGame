@@ -8,11 +8,11 @@ namespace FightingGame
 {
     public class BringerOfDeathRangedAttack : AttackBehaviour
     {
-        Projectile projectile;
+        StationaryProjectile projectile;
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
         
-        public BringerOfDeathRangedAttack(AnimationType animationType, Projectile projectile, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public BringerOfDeathRangedAttack(AnimationType animationType, StationaryProjectile projectile, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
@@ -34,10 +34,9 @@ namespace FightingGame
         {
             if (animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame && !projectile.IsActive)
             {
-                Vector2 projectileAttachmentPoint = GameObjects.Instance.SelectedCharacter.Position + new Vector2(0, 70);
-                Vector2 projectileDirection = new Vector2(0, 0);
+                Vector2 projectileAttachmentPoint = GameObjects.Instance.SelectedCharacter.Position - new Vector2(0, 70);
                 GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectile);
-                projectile.Activate(projectileAttachmentPoint, projectileDirection, projectileSpeed);
+                projectile.Activate(projectileAttachmentPoint);
             }
         }
 
@@ -55,16 +54,16 @@ namespace FightingGame
             {
                 foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles)
                 {
-                    if (projectile.ProjectileType == this.projectile.ProjectileType)
+                    if (projectile.ProjectileType == this.projectile.ProjectileType && projectile.GetType() == typeof(StationaryProjectile))
                     {
-                        this.projectile = projectile;
+                        this.projectile = (StationaryProjectile)projectile;
                         this.projectile.Reset();
                         GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Remove(projectile);
                         return;
                     }
                 }
             }
-            projectile = new Projectile(projectile);
+            projectile = (StationaryProjectile)projectile.Clone();
         }
     }
 }

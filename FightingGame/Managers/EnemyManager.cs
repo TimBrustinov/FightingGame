@@ -98,7 +98,7 @@ namespace FightingGame
         }
         private void SpawnEnemies()
         {
-            int RandomAmmountOfEnemies = random.Next(0, enemySpawnAmmountMax);
+            int RandomAmmountOfEnemies = 1/*random.Next(0, enemySpawnAmmountMax)*/;
 
             for (int i = 0; i < RandomAmmountOfEnemies; i++)
             {
