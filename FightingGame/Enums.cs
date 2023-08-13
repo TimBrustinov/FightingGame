@@ -65,6 +65,7 @@ namespace FightingGame
 
         //Enemies
         Skeleton,
+        Necromancer,
         BringerOfDeath,
 
         RangedCultist,

@@ -34,7 +34,7 @@ namespace FightingGame
         {
             if (animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame && !projectile.IsActive)
             {
-                Vector2 projectileAttachmentPoint = GameObjects.Instance.SelectedCharacter.Position - new Vector2(0, 70);
+                Vector2 projectileAttachmentPoint = GameObjects.Instance.SelectedCharacter.Position - new Vector2(0, 50);
                 GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectile);
                 projectile.Activate(projectileAttachmentPoint);
             }

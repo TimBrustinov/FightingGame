@@ -421,6 +421,77 @@ namespace FightingGame
             EntityAnimationBehaviours.Add(EntityName.Skeleton, SkeletonAbilites);
             #endregion
 
+            #region Necromancer
+            var NecromancerSpritesheet = content.Load<Texture2D>("NecromancerFullSpritesheet");
+            EntitySpriteSheets.Add(EntityName.Necromancer, NecromancerSpritesheet);
+            EntityTextures.Add(EntityName.Necromancer, new Rectangle(38, 17, 28, 49));
+
+            Dictionary<AnimationType, Animation> Necromancer = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> NecromancerBasicAttack = new List<FrameHelper>();
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(54, 186, 28, 49)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(182, 185, 28, 50)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(310, 181, 28, 54)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(438, 174, 29, 61)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1078, 178, 29, 57)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1205, 188, 49, 47), new Rectangle(1232, 194, 33, 42), new Rectangle(1205, 188, 30, 47), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1335, 187, 47, 48), new Rectangle(1361, 192, 33, 45), new Rectangle(1335, 187, 28, 48), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1462, 186, 51, 49), new Rectangle(1489, 187, 36, 49), new Rectangle(1462, 186, 29, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1590, 186, 58, 49), new Rectangle(1614, 186, 42, 49), new Rectangle(1590, 186, 29, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1718, 186, 61, 49), new Rectangle(1741, 182, 46, 53), new Rectangle(1718, 186, 30, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1846, 185, 63, 50), new Rectangle(1867, 174, 52, 61), new Rectangle(1846, 186, 31, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1974, 182, 65, 53), new Rectangle(1994, 172, 54, 63), new Rectangle(1974, 186, 31, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2102, 180, 66, 55), new Rectangle(2129, 174, 49, 62), new Rectangle(2102, 186, 28, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2203, 179, 65, 56), new Rectangle(2262, 169, 37, 56), new Rectangle(2230, 186, 29, 48), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2358, 178, 46, 57), new Rectangle(2358, 186, 29, 49)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2486, 186, 29, 49)));
+            Necromancer.Add(AnimationType.BasicAttack, new Animation(NecromancerSpritesheet, 0.1f, NecromancerBasicAttack));
+
+            List<FrameHelper> NecromancerSummon = new List<FrameHelper>();
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(273, 286, 30, 49)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(401, 284, 30, 51)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(529, 278, 30, 57)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(657, 274, 30, 61)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(785, 274, 30, 61)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1297, 276, 30, 59)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1425, 288, 30, 47)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1553, 287, 30, 48)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1681, 286, 30, 49)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1809, 286, 30, 49)));
+            Necromancer.Add(AnimationType.Ability1, new Animation(NecromancerSpritesheet, 0.1f, NecromancerSummon));
+
+            List<FrameHelper> NecromancerRun = new List<FrameHelper>();
+            NecromancerRun.Add(new FrameHelper(new Rectangle(32, 96, 32, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(128, 96, 31, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(225, 96, 28, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(322, 96, 22, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(420, 96, 18, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(516, 96, 18, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(613, 95, 17, 50)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(708, 94, 20, 51)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(803, 94, 26, 51)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(897, 95, 30, 50)));
+            Necromancer.Add(AnimationType.Run, new Animation(NecromancerSpritesheet, 0.1f, NecromancerRun));
+
+            List<FrameHelper> NecromancerStand = new List<FrameHelper>();
+            NecromancerStand.Add(new FrameHelper(new Rectangle(38, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(134, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(230, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(326, 17, 28, 49)));
+            Necromancer.Add(AnimationType.Stand, new Animation(NecromancerSpritesheet, 0.1f, NecromancerStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> NecromancerBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 60, 0, false),
+                [AnimationType.Ability1] = new NecromancerSummon(AnimationType.Ability1, 0, 600, 20, false),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+
+            EntityAnimationBehaviours.Add(EntityName.Necromancer, NecromancerBehaviours);
+            EntityAnimations.Add(EntityName.Necromancer, Necromancer);
+            #endregion
+
             #region BringerOfDeath
             var BringerOfDeathTexture = content.Load<Texture2D>("Bringer-of-Death-SpritSheet");
             EntitySpriteSheets.Add(EntityName.BringerOfDeath, BringerOfDeathTexture);
@@ -475,18 +546,25 @@ namespace FightingGame
             BringerOfDeath.Add(AnimationType.Ability1, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAbility1));
 
             List<FrameHelper> BringerOfDeathPortalSummon = new List<FrameHelper>();
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
             BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
             BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(471, 595, 35, 16)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(614, 593, 29, 23)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(752, 593, 31, 36)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 593, 31, 53)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(1032, 593, 31, 57)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(51, 686, 33, 57)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(190, 686, 34, 57)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 688, 35, 55)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(470, 688, 36, 55)));
-            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(609, 686, 34, 57)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(471, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(614, 593, 29, 23), new Rectangle(614, 593, 29, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(752, 593, 31, 36), new Rectangle(752, 593, 31, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 593, 31, 53), new Rectangle(892, 593, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(1032, 593, 31, 57), new Rectangle(1032, 593, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(51, 686, 33, 57), new Rectangle(51, 686, 33, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(190, 686, 34, 57), new Rectangle(190, 686, 34, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 688, 35, 55), new Rectangle(331, 688, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(470, 688, 36, 55), new Rectangle(470, 688, 36, 17)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(609, 686, 34, 57), new Rectangle(609, 686, 34, 20)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(754, 686, 29, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 686, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(754, 686, 29, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 686, 31, 19)));
 
             List<FrameHelper> BringerOfDeathStand = new List<FrameHelper>();
             BringerOfDeathStand.Add(new FrameHelper(new Rectangle(86, 38, 40, 54)));
@@ -499,7 +577,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
-                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -714,6 +792,98 @@ namespace FightingGame
 
             EntityAnimations.Add(EntityName.RangedCultist, RangedCultist);
             EntityAnimationBehaviours.Add(EntityName.RangedCultist, RangedCultistBehaviour);
+            #endregion
+
+            #region AssassinCultist
+            var AssassinCultistSpriteSheet = content.Load<Texture2D>("Cultist_Assassin_Sheet");
+            EntitySpriteSheets.Add(EntityName.AssassinCultist, AssassinCultistSpriteSheet);
+            EntityTextures.Add(EntityName.AssassinCultist, new Rectangle(16, 8, 31, 30));
+
+            Dictionary<AnimationType, Animation> AssassinCultist = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> AssassinCultistRun = new List<FrameHelper>();
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(442, 12, 26, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(497, 10, 25, 28)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(12, 47, 32, 24)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(71, 50, 23, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(125, 50, 26, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(180, 48, 25, 28)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(225, 47, 32, 24)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(283, 50, 24, 26)));
+            AssassinCultist.Add(AnimationType.Run, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistRun));
+
+            List<FrameHelper> AssassinCultistBasicAttack = new List<FrameHelper>();
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(436, 48, 30, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(488, 49, 30, 27)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(15, 86, 29, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(67, 86, 33, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(120, 83, 32, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(176, 82, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(228, 80, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(280, 78, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(318, 81, 45, 33), new Rectangle(310, 79, 52, 37), new Rectangle(327, 85, 35, 29), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(318, 81, 45, 33), new Rectangle(310, 79, 52, 37), new Rectangle(327, 85, 35, 29), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(371, 83, 45, 30), new Rectangle(371, 83, 45, 30), new Rectangle(381, 87, 34, 27), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(371, 83, 45, 30), new Rectangle(371, 83, 45, 30), new Rectangle(381, 87, 34, 27), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(433, 85, 36, 29)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(486, 85, 36, 29)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(15, 125, 30, 27)));
+            AssassinCultist.Add(AnimationType.BasicAttack, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistBasicAttack));
+
+            List<FrameHelper> AssassinCultistAmbushAttack = new List<FrameHelper>();
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(393, 198, 25, 30)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(447, 196, 22, 33)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(501, 193, 19, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(25, 234, 16, 29)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(76, 242, 18, 19)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(128, 238, 19, 23)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(181, 239, 15, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(233, 238, 21, 20)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(343, 236, 12, 19)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(393, 231, 19, 27)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(443, 228, 26, 35)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(492, 229, 31, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(14, 267, 33, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(67, 267, 33, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(123, 267, 21, 33), new Rectangle(116, 267, 35, 40), new Rectangle(123, 267, 21, 33), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(169, 267, 28, 37), new Rectangle(161, 267, 35, 43), new Rectangle(169, 267, 28, 37), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(225, 281, 31, 23), new Rectangle(217, 284, 31, 23), new Rectangle(225, 281, 31, 23), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(279, 286, 31, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(332, 286, 31, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(385, 281, 31, 23)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(440, 276, 31, 28)));
+            AssassinCultist.Add(AnimationType.Ability1, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistAmbushAttack));
+
+            List<FrameHelper> AssassinCultistDeath = new List<FrameHelper>();
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(286, 121, 26, 31)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(339, 121, 26, 31)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(390, 123, 24, 29)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(443, 125, 21, 27)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(495, 128, 25, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(18, 167, 24, 23)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(71, 166, 26, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(125, 166, 26, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(178, 165, 26, 25)));
+            AssassinCultist.Add(AnimationType.Death, new Animation(AssassinCultistSpriteSheet, 0.17f, AssassinCultistDeath));
+
+            List<FrameHelper> AssassinCultistStand = new List<FrameHelper>();
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(16, 8, 31, 30)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(70, 7, 30, 31)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(124, 6, 30, 32)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(178, 6, 30, 32)));
+            AssassinCultist.Add(AnimationType.Stand, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> AssassinCultistBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 20, 90, 0, true),
+                [AnimationType.Ability1] = new AssassinCultistAmbush(AnimationType.Ability1, 20, 200, 10, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+
+            EntityAnimationBehaviours.Add(EntityName.AssassinCultist, AssassinCultistBehaviours);
+            EntityAnimations.Add(EntityName.AssassinCultist, AssassinCultist);
             #endregion
         }
     }

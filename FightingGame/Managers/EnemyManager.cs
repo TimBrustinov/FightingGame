@@ -16,9 +16,9 @@ namespace FightingGame
         private int bossSpawnRate = 40000;
         private double bossSpawnTimer;
 
-        private int enemyPoolIndex;
+        public int enemyPoolIndex;
         public List<Enemy> EnemyPool;
-        private List<Enemy> ReservePool;
+        public List<Enemy> ReservePool;
         private Random random;
 
 
@@ -27,10 +27,12 @@ namespace FightingGame
         private int currentWave = 0;
 
         #region Enemy Presets
-        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.5f, false, 0);
+        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
         Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
         Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
         Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, false, 50, 0.5f, 1f, true, 0);
+        Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
+        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 40, 0.5f, 1.2f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);
         //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior2]);
         #endregion
@@ -120,26 +122,6 @@ namespace FightingGame
                 }
             }
             enemyPoolIndex += RandomAmmountOfEnemies;
-
-            //int increaseEnemyPoolAmount = EnemyWaves[currentWave].Item1;
-            //if (EnemyPool.Count < MaxEnemyPool)
-            //{
-            //    for (int i = 0; i < increaseEnemyPoolAmount; i++)
-            //    {
-            //        Enemy enemySpawn = new Enemy(enemy);
-            //        EnemyPool.Add(enemySpawn);
-            //        if (enemySpawn.Animator.AnimationBehaviours.ContainsKey(AnimationType.Spawn))
-            //        {
-            //            enemySpawn.SpawnWithAnimation(GetSpawnLocation());
-            //        }
-            //        else
-            //        {
-            //            enemySpawn.Spawn(GetSpawnLocation());
-            //        }
-            //        enemySpawn.SetBounds(Tilemap.HitBox);
-            //    }
-            //    enemyPoolIndex += increaseEnemyPoolAmount;
-            //}
         }
         private void SpawnBoss(Enemy boss)
         {
@@ -194,7 +176,9 @@ namespace FightingGame
             List<Enemy> wave1Enemies = new List<Enemy>();
             //wave1Enemies.Add(SkeletonPreset);
             //wave1Enemies.Add(RangedCultistPreset);
-            wave1Enemies.Add(BringerOfDeathPreset);
+            //wave1Enemies.Add(BringerOfDeathPreset);
+            //wave1Enemies.Add(AssassinCultistPreset);
+            wave1Enemies.Add(NecromancerPreset);
 
             EnemyWaves.Add(0, wave1Enemies);
             BossWaves.Add(0, wave1Bosses);
@@ -202,13 +186,27 @@ namespace FightingGame
             //add other waves
         }
 
-        private Enemy GetEnemyFromReserve()
+        public Enemy GetEnemyFromReserve()
         {
             if(ReservePool.Count > 0)
             {
                 for (int i = 0; i < ReservePool.Count; i++)
                 {
                     if(ReservePool[i].WaveNum == currentWave)
+                    {
+                        return ReservePool[i];
+                    }
+                }
+            }
+            return null;
+        }
+        public Enemy GetEnemyFromReserve(EntityName enemyName)
+        {
+            if (ReservePool.Count > 0)
+            {
+                for (int i = 0; i < ReservePool.Count; i++)
+                {
+                    if (ReservePool[i].Name == enemyName)
                     {
                         return ReservePool[i];
                     }
