@@ -19,8 +19,9 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public EntityAction CurrentAction;
-        public Attack CurrentAttack;
+        public AnimationBehaviour CurrentAction;
+        public int NUM;
+       // public Attack CurrentAttack;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -38,31 +39,54 @@ namespace FightingGame
         public double staminaTimer;
         public float Speed;
         public float SpeedMultiplier = 0;
-        public float AbilityDamageMultiplier = 0;
+        public float CurrentAttackDamage;
+        public float AttackDamageMultiplier = 0;
         public float EntityScale;
 
         public Animator Animator;
+        public AnimationType WantedAnimation;
         public CooldownManager CooldownManager;
         public bool overrideAnimation = false;
         public FrameHelper currFrame;
 
         private Vector2 minPosition, maxPosition;
-        public Dictionary<AnimationType, EntityAction> AnimationToEntityAction = new Dictionary<AnimationType, EntityAction>();
-        public Dictionary<AnimationType, Attack> Attacks = new Dictionary<AnimationType, Attack>();
-        public Entity(EntityName name, Texture2D texture, Dictionary<AnimationType, EntityAction> entityActions)
+
+
+        public Dictionary<AnimationType, AttackBehaviour> Attacks;
+
+        public Entity(EntityName name)
         {
             Name = name;
-            AnimationToEntityAction = entityActions;
             CooldownManager = new CooldownManager();
             Animator = new Animator(this);
-            foreach (var item in ContentManager.Instance.EntityActions[Name])
+            Attacks = new Dictionary<AnimationType, AttackBehaviour>();
+            foreach (var animation in ContentManager.Instance.EntityAnimations[name])
             {
-                Animator.AddAnimation(item.Value.AnimationType, item.Value.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[Name], item.Value.AnimationFrames, item.Value.AnimationSpeed);
-                if(item.Value is Attack)
+                Animator.AddAnimation(animation.Key, animation.Value.Texture, animation.Value.frameTime, animation.Value.AnimationFrames);
+            }
+            foreach (var behaviour in ContentManager.Instance.EntityAnimationBehaviours[name])
+            {
+                Animator.AnimationBehaviours.Add(behaviour.Key, behaviour.Value.Clone());
+                if(behaviour.Value is AttackBehaviour)
                 {
-                    Attacks.Add(item.Key, (Attack)item.Value);
+                    var attack = (AttackBehaviour)behaviour.Value;
+                    Attacks.Add(attack.AnimationType, (AttackBehaviour)attack.Clone());
+                    CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
                 }
             }
+            //Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
+            //foreach (var animationBehaviour in ContentManager.Instance.EntityAnimationBehaviours[Name])
+            //{
+            //    Animator.AddAnimation(animationBehaviour.Key, animationBehaviour.Value.Animation);
+            //    Animator.AnimationBehaviours.Add(animationBehaviour.Key, animationBehaviour.Value);
+            //    if (animationBehaviour.Value is AttackBehaviour)
+            //    {
+            //        var attack = (AttackBehaviour)animationBehaviour.Value;
+            //        Attacks.Add(attack.AnimationType, attack);
+            //        CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
+            //    }
+            //}
+            ;
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
@@ -70,12 +94,8 @@ namespace FightingGame
             Direction = direction;
             Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
-            Animator.Update(animation);
-            CurrentAction = Animator.CurrentAction;
-            if(Attacks.ContainsKey(CurrentAction.AnimationType))
-            {
-                CurrentAttack = Attacks[CurrentAction.AnimationType];
-            }
+            WantedAnimation = animation;
+            Animator.Update();
             CooldownManager.Update();
             UpdateHitbox();
             UpdateWeapon();
@@ -83,11 +103,22 @@ namespace FightingGame
         }
         public virtual void Draw()
         {
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, WeaponHitBox, Color.Aqua);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, HitBox, Color.Red);
             Animator.Draw();
             DrawShadow();
         }
-
+        public bool CheckTransition(AnimationType animation)
+        {
+            if(CooldownManager.AnimationCooldown.ContainsKey(animation))
+            {
+                if(CooldownManager.AnimationCooldown[animation] != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         private void UpdateHitbox()
         {
             if (Animator.CurrentAnimationType == AnimationType.Dodge || Animator.CurrentAnimationType == AnimationType.UltimateDodge)

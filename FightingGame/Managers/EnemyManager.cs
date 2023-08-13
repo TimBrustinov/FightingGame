@@ -10,85 +10,87 @@ namespace FightingGame
         private Camera Camera;
         private DrawableObject Tilemap;
 
+        private int enemySpawnAmmountMax = 5;
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
         private int bossSpawnRate = 40000;
         private double bossSpawnTimer;
 
-        private int MaxEnemyPool = 50;
-        private int enemyPoolIndex;
-        private int deadEnemies;
+        public int enemyPoolIndex;
         public List<Enemy> EnemyPool;
-        private List<Enemy> ReservePool;
+        public List<Enemy> ReservePool;
+        private Random random;
 
-        private Dictionary<int, (int, List<Enemy>)> EnemyWaves;
+
+        private Dictionary<int, List<Enemy>> EnemyWaves;
         private Dictionary<int, List<Enemy>> BossWaves;
         private int currentWave = 0;
 
         #region Enemy Presets
-        Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, ContentManager.Instance.EntitySpriteSheets[EntityName.Skeleton], 30, 0.5f, 1.5f, ContentManager.Instance.EntityActions[EntityName.Skeleton]);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior]);
-        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityActions[EntityName.GhostWarrior2]);
+        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
+        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
+        Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
+        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, false, 50, 0.5f, 1f, true, 0);
+        Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
+        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 40, 0.5f, 1.2f, false, 0);
+        //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);
+        //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior2]);
         #endregion
         public EnemyManager(DrawableObject tilemap)
         {
             Tilemap = tilemap;
             ReservePool = new List<Enemy>();
             EnemyPool = new List<Enemy>();
-            EnemyWaves = new Dictionary<int, (int, List<Enemy>)>();
+            EnemyWaves = new Dictionary<int, List<Enemy>>();
             BossWaves = new Dictionary<int, List<Enemy>>();
+            random = new Random();
             CreateEnemyWaves();
         }
 
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-            
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (enemySpawnTimer >= enemySpawnRate)
             {
-                int randomNumber = new Random().Next(0, EnemyWaves[currentWave].Item2.Count);
-                SpawnEnemies(EnemyWaves[currentWave].Item2[randomNumber]);
+                SpawnEnemies();
                 enemySpawnTimer = 0;
             }
 
             bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if(bossSpawnTimer >= bossSpawnRate)
+            if (bossSpawnTimer >= bossSpawnRate)
             {
                 int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
                 SpawnBoss(BossWaves[currentWave][randomNumber]);
                 bossSpawnTimer = 0;
             }
-
-            for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
+            for (int i = 0; i < enemyPoolIndex; i++)
             {
-                UpdateEnemy(EnemyPool[i], SelectedCharacter);
+                if (EnemyPool[i].IsBoss && EnemyPool[i].IsDead)
+                {
+                    EnemyPool.Remove(EnemyPool[i]);
+                    bossSpawnTimer = 0;
+                    enemyPoolIndex--;
+                }
+                else if (EnemyPool[i].IsDead || CheckEnemyDistanceToPlayer(EnemyPool[i], SelectedCharacter))
+                {
+                    ReservePool.Add(EnemyPool[i]);
+                    SelectedCharacter.XP += EnemyPool[i].XPAmmount;
+                    EnemyPool.Remove(EnemyPool[i]);
+                    enemyPoolIndex--;
+                }
+                else
+                {
+                    EnemyPool[i].Update(SelectedCharacter);
+                }
+                //UpdateEnemy(EnemyPool[i], SelectedCharacter);
+                //Console.WriteLine(EnemyPool[enemyPoolIndex - 1].Animator.CurrentAnimation.frameTime);
+                //Console.WriteLine(EnemyPool[0].Direction);
             }
-        }
-
-        private void UpdateEnemy(Enemy enemy, Character selectedCharacter)
-        {
-            if(enemy.IsBoss && enemy.IsDead)
-            {
-                EnemyPool.Remove(enemy);
-                bossSpawnTimer = 0;
-                deadEnemies++;
-            }
-            else if (enemy.IsDead || CheckEnemyDistanceToPlayer(enemy, selectedCharacter))
-            {
-                ReservePool.Add(enemy);
-                EnemyPool.Remove(enemy);
-                deadEnemies++;
-            }
-
-           
-            
-            enemy.Update(selectedCharacter);
-            
         }
         public void Draw()
         {
-            for (int i = 0; i < enemyPoolIndex - deadEnemies; i++)
+            for (int i = 0; i < enemyPoolIndex; i++)
             {
                 if (!EnemyPool[i].IsDead)
                 {
@@ -96,56 +98,37 @@ namespace FightingGame
                 }
             }
         }
-        private void SpawnEnemies(Enemy enemy)
+        private void SpawnEnemies()
         {
-            int increaseEnemyPoolAmount = EnemyWaves[currentWave].Item1;
-            if (ReservePool.Count > 0)
-            {
-                for (int i = 0; i < ReservePool.Count / 2; i++)
-                {
-                    if(EnemyWaves[currentWave].Item2.Contains(enemy))
-                    {
-                        ReservePool[i].Reset();
-                        EnemyPool.Add(ReservePool[i]);
-                        if (ReservePool[i].AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
-                        {
-                            ReservePool[i].SpawnWithAnimation(GetSpawnLocation());
-                        }
-                        else
-                        {
-                            ReservePool[i].Spawn(GetSpawnLocation());
-                        }
-                    }
-                    ReservePool.RemoveAt(i);
-                    deadEnemies--;
-                }
-            }
+            int RandomAmmountOfEnemies = 1/*random.Next(0, enemySpawnAmmountMax)*/;
 
-            if(EnemyPool.Count < MaxEnemyPool)
+            for (int i = 0; i < RandomAmmountOfEnemies; i++)
             {
-                for (int i = 0; i < increaseEnemyPoolAmount; i++)
+                var enemyFromReserve = GetEnemyFromReserve();
+                if(enemyFromReserve != null)
                 {
-                    Enemy enemySpawn = new Enemy(enemy);
-                    EnemyPool.Add(enemySpawn);
-                    if (enemySpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
-                    {
-                        enemySpawn.SpawnWithAnimation(GetSpawnLocation());
-                    }
-                    else
-                    {
-                        enemySpawn.Spawn(GetSpawnLocation());
-                    }
-                    enemySpawn.SetBounds(Tilemap.HitBox);
+                    enemyFromReserve.Reset();
+                    enemyFromReserve.Spawn(GetSpawnLocation());
+                    EnemyPool.Add(enemyFromReserve);
+                    ReservePool.Remove(enemyFromReserve);
                 }
-                enemyPoolIndex += increaseEnemyPoolAmount;
+                else
+                {
+                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count);
+                    var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
+                    newEnemy.SetBounds(Tilemap.HitBox);
+                    newEnemy.Spawn(GetSpawnLocation());
+                    EnemyPool.Add(newEnemy);
+                }
             }
+            enemyPoolIndex += RandomAmmountOfEnemies;
         }
         private void SpawnBoss(Enemy boss)
         {
             Enemy bossSpawn = new Enemy(boss);
             bossSpawn.HealthBarColor = Color.Red;
             EnemyPool.Add(bossSpawn);
-            if (bossSpawn.AnimationToEntityAction.ContainsKey(AnimationType.Spawn))
+            if (bossSpawn.Animator.AnimationBehaviours.ContainsKey(AnimationType.Spawn))
             {
                 bossSpawn.SpawnWithAnimation(GetSpawnLocation());
             }
@@ -188,15 +171,48 @@ namespace FightingGame
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
             wave1Bosses.Add(GhostWarriorPreset);
-            wave1Bosses.Add(GhostWarrior2Preset);
+            //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            wave1Enemies.Add(SkeletonPreset);
+            //wave1Enemies.Add(SkeletonPreset);
+            //wave1Enemies.Add(RangedCultistPreset);
+            //wave1Enemies.Add(BringerOfDeathPreset);
+            //wave1Enemies.Add(AssassinCultistPreset);
+            wave1Enemies.Add(NecromancerPreset);
 
-            EnemyWaves.Add(0, (3, wave1Enemies));
+            EnemyWaves.Add(0, wave1Enemies);
             BossWaves.Add(0, wave1Bosses);
             #endregion 
             //add other waves
+        }
+
+        public Enemy GetEnemyFromReserve()
+        {
+            if(ReservePool.Count > 0)
+            {
+                for (int i = 0; i < ReservePool.Count; i++)
+                {
+                    if(ReservePool[i].WaveNum == currentWave)
+                    {
+                        return ReservePool[i];
+                    }
+                }
+            }
+            return null;
+        }
+        public Enemy GetEnemyFromReserve(EntityName enemyName)
+        {
+            if (ReservePool.Count > 0)
+            {
+                for (int i = 0; i < ReservePool.Count; i++)
+                {
+                    if (ReservePool[i].Name == enemyName)
+                    {
+                        return ReservePool[i];
+                    }
+                }
+            }
+            return null;
         }
     }
 }

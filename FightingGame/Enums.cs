@@ -53,6 +53,10 @@ namespace FightingGame
         UltimateAbility1,
         UltimateAbility2,
         UltimateAbility3,
+
+        ProjectileFlight,
+        ProjectileHit,
+
     }
     public enum EntityName
     {
@@ -61,7 +65,10 @@ namespace FightingGame
 
         //Enemies
         Skeleton,
+        Necromancer,
+        BringerOfDeath,
 
+        RangedCultist,
         BigCultist,
         AssassinCultist,
 
@@ -97,5 +104,11 @@ namespace FightingGame
         Top,
         Bottom,
         None,
+    }
+
+    public enum ProjectileType
+    {
+        CultistFireBall,
+        BringerOfDeathPortalSummon,
     }
 }

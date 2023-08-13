@@ -12,13 +12,15 @@ namespace FightingGame
 {
     public class Enemy : Entity
     {
+        public int WaveNum;
         public int XPAmmount = 5;
         public bool IsSpawning;
         public Color HealthBarColor = Color.Green;
         public bool IsBoss;
-        private AnimationType wantedAnimation;
         private Vector2 direction;
-        public Enemy(EntityName name, bool isBoss, Texture2D texture, float health, float speed, float scale, Dictionary<AnimationType, EntityAction> abilites) : base(name, texture, abilites)
+        public bool leftFacingSprite;
+
+        public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
@@ -29,27 +31,24 @@ namespace FightingGame
             TotalHealth = health;
             RemainingHealth = TotalHealth;
             IsBoss = isBoss;
+            this.leftFacingSprite = leftFacingSprite;
+            WaveNum = waveNum;
         }
-        public Enemy(Enemy enemy) : base(enemy.Name, ContentManager.Instance.EntitySpriteSheets[enemy.Name], ContentManager.Instance.EntityActions[enemy.Name])
+        public Enemy(Enemy enemy) : base(enemy.Name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[enemy.Name];
             EntityScale = enemy.EntityScale;
             Position = new Vector2(1000, 350);
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
-
             Speed = enemy.Speed;
             TotalHealth = enemy.TotalHealth;
             RemainingHealth = TotalHealth;
+            this.leftFacingSprite = enemy.leftFacingSprite;
+            WaveNum = enemy.WaveNum;
         }
         public void Update(Character character)
         {
             direction = Vector2.Normalize(character.Position - Position);
-
-            if(IsDead)
-            {
-                character.XP += XPAmmount;
-            }
-
             if (character.WeaponHitBox.Intersects(HitBox))
             {
                 if (character.HasFrameChanged)
@@ -58,7 +57,7 @@ namespace FightingGame
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAttack.AttackDamage);
+                    TakeDamage(character.CurrentAttackDamage);
                     HasBeenHit = true;
                 }
             }
@@ -66,14 +65,20 @@ namespace FightingGame
             {
                 HasBeenHit = false;
             }
-            
-            wantedAnimation = GetWantedAnimation(character);
-            IsFacingLeft = direction.X < 0;
-            base.Update(wantedAnimation, direction);
-            if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
+
+            if (leftFacingSprite)
             {
-                IsDead = true;
+                IsFacingLeft = direction.X > 0;
             }
+            else
+            {
+                IsFacingLeft = direction.X < 0;
+            }
+            base.Update(GetWantedAnimation(character), direction);
+            //if (CurrentAction.AnimationType == AnimationType.Death && Animator.CurrentAnimation.IsAnimationDone)
+            //{
+            //    IsDead = true;
+            //}
             //animationManager.Update(currentAnimation, overrideAnimation);
         }
         public override void Draw()
@@ -101,7 +106,7 @@ namespace FightingGame
         }
         private AnimationType GetWantedAnimation(Character character)
         {
-            if(IsSpawning)
+            if (IsSpawning)
             {
                 IsSpawning = false;
                 return AnimationType.Spawn;
@@ -111,13 +116,16 @@ namespace FightingGame
             {
                 return AnimationType.Death;
             }
-            if(Attacks.Count > 0)
+            if (Attacks.Count > 0)
             {
                 foreach (var attack in Attacks.Values)
                 {
-                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && Math.Abs(character.Position.Y - Position.Y) <= 30)
+                    if (CalculateDistance(character.Position, Position) <= attack.AttackRange && CooldownManager.AnimationCooldown[attack.AnimationType] == 0)
                     {
-                        return attack.AnimationType;
+                        if(attack.IsRanged || Math.Abs(character.Position.Y - Position.Y) <= 30)
+                        {
+                            return attack.AnimationType;
+                        }
                     }
                 }
             }

@@ -41,6 +41,7 @@ namespace FightingGame
         
         UIManager CharacterUIManager;
         EnemyManager EnemyManager;
+        ProjectileManager ProjectileManager;
 
         #region DrawableObjects
         DrawableObject Tilemap;
@@ -50,7 +51,8 @@ namespace FightingGame
         {
             Graphics = graphics;
             Tilemap = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920 * 1.8f, 1920 * 1.8f), Color.White);
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.5f, ContentManager.Instance.EntityActions[EntityName.Hashashin]);
+            Globals.Tilemap = Tilemap.HitBox;
+            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.3f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.Hashashin]);
             Hashashin.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
@@ -69,8 +71,13 @@ namespace FightingGame
         {
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
+            Globals.Camera = Camera;
             EnemyManager = new EnemyManager(Tilemap);
+            ProjectileManager = new ProjectileManager();
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
+            GameObjects.Instance.EnemyManager = EnemyManager;
+            GameObjects.Instance.SelectedCharacter = SelectedCharacter;
+            GameObjects.Instance.ProjectileManager = ProjectileManager;
         }
         public override Screenum Update(MouseState ms)
         {
@@ -102,6 +109,7 @@ namespace FightingGame
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             EnemyManager.Update(SelectedCharacter, Camera);
+            ProjectileManager.UpdateEnemyProjectiles();
             return Screenum.GameScreen;
         }
         public override void Draw(SpriteBatch spriteBatch)
@@ -112,6 +120,7 @@ namespace FightingGame
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
             EnemyManager.Draw();
+            ProjectileManager.DrawEnemyProjectiles();
             CharacterUIManager.Draw(spriteBatch, Camera.Corner);
 
             spriteBatch.End();

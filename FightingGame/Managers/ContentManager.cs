@@ -20,7 +20,8 @@ namespace FightingGame
 
         public Dictionary<EntityName, Rectangle> EntityTextures;
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets;
-        public Dictionary<EntityName, Dictionary<AnimationType, EntityAction>> EntityActions;
+        public Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>> EntityAnimationBehaviours;
+        public Dictionary<EntityName, Dictionary<AnimationType, Animation>> EntityAnimations;
 
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
@@ -29,22 +30,22 @@ namespace FightingGame
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
-            EntityActions = new Dictionary<EntityName, Dictionary<AnimationType, EntityAction>>();
+            EntityAnimationBehaviours = new Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
+            EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
 
         public void LoadContent(Content content)
         {
-            bool CanBeCanceled = true;
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Hashashin
-
-            EntitySpriteSheets.Add(EntityName.Hashashin, content.Load<Texture2D>("HashashinFullSpritesheet"));
+            Texture2D HashashinTexture = content.Load<Texture2D>("HashashinFullSpritesheet");
+            EntitySpriteSheets.Add(EntityName.Hashashin, HashashinTexture);
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
             Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
@@ -61,6 +62,7 @@ namespace FightingGame
                 [CharacterPortrait.HashashinBase] = content.Load<Texture2D>("wind_hashashin"),
                 [CharacterPortrait.HashashinElemental] = content.Load<Texture2D>("wind_elemental"),
             };
+            Dictionary<AnimationType, Animation> Hashashin = new Dictionary<AnimationType, Animation>();
 
             List<FrameHelper> HashashinRun = new List<FrameHelper>();
             HashashinRun.Add(new FrameHelper(new Rectangle(123, 219, 39, 36)));
@@ -71,6 +73,7 @@ namespace FightingGame
             HashashinRun.Add(new FrameHelper(new Rectangle(1567, 218, 38, 37)));
             HashashinRun.Add(new FrameHelper(new Rectangle(1849, 216, 44, 30)));
             HashashinRun.Add(new FrameHelper(new Rectangle(2140, 218, 39, 37)));
+            Hashashin.Add(AnimationType.Run, new Animation(HashashinTexture, 0.1f, HashashinRun));
 
             List<FrameHelper> HashashinBasicAttack = new List<FrameHelper>();
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(135, 858, 48, 37), new Rectangle(145, 858, 38, 25), canHit));
@@ -81,6 +84,7 @@ namespace FightingGame
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1562, 856, 39, 39)));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1854, 858, 39, 37)));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(2148, 858, 33, 37)));
+            Hashashin.Add(AnimationType.BasicAttack, new Animation(HashashinTexture, 0.1f, HashashinBasicAttack));
 
             List<FrameHelper> HashashinDodge = new List<FrameHelper>();
             HashashinDodge.Add(new FrameHelper(new Rectangle(127, 731, 39, 36)));
@@ -89,6 +93,7 @@ namespace FightingGame
             HashashinDodge.Add(new FrameHelper(new Rectangle(992, 736, 34, 31)));
             HashashinDodge.Add(new FrameHelper(new Rectangle(1280, 736, 34, 31)));
             HashashinDodge.Add(new FrameHelper(new Rectangle(1572, 730, 26, 37)));
+            Hashashin.Add(AnimationType.Dodge, new Animation(HashashinTexture, 0.1f, HashashinDodge));
 
             List<FrameHelper> HashashinAbility1 = new List<FrameHelper>();
             HashashinAbility1.Add(new FrameHelper(new Rectangle(134, 601, 24, 36)));
@@ -98,6 +103,8 @@ namespace FightingGame
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1269, 575, 84, 61), new Rectangle(1305, 573, 51, 64), new Rectangle(1280, 599, 32, 37), canHit));
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1560, 571, 84, 67), new Rectangle(1601, 569, 49, 70), new Rectangle(1568, 588, 34, 38), canHit));
             HashashinAbility1.Add(new FrameHelper(new Rectangle(1853, 572, 80, 67), new Rectangle(1895, 569, 43, 72), new Rectangle(1859, 600, 26, 38), canHit));
+            Hashashin.Add(AnimationType.Ability1, new Animation(HashashinTexture, 0.1f, HashashinAbility1));
+
 
             List<FrameHelper> HashashinAbility2 = new List<FrameHelper>();
             HashashinAbility2.Add(new FrameHelper(new Rectangle(3570, 1115, 46, 36)));
@@ -112,6 +119,7 @@ namespace FightingGame
             HashashinAbility2.Add(new FrameHelper(new Rectangle(6179, 1100, 122, 48), new Rectangle(6242, 1093, 72, 64), new Rectangle(6179, 1105, 26, 38), canHit));
             HashashinAbility2.Add(new FrameHelper(new Rectangle(6467, 1113, 26, 38)));
             HashashinAbility2.Add(new FrameHelper(new Rectangle(7332, 1114, 26, 37)));
+            Hashashin.Add(AnimationType.Ability2, new Animation(HashashinTexture, 0.1f, HashashinAbility2));
 
             List<FrameHelper> HashashinAbility3 = new List<FrameHelper>();
             HashashinAbility3.Add(new FrameHelper(new Rectangle(132, 1242, 32, 37)));
@@ -138,6 +146,8 @@ namespace FightingGame
             HashashinAbility3.Add(new FrameHelper(new Rectangle(7938, 1244, 42, 34)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8212, 1243, 39, 36)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8478, 1243, 39, 36)));
+            Hashashin.Add(AnimationType.Ability3, new Animation(HashashinTexture, 0.1f, HashashinAbility3));
+
 
             //List<FrameHelper> HashashinAbility3 = new List<FrameHelper>();
             //HashashinAbility3.Add(new FrameHelper(new Rectangle(978, 986, 45, 37)));
@@ -180,6 +190,8 @@ namespace FightingGame
             HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(6364, 1684, 233, 108), new Rectangle(6364, 1684, 233, 108), canHit));
             HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(6648, 1682, 241, 110)));
             HashashinUltimateTransformation.Add(new FrameHelper(new Rectangle(7032, 1732, 62, 55)));
+            Hashashin.Add(AnimationType.UltimateTransform, new Animation(HashashinTexture, 0.1f, HashashinUltimateTransformation));
+
 
             List<FrameHelper> HashashinUltimateStand = new List<FrameHelper>();
             HashashinUltimateStand.Add(new FrameHelper(new Rectangle(120, 1860, 59, 56)));
@@ -190,6 +202,8 @@ namespace FightingGame
             HashashinUltimateStand.Add(new FrameHelper(new Rectangle(1560, 1861, 63, 54)));
             HashashinUltimateStand.Add(new FrameHelper(new Rectangle(1848, 1858, 63, 58)));
             HashashinUltimateStand.Add(new FrameHelper(new Rectangle(2136, 1860, 62, 55)));
+            Hashashin.Add(AnimationType.UltimateStand, new Animation(HashashinTexture, 0.1f, HashashinUltimateStand));
+
 
             List<FrameHelper> HashashinUltimateRun = new List<FrameHelper>();
             HashashinUltimateRun.Add(new FrameHelper(new Rectangle(116, 1993, 57, 52)));
@@ -198,6 +212,8 @@ namespace FightingGame
             HashashinUltimateRun.Add(new FrameHelper(new Rectangle(979, 1996, 58, 51)));
             HashashinUltimateRun.Add(new FrameHelper(new Rectangle(1270, 1995, 55, 49)));
             HashashinUltimateRun.Add(new FrameHelper(new Rectangle(1554, 1994, 59, 50)));
+            Hashashin.Add(AnimationType.UltimateRun, new Animation(HashashinTexture, 0.1f, HashashinUltimateRun));
+
 
             List<FrameHelper> HashashinUltimateDodge = new List<FrameHelper>();
             HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(122, 3014, 41, 53)));
@@ -206,6 +222,8 @@ namespace FightingGame
             HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(1556, 3014, 59, 48)));
             HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(1846, 3014, 55, 54)));
             HashashinUltimateDodge.Add(new FrameHelper(new Rectangle(2122, 3014, 64, 53)));
+            Hashashin.Add(AnimationType.UltimateDodge, new Animation(HashashinTexture, 0.1f, HashashinUltimateDodge));
+
 
             List<FrameHelper> HashashinUltimateBasicAttack = new List<FrameHelper>();
             HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(139, 2503, 59, 53)));
@@ -215,6 +233,8 @@ namespace FightingGame
             HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(1232, 2473, 145, 83), new Rectangle(1311, 2458, 93, 59), new Rectangle(1264, 2497, 39, 59), canHit));
             HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(1518, 2491, 95, 64)));
             HashashinUltimateBasicAttack.Add(new FrameHelper(new Rectangle(2142, 2500, 49, 55)));
+            Hashashin.Add(AnimationType.UltimateBasicAttack, new Animation(HashashinTexture, 0.1f, HashashinUltimateBasicAttack));
+
 
             List<FrameHelper> HashashinUltimateAbility1 = new List<FrameHelper>();
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(99, 2374, 52, 54)));
@@ -225,6 +245,8 @@ namespace FightingGame
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(1522, 2355, 121, 72), new Rectangle(1514, 2351, 138, 80), new Rectangle(1563, 2367, 43, 54), canHit));
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(1808, 2354, 128, 72), new Rectangle(1803, 2350, 138, 78), new Rectangle(1854, 2372, 36, 52), canHit));
             HashashinUltimateAbility1.Add(new FrameHelper(new Rectangle(2125, 2353, 71, 75)));
+            Hashashin.Add(AnimationType.UltimateAbility1, new Animation(HashashinTexture, 0.1f, HashashinUltimateAbility1));
+
 
             List<FrameHelper> HashashinUltimateAbility2 = new List<FrameHelper>();
             HashashinUltimateAbility2.Add(new FrameHelper(new Rectangle(3604, 2764, 63, 52)));
@@ -234,6 +256,8 @@ namespace FightingGame
             HashashinUltimateAbility2.Add(new FrameHelper(new Rectangle(4738, 2692, 141, 124), new Rectangle(4798, 2684, 91, 139), new Rectangle(4738, 2753, 50, 58), canHit));
             HashashinUltimateAbility2.Add(new FrameHelper(new Rectangle(5015, 2696, 160, 116), new Rectangle(5102, 2687, 84, 131), new Rectangle(5015, 2754, 63, 58), canHit));
             HashashinUltimateAbility2.Add(new FrameHelper(new Rectangle(5304, 2694, 167, 117), new Rectangle(5387, 2689, 97, 125), new Rectangle(5304, 2756, 62, 55), canHit));
+            Hashashin.Add(AnimationType.UltimateAbility2, new Animation(HashashinTexture, 0.1f, HashashinUltimateAbility2));
+
 
             List<FrameHelper> HashashinUndoTransform = new List<FrameHelper>();
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(120, 3268, 59, 56)));
@@ -245,6 +269,8 @@ namespace FightingGame
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(1859, 3294, 26, 33)));
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(2147, 3295, 26, 33)));
             HashashinUndoTransform.Add(new FrameHelper(new Rectangle(2436, 3290, 26, 37)));
+            Hashashin.Add(AnimationType.UndoTransform, new Animation(HashashinTexture, 0.1f, HashashinUndoTransform));
+
 
             List<FrameHelper> HashashinUltimateAbility3 = new List<FrameHelper>();
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(122, 2886, 41, 53)));
@@ -267,6 +293,8 @@ namespace FightingGame
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5874, 2829, 173, 102), new Rectangle(5967, 2826, 84, 109), new Rectangle(5874, 2886, 51, 35), canHit));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(5874, 2829, 173, 102), new Rectangle(5967, 2826, 84, 109), new Rectangle(5874, 2886, 51, 35), canHit));
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(6168, 2886, 50, 54)));
+            Hashashin.Add(AnimationType.UltimateAbility3, new Animation(HashashinTexture, 0.1f, HashashinUltimateAbility3));
+
 
             List<FrameHelper> HashashinStand = new List<FrameHelper>();
             HashashinStand.Add(new FrameHelper(new Rectangle(132, 90, 34, 37)));
@@ -277,28 +305,51 @@ namespace FightingGame
             HashashinStand.Add(new FrameHelper(new Rectangle(1568, 92, 33, 35)));
             HashashinStand.Add(new FrameHelper(new Rectangle(1858, 92, 35, 35)));
             HashashinStand.Add(new FrameHelper(new Rectangle(2147, 91, 34, 36)));
+            Hashashin.Add(AnimationType.Stand, new Animation(HashashinTexture, 0.1f, HashashinStand));
 
-            Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
+
+            Dictionary<AnimationType, AnimationBehaviour> HashashinAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.07f, 0, default, 5, true),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
-                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.1f, 15, 5),
-                [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.115f, 2, default, 7, true),
-                [AnimationType.Ability2] = new Ability(AnimationType.Ability2, HashashinAbility2, !CanBeCanceled, 0.1f, 2, default, 5, true),
-                [AnimationType.Ability3] = new Ability(AnimationType.Ability3, HashashinAbility3, !CanBeCanceled, 0.065f, 3, default, 8, false),
-                [AnimationType.UltimateTransform] = new Ability(AnimationType.UltimateTransform, HashashinUltimateTransformation, !CanBeCanceled, 0.1f, 60, 0, 5, false),
-                [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand, HashashinUltimateStand, CanBeCanceled, 0.1f),
-                [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun, HashashinUltimateRun, CanBeCanceled, 0.1f),
-                [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, HashashinUltimateAbility1, !CanBeCanceled, 0.08f, 3, default, 8, true),
-                [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, HashashinUltimateAbility2, !CanBeCanceled, 0.08f, 3, default, 8, true),
-                [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, HashashinUltimateAbility3, !CanBeCanceled, 0.08f, 3, default, 8, true),
-                [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 0, default, 8, true),
-                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, HashashinUltimateDodge, !CanBeCanceled, 0.1f, 15, 5),
-                [AnimationType.UndoTransform] = new Ability(AnimationType.UndoTransform, HashashinUndoTransform, !CanBeCanceled, 0.1f, 5, 0, 0, false),
-                [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 15),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 7, 0, 0, true),
+                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 10, 0, 2, true),
+                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 5, 0, 3, true),
+                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 7, 0, 2, false),
+                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 6, 0, 0, false),
+                [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand),
+                [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun),
+                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 7, 0, 0, true),
+                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 5, 0, 1, true),
+                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 10, 0, 3, true),
+                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 5, 0, 4, true),
+                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 12),
+                [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
+            //Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
+            //{
+            //    [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.07f, 0, default, 5, true),
+            //    [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
+            //    [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.1f, 15, 5),
+            //    [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.115f, 2, default, 7, true),
+            //    [AnimationType.Ability2] = new Ability(AnimationType.Ability2, HashashinAbility2, !CanBeCanceled, 0.1f, 2, default, 5, true),
+            //    [AnimationType.Ability3] = new Ability(AnimationType.Ability3, HashashinAbility3, !CanBeCanceled, 0.065f, 3, default, 8, false),
+            //    [AnimationType.UltimateTransform] = new Ability(AnimationType.UltimateTransform, HashashinUltimateTransformation, !CanBeCanceled, 0.1f, 60, 0, 5, false),
+            //    [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand, HashashinUltimateStand, CanBeCanceled, 0.1f),
+            //    [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun, HashashinUltimateRun, CanBeCanceled, 0.1f),
+            //    [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, HashashinUltimateAbility1, !CanBeCanceled, 0.08f, 3, default, 8, true),
+            //    [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, HashashinUltimateAbility2, !CanBeCanceled, 0.08f, 3, default, 8, true),
+            //    [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, HashashinUltimateAbility3, !CanBeCanceled, 0.08f, 3, default, 8, true),
+            //    [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 0, default, 8, true),
+            //    [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, HashashinUltimateDodge, !CanBeCanceled, 0.1f, 15, 5),
+            //    [AnimationType.UndoTransform] = new Ability(AnimationType.UndoTransform, HashashinUndoTransform, !CanBeCanceled, 0.1f, 5, 0, 0, false),
+            //    [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
+            //};
 
-            EntityActions.Add(EntityName.Hashashin, HashashinAbilites);
+            //EntityActions.Add(EntityName.Hashashin, HashashinAbilites);
+            EntityAnimations.Add(EntityName.Hashashin, Hashashin);
+            EntityAnimationBehaviours.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
             CharacterPortraits.Add(EntityName.Hashashin, HashashinPortraits);
             #endregion
@@ -306,6 +357,7 @@ namespace FightingGame
             #region Skeleton
             EntitySpriteSheets.Add(EntityName.Skeleton, content.Load<Texture2D>("Skeleton"));
             EntityTextures.Add(EntityName.Skeleton, new Rectangle(17, 70, 15, 21));
+            Dictionary<AnimationType, Animation> Skeleton = new Dictionary<AnimationType, Animation>();
 
             List<FrameHelper> SkeletonRun = new List<FrameHelper>();
             SkeletonRun.Add(new FrameHelper(new Rectangle(5, 145, 36, 32)));
@@ -318,6 +370,7 @@ namespace FightingGame
             SkeletonRun.Add(new FrameHelper(new Rectangle(452, 144, 38, 33)));
             SkeletonRun.Add(new FrameHelper(new Rectangle(516, 144, 38, 33)));
             SkeletonRun.Add(new FrameHelper(new Rectangle(580, 144, 38, 33)));
+            Skeleton.Add(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.Skeleton], 0.1f, SkeletonRun));
 
             List<FrameHelper> SkeletonBasicAttack = new List<FrameHelper>();
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(8, 16, 34, 32)));
@@ -333,6 +386,7 @@ namespace FightingGame
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(646, 12, 36, 36)));
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(707, 16, 39, 32)));
             SkeletonBasicAttack.Add(new FrameHelper(new Rectangle(776, 16, 34, 32)));
+            Skeleton.Add(AnimationType.BasicAttack, new Animation(EntitySpriteSheets[EntityName.Skeleton], 0.1f, SkeletonBasicAttack));
 
             List<FrameHelper> SkeletonDeath = new List<FrameHelper>();
             SkeletonDeath.Add(new FrameHelper(new Rectangle(137, 81, 31, 32)));
@@ -343,30 +397,199 @@ namespace FightingGame
             SkeletonDeath.Add(new FrameHelper(new Rectangle(521, 79, 42, 34)));
             SkeletonDeath.Add(new FrameHelper(new Rectangle(585, 79, 42, 34)));
             SkeletonDeath.Add(new FrameHelper(new Rectangle(649, 80, 42, 33)));
-
-            List<FrameHelper> SkeletonStand = new List<FrameHelper>();
-            SkeletonStand.Add(new FrameHelper(new Rectangle(9, 208, 33, 33)));
+            Skeleton.Add(AnimationType.Death, new Animation(EntitySpriteSheets[EntityName.Skeleton], 0.1f, SkeletonDeath));
 
             List<FrameHelper> SkeletonSpawn = new List<FrameHelper>();
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(9, 271, 32, 34)));
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(73, 272, 32, 33)));
             SkeletonSpawn.Add(new FrameHelper(new Rectangle(137, 272, 32, 33)));
+            Skeleton.Add(AnimationType.Spawn, new Animation(EntitySpriteSheets[EntityName.Skeleton], 0.1f, SkeletonSpawn));
 
-            Dictionary<AnimationType, EntityAction> SkeletonAbilites = new Dictionary<AnimationType, EntityAction>()
+            List<FrameHelper> SkeletonStand = new List<FrameHelper>();
+            SkeletonStand.Add(new FrameHelper(new Rectangle(9, 208, 33, 33)));
+            SkeletonStand.Add(new FrameHelper(new Rectangle(9, 208, 33, 33)));
+            Skeleton.Add(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.Skeleton], 0.1f, SkeletonStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> SkeletonAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.Run] = new Run(AnimationType.Run, SkeletonRun, CanBeCanceled, 0.1f),
-                [AnimationType.Death] = new Death(AnimationType.Death, SkeletonDeath, !CanBeCanceled, 0.18f),
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, SkeletonBasicAttack, !CanBeCanceled, 0.1f, 0, 60, 5, false),
-                [AnimationType.Spawn] = new Spawn(AnimationType.Spawn, SkeletonSpawn, !CanBeCanceled, 0.12f),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, SkeletonStand, CanBeCanceled, 0.1f),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 50, 0, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+            EntityAnimations.Add(EntityName.Skeleton, Skeleton);
+            EntityAnimationBehaviours.Add(EntityName.Skeleton, SkeletonAbilites);
+            #endregion
+
+            #region Necromancer
+            var NecromancerSpritesheet = content.Load<Texture2D>("NecromancerFullSpritesheet");
+            EntitySpriteSheets.Add(EntityName.Necromancer, NecromancerSpritesheet);
+            EntityTextures.Add(EntityName.Necromancer, new Rectangle(38, 17, 28, 49));
+
+            Dictionary<AnimationType, Animation> Necromancer = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> NecromancerBasicAttack = new List<FrameHelper>();
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(54, 186, 28, 49)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(182, 185, 28, 50)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(310, 181, 28, 54)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(438, 174, 29, 61)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1078, 178, 29, 57)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1205, 188, 49, 47), new Rectangle(1232, 194, 33, 42), new Rectangle(1205, 188, 30, 47), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1335, 187, 47, 48), new Rectangle(1361, 192, 33, 45), new Rectangle(1335, 187, 28, 48), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1462, 186, 51, 49), new Rectangle(1489, 187, 36, 49), new Rectangle(1462, 186, 29, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1590, 186, 58, 49), new Rectangle(1614, 186, 42, 49), new Rectangle(1590, 186, 29, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1718, 186, 61, 49), new Rectangle(1741, 182, 46, 53), new Rectangle(1718, 186, 30, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1846, 185, 63, 50), new Rectangle(1867, 174, 52, 61), new Rectangle(1846, 186, 31, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(1974, 182, 65, 53), new Rectangle(1994, 172, 54, 63), new Rectangle(1974, 186, 31, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2102, 180, 66, 55), new Rectangle(2129, 174, 49, 62), new Rectangle(2102, 186, 28, 49), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2203, 179, 65, 56), new Rectangle(2262, 169, 37, 56), new Rectangle(2230, 186, 29, 48), canHit));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2358, 178, 46, 57), new Rectangle(2358, 186, 29, 49)));
+            NecromancerBasicAttack.Add(new FrameHelper(new Rectangle(2486, 186, 29, 49)));
+            Necromancer.Add(AnimationType.BasicAttack, new Animation(NecromancerSpritesheet, 0.1f, NecromancerBasicAttack));
+
+            List<FrameHelper> NecromancerSummon = new List<FrameHelper>();
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(273, 286, 30, 49)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(401, 284, 30, 51)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(529, 278, 30, 57)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(657, 274, 30, 61)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(785, 274, 30, 61)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1297, 276, 30, 59)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1425, 288, 30, 47)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1553, 287, 30, 48)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1681, 286, 30, 49)));
+            NecromancerSummon.Add(new FrameHelper(new Rectangle(1809, 286, 30, 49)));
+            Necromancer.Add(AnimationType.Ability1, new Animation(NecromancerSpritesheet, 0.1f, NecromancerSummon));
+
+            List<FrameHelper> NecromancerRun = new List<FrameHelper>();
+            NecromancerRun.Add(new FrameHelper(new Rectangle(32, 96, 32, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(128, 96, 31, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(225, 96, 28, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(322, 96, 22, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(420, 96, 18, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(516, 96, 18, 49)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(613, 95, 17, 50)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(708, 94, 20, 51)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(803, 94, 26, 51)));
+            NecromancerRun.Add(new FrameHelper(new Rectangle(897, 95, 30, 50)));
+            Necromancer.Add(AnimationType.Run, new Animation(NecromancerSpritesheet, 0.1f, NecromancerRun));
+
+            List<FrameHelper> NecromancerStand = new List<FrameHelper>();
+            NecromancerStand.Add(new FrameHelper(new Rectangle(38, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(134, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(230, 17, 28, 49)));
+            NecromancerStand.Add(new FrameHelper(new Rectangle(326, 17, 28, 49)));
+            Necromancer.Add(AnimationType.Stand, new Animation(NecromancerSpritesheet, 0.1f, NecromancerStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> NecromancerBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 60, 0, false),
+                [AnimationType.Ability1] = new NecromancerSummon(AnimationType.Ability1, 0, 600, 20, false),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
-            EntityActions.Add(EntityName.Skeleton, SkeletonAbilites);
+            EntityAnimationBehaviours.Add(EntityName.Necromancer, NecromancerBehaviours);
+            EntityAnimations.Add(EntityName.Necromancer, Necromancer);
+            #endregion
+
+            #region BringerOfDeath
+            var BringerOfDeathTexture = content.Load<Texture2D>("Bringer-of-Death-SpritSheet");
+            EntitySpriteSheets.Add(EntityName.BringerOfDeath, BringerOfDeathTexture);
+            EntityTextures.Add(EntityName.BringerOfDeath, new Rectangle(86, 38, 40, 54));
+
+            Dictionary<AnimationType, Animation> BringerOfDeath = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> BringerOfDeathRun = new List<FrameHelper>();
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(215, 133, 56, 52)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(354, 131, 56, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(495, 130, 54, 55)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(637, 131, 48, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(778, 133, 46, 52)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(920, 131, 45, 54)));
+            BringerOfDeathRun.Add(new FrameHelper(new Rectangle(1056, 130, 50, 55)));
+            BringerOfDeath.Add(AnimationType.Run, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathRun));
+
+            List<FrameHelper> BringerOfDeathDeath = new List<FrameHelper>();
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(785, 318, 40, 53)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(922, 317, 45, 54)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(1061, 317, 48, 54)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(81, 408, 49, 56)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(222, 406, 51, 58)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(365, 404, 50, 60)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(506, 400, 48, 59)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(645, 399, 48, 52)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(788, 397, 40, 49)));
+            BringerOfDeathDeath.Add(new FrameHelper(new Rectangle(936, 397, 33, 40)));
+            BringerOfDeath.Add(AnimationType.Death, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathDeath));
+
+            List<FrameHelper> BringerOfDeathAttack = new List<FrameHelper>();
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(84, 224, 44, 54)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(218, 224, 60, 54)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(353, 209, 61, 69)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(495, 209, 62, 69)));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(565, 202, 133, 76), new Rectangle(565, 202, 133, 76), new Rectangle(617, 234, 62, 44), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(700, 195, 140, 83), new Rectangle(700, 195, 140, 83), new Rectangle(761, 235, 58, 43), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(984, 193, 126, 85), new Rectangle(984, 193, 126, 85), new Rectangle(1056, 231, 42, 47), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(6, 289, 112, 82), new Rectangle(6, 289, 112, 82), new Rectangle(77, 321, 41, 50), canHit));
+            BringerOfDeathAttack.Add(new FrameHelper(new Rectangle(226, 318, 37, 53)));
+            BringerOfDeath.Add(AnimationType.BasicAttack, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAttack));
+
+            List<FrameHelper> BringerOfDeathAbility1 = new List<FrameHelper>();
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(1058, 412, 48, 52)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(78, 506, 48, 51)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(219, 507, 46, 50)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(357, 507, 48, 50)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(495, 508, 50, 49)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(634, 465, 51, 92)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(774, 465, 51, 92)));
+            BringerOfDeathAbility1.Add(new FrameHelper(new Rectangle(913, 466, 52, 91)));
+            BringerOfDeath.Add(AnimationType.Ability1, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathAbility1));
+
+            List<FrameHelper> BringerOfDeathPortalSummon = new List<FrameHelper>();
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(471, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(192, 593, 32, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(471, 595, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(614, 593, 29, 23), new Rectangle(614, 593, 29, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(752, 593, 31, 36), new Rectangle(752, 593, 31, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 593, 31, 53), new Rectangle(892, 593, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(1032, 593, 31, 57), new Rectangle(1032, 593, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(51, 686, 33, 57), new Rectangle(51, 686, 33, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(190, 686, 34, 57), new Rectangle(190, 686, 34, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(331, 688, 35, 55), new Rectangle(331, 688, 35, 16)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(470, 688, 36, 55), new Rectangle(470, 688, 36, 17)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(609, 686, 34, 57), new Rectangle(609, 686, 34, 20)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(754, 686, 29, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 686, 31, 19)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(754, 686, 29, 18)));
+            BringerOfDeathPortalSummon.Add(new FrameHelper(new Rectangle(892, 686, 31, 19)));
+
+            List<FrameHelper> BringerOfDeathStand = new List<FrameHelper>();
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(86, 38, 40, 54)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(226, 37, 40, 55)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(365, 36, 41, 56)));
+            BringerOfDeathStand.Add(new FrameHelper(new Rectangle(504, 36, 41, 56)));
+            BringerOfDeath.Add(AnimationType.Stand, new Animation(BringerOfDeathTexture, 0.1f, BringerOfDeathStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> BringerofDeathBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+            EntityAnimations.Add(EntityName.BringerOfDeath, BringerOfDeath);
+            EntityAnimationBehaviours.Add(EntityName.BringerOfDeath, BringerofDeathBehaviours);
+
             #endregion
 
             #region Ghost Warrior
             EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
             EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));
+            Dictionary<AnimationType, Animation> GhostWarrior = new Dictionary<AnimationType, Animation>();
 
             List<FrameHelper> GhostWarriorStand = new List<FrameHelper>();
             GhostWarriorStand.Add(new FrameHelper(new Rectangle(49, 130, 77, 56)));
@@ -377,6 +600,7 @@ namespace FightingGame
             GhostWarriorStand.Add(new FrameHelper(new Rectangle(699, 129, 77, 57)));
             GhostWarriorStand.Add(new FrameHelper(new Rectangle(829, 127, 77, 59)));
             GhostWarriorStand.Add(new FrameHelper(new Rectangle(959, 129, 77, 57)));
+            GhostWarrior.Add(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorStand));
 
             List<FrameHelper> GhostWarriorDeath = new List<FrameHelper>();
             GhostWarriorDeath.Add(new FrameHelper(new Rectangle(47, 339, 64, 58)));
@@ -386,6 +610,8 @@ namespace FightingGame
             GhostWarriorDeath.Add(new FrameHelper(new Rectangle(567, 339, 63, 58)));
             GhostWarriorDeath.Add(new FrameHelper(new Rectangle(697, 333, 63, 64)));
             GhostWarriorDeath.Add(new FrameHelper(new Rectangle(0, 0, 0, 0)));
+            GhostWarrior.Add(AnimationType.Death, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorDeath));
+
 
             List<FrameHelper> GhostWarriorBasicAttack = new List<FrameHelper>();
             GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(49, 39, 77, 56), new Rectangle(49, 39, 36, 56)));
@@ -397,6 +623,8 @@ namespace FightingGame
             GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(811, 3, 96, 92), new Rectangle(833, 3, 74, 92), new Rectangle(829, 58, 29, 36), canHit));
             GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1088, 55, 72, 40), new Rectangle(1105, 80, 55, 15), new Rectangle(1088, 55, 35, 40), canHit));
             GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1219, 52, 78, 43)));
+            GhostWarrior.Add(AnimationType.BasicAttack, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorBasicAttack));
+
 
             List<FrameHelper> GhostWarriorRun = new List<FrameHelper>();
             GhostWarriorRun.Add(new FrameHelper(new Rectangle(43, 232, 70, 58), new Rectangle(43, 232, 35, 58)));
@@ -407,16 +635,20 @@ namespace FightingGame
             GhostWarriorRun.Add(new FrameHelper(new Rectangle(700, 229, 63, 61), new Rectangle(700, 229, 26, 61)));
             GhostWarriorRun.Add(new FrameHelper(new Rectangle(830, 233, 63, 57), new Rectangle(830, 233, 26, 57)));
             GhostWarriorRun.Add(new FrameHelper(new Rectangle(956, 231, 67, 59), new Rectangle(956, 231, 31, 59)));
+            GhostWarrior.Add(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorRun));
 
-            Dictionary<AnimationType, EntityAction> GhostWarriorActions = new Dictionary<AnimationType, EntityAction>()
+
+            Dictionary<AnimationType, AnimationBehaviour> GhostWarriorAnimations = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, GhostWarriorBasicAttack, !CanBeCanceled, 0.1f, 0, 90, 20, false),
-                [AnimationType.Death] = new Death(AnimationType.Death, GhostWarriorDeath, !CanBeCanceled, 0.16f),
-                [AnimationType.Run] = new Run(AnimationType.Run, GhostWarriorRun, CanBeCanceled, 0.2f),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarriorStand, CanBeCanceled, 0.1f),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 12, 100, 0, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
-            EntityActions.Add(EntityName.GhostWarrior, GhostWarriorActions);
+            EntityAnimations.Add(EntityName.GhostWarrior, GhostWarrior);
+            EntityAnimationBehaviours.Add(EntityName.GhostWarrior, GhostWarriorAnimations);
+            //EntityActions.Add(EntityName.GhostWarrior, GhostWarriorActions);
             #endregion
 
             #region Ghost Warrior 2
@@ -478,18 +710,181 @@ namespace FightingGame
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(548, 280, 40, 84)));
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(708, 279, 43, 83)));
 
-            Dictionary<AnimationType, EntityAction> GhostWarrior2Actions = new Dictionary<AnimationType, EntityAction>()
-            {
-                [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, GhostWarrior2BasicAttack, !CanBeCanceled, 0.1f, 0, 90, 20, false),
-                [AnimationType.Death] = new Death(AnimationType.Death, GhostWarrior2Death, !CanBeCanceled, 0.1f),
-                [AnimationType.Run] = new Run(AnimationType.Run, GhostWarrior2Run, CanBeCanceled, 0.2f),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarrior2Stand, CanBeCanceled, 0.1f),
-            };
+            //Dictionary<AnimationType, EntityAction> GhostWarrior2Actions = new Dictionary<AnimationType, EntityAction>()
+            //{
+            //    [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, GhostWarrior2BasicAttack, !CanBeCanceled, 0.1f, 0, 90, 20, false),
+            //    [AnimationType.Death] = new Death(AnimationType.Death, GhostWarrior2Death, !CanBeCanceled, 0.1f),
+            //    [AnimationType.Run] = new Run(AnimationType.Run, GhostWarrior2Run, CanBeCanceled, 0.2f),
+            //    [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarrior2Stand, CanBeCanceled, 0.1f),
+            //};
 
-            EntityActions.Add(EntityName.GhostWarrior2, GhostWarrior2Actions);
+            //EntityActions.Add(EntityName.GhostWarrior2, GhostWarrior2Actions);
             #endregion
 
+            #region RangedCultist
+            Texture2D rangedCultistSprite = content.Load<Texture2D>("Cultist_Sheet");
+            EntitySpriteSheets.Add(EntityName.RangedCultist, rangedCultistSprite);
+            EntityTextures.Add(EntityName.RangedCultist, new Rectangle(59, 47, 23, 37));
 
+            Dictionary<AnimationType, Animation> RangedCultist = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> RangeCultistRun = new List<FrameHelper>();
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(59, 47, 23, 37)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(104, 48, 23, 36)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(151, 48, 21, 36)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(194, 47, 23, 37)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(14, 89, 25, 37)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(59, 90, 24, 36)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(104, 90, 24, 36)));
+            RangeCultistRun.Add(new FrameHelper(new Rectangle(149, 89, 23, 37)));
+            RangedCultist.Add(AnimationType.Run, new Animation(rangedCultistSprite, 0.1f, RangeCultistRun));
+
+            List<FrameHelper> RangedCultistAttack = new List<FrameHelper>();
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(191, 90, 27, 36)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(14, 131, 25, 37)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(59, 131, 25, 37)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(96, 131, 34, 37)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(137, 132, 37, 36)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(182, 133, 38, 35)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(0, 175, 40, 35)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(55, 173, 29, 37)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(103, 172, 26, 38)));
+            RangedCultistAttack.Add(new FrameHelper(new Rectangle(145, 173, 29, 37)));
+            RangedCultist.Add(AnimationType.BasicAttack, new Animation(rangedCultistSprite, 0.1f, RangedCultistAttack));
+
+            List<FrameHelper> CultistFireball = new List<FrameHelper>();
+            CultistFireball.Add(new FrameHelper(new Rectangle(198, 184, 19, 10)));
+            CultistFireball.Add(new FrameHelper(new Rectangle(18, 225, 19, 11)));
+            CultistFireball.Add(new FrameHelper(new Rectangle(63, 225, 18, 11)));
+            CultistFireball.Add(new FrameHelper(new Rectangle(108, 226, 18, 10)));
+
+            List<FrameHelper> CultistFireBallImpact = new List<FrameHelper>();
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(18, 263, 20, 15)));
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(62, 262, 19, 17)));
+            CultistFireBallImpact.Add(new FrameHelper(new Rectangle(112, 261, 14, 19)));
+
+            List<FrameHelper> RangedCultistDeath = new List<FrameHelper>();
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(13, 3240, 24, 38)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(58, 341, 23, 37)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(103, 343, 22, 35)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(142, 350, 37, 28)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(183, 360, 41, 18)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(1, 401, 43, 19)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(46, 414, 42, 6)));
+            RangedCultistDeath.Add(new FrameHelper(new Rectangle(91, 415, 43, 5)));
+            RangedCultist.Add(AnimationType.Death, new Animation(rangedCultistSprite, 0.1f, RangedCultistDeath));
+
+            List<FrameHelper> RangedCultistStand = new List<FrameHelper>();
+            RangedCultistStand.Add(new FrameHelper(new Rectangle(8, 6, 31, 36)));
+            RangedCultistStand.Add(new FrameHelper(new Rectangle(54, 5, 30, 37)));
+            RangedCultistStand.Add(new FrameHelper(new Rectangle(99, 5, 31, 37)));
+            RangedCultistStand.Add(new FrameHelper(new Rectangle(144, 6, 31, 36)));
+            RangedCultistStand.Add(new FrameHelper(new Rectangle(188, 7, 31, 35)));
+            RangedCultist.Add(AnimationType.Stand, new Animation(rangedCultistSprite, 0.1f, RangedCultistStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> RangedCultistBehaviour = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+
+            EntityAnimations.Add(EntityName.RangedCultist, RangedCultist);
+            EntityAnimationBehaviours.Add(EntityName.RangedCultist, RangedCultistBehaviour);
+            #endregion
+
+            #region AssassinCultist
+            var AssassinCultistSpriteSheet = content.Load<Texture2D>("Cultist_Assassin_Sheet");
+            EntitySpriteSheets.Add(EntityName.AssassinCultist, AssassinCultistSpriteSheet);
+            EntityTextures.Add(EntityName.AssassinCultist, new Rectangle(16, 8, 31, 30));
+
+            Dictionary<AnimationType, Animation> AssassinCultist = new Dictionary<AnimationType, Animation>();
+
+            List<FrameHelper> AssassinCultistRun = new List<FrameHelper>();
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(442, 12, 26, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(497, 10, 25, 28)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(12, 47, 32, 24)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(71, 50, 23, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(125, 50, 26, 26)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(180, 48, 25, 28)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(225, 47, 32, 24)));
+            AssassinCultistRun.Add(new FrameHelper(new Rectangle(283, 50, 24, 26)));
+            AssassinCultist.Add(AnimationType.Run, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistRun));
+
+            List<FrameHelper> AssassinCultistBasicAttack = new List<FrameHelper>();
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(436, 48, 30, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(488, 49, 30, 27)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(15, 86, 29, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(67, 86, 33, 28)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(120, 83, 32, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(176, 82, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(228, 80, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(280, 78, 30, 30)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(318, 81, 45, 33), new Rectangle(310, 79, 52, 37), new Rectangle(327, 85, 35, 29), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(318, 81, 45, 33), new Rectangle(310, 79, 52, 37), new Rectangle(327, 85, 35, 29), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(371, 83, 45, 30), new Rectangle(371, 83, 45, 30), new Rectangle(381, 87, 34, 27), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(371, 83, 45, 30), new Rectangle(371, 83, 45, 30), new Rectangle(381, 87, 34, 27), canHit));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(433, 85, 36, 29)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(486, 85, 36, 29)));
+            AssassinCultistBasicAttack.Add(new FrameHelper(new Rectangle(15, 125, 30, 27)));
+            AssassinCultist.Add(AnimationType.BasicAttack, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistBasicAttack));
+
+            List<FrameHelper> AssassinCultistAmbushAttack = new List<FrameHelper>();
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(393, 198, 25, 30)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(447, 196, 22, 33)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(501, 193, 19, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(25, 234, 16, 29)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(76, 242, 18, 19)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(128, 238, 19, 23)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(181, 239, 15, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(233, 238, 21, 20)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(343, 236, 12, 19)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(393, 231, 19, 27)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(443, 228, 26, 35)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(492, 229, 31, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(14, 267, 33, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(67, 267, 33, 34)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(123, 267, 21, 33), new Rectangle(116, 267, 35, 40), new Rectangle(123, 267, 21, 33), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(169, 267, 28, 37), new Rectangle(161, 267, 35, 43), new Rectangle(169, 267, 28, 37), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(225, 281, 31, 23), new Rectangle(217, 284, 31, 23), new Rectangle(225, 281, 31, 23), canHit));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(279, 286, 31, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(332, 286, 31, 18)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(385, 281, 31, 23)));
+            AssassinCultistAmbushAttack.Add(new FrameHelper(new Rectangle(440, 276, 31, 28)));
+            AssassinCultist.Add(AnimationType.Ability1, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistAmbushAttack));
+
+            List<FrameHelper> AssassinCultistDeath = new List<FrameHelper>();
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(286, 121, 26, 31)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(339, 121, 26, 31)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(390, 123, 24, 29)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(443, 125, 21, 27)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(495, 128, 25, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(18, 167, 24, 23)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(71, 166, 26, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(125, 166, 26, 24)));
+            AssassinCultistDeath.Add(new FrameHelper(new Rectangle(178, 165, 26, 25)));
+            AssassinCultist.Add(AnimationType.Death, new Animation(AssassinCultistSpriteSheet, 0.17f, AssassinCultistDeath));
+
+            List<FrameHelper> AssassinCultistStand = new List<FrameHelper>();
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(16, 8, 31, 30)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(70, 7, 30, 31)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(124, 6, 30, 32)));
+            AssassinCultistStand.Add(new FrameHelper(new Rectangle(178, 6, 30, 32)));
+            AssassinCultist.Add(AnimationType.Stand, new Animation(AssassinCultistSpriteSheet, 0.1f, AssassinCultistStand));
+
+            Dictionary<AnimationType, AnimationBehaviour> AssassinCultistBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 20, 90, 0, true),
+                [AnimationType.Ability1] = new AssassinCultistAmbush(AnimationType.Ability1, 20, 200, 10, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
+
+            EntityAnimationBehaviours.Add(EntityName.AssassinCultist, AssassinCultistBehaviours);
+            EntityAnimations.Add(EntityName.AssassinCultist, AssassinCultist);
+            #endregion
         }
     }
 }
