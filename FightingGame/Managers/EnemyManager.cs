@@ -10,7 +10,7 @@ namespace FightingGame
         private Camera Camera;
         private DrawableObject Tilemap;
 
-        private int enemySpawnAmmountMax = 5;
+        private int enemySpawnAmmountMax = 3;
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
         private int bossSpawnRate = 40000;
@@ -28,11 +28,12 @@ namespace FightingGame
 
         #region Enemy Presets
         public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
-        Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
-        Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
-        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, false, 50, 0.5f, 1f, true, 0);
-        Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
+        //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
+        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 50, 0.8f, 1f, false, 0);
         Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 40, 0.5f, 1.2f, false, 0);
+        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, true, 50, 0.5f, 1f, true, 0);
+        Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
+        Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);
         //Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior2], 150, 1f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior2]);
         #endregion
@@ -100,7 +101,7 @@ namespace FightingGame
         }
         private void SpawnEnemies()
         {
-            int RandomAmmountOfEnemies = 1/*random.Next(0, enemySpawnAmmountMax)*/;
+            int RandomAmmountOfEnemies = random.Next(1, enemySpawnAmmountMax);
 
             for (int i = 0; i < RandomAmmountOfEnemies; i++)
             {
@@ -114,7 +115,7 @@ namespace FightingGame
                 }
                 else
                 {
-                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count);
+                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count); 
                     var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
                     newEnemy.SetBounds(Tilemap.HitBox);
                     newEnemy.Spawn(GetSpawnLocation());
@@ -170,7 +171,7 @@ namespace FightingGame
         {
             #region Wave 1
             List<Enemy> wave1Bosses = new List<Enemy>();
-            wave1Bosses.Add(GhostWarriorPreset);
+            wave1Bosses.Add(BringerOfDeathPreset);
             //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
@@ -179,6 +180,7 @@ namespace FightingGame
             //wave1Enemies.Add(BringerOfDeathPreset);
             //wave1Enemies.Add(AssassinCultistPreset);
             wave1Enemies.Add(NecromancerPreset);
+            wave1Enemies.Add(GhostWarrior2Preset);
 
             EnemyWaves.Add(0, wave1Enemies);
             BossWaves.Add(0, wave1Bosses);

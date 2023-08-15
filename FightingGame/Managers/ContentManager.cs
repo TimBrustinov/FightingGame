@@ -16,7 +16,6 @@ namespace FightingGame
         public Texture2D Pixel;
         public Texture2D Shadow;
         public SpriteFont Font;
-        public Texture2D Heart;
 
         public Dictionary<EntityName, Rectangle> EntityTextures;
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets;
@@ -473,6 +472,33 @@ namespace FightingGame
             NecromancerRun.Add(new FrameHelper(new Rectangle(897, 95, 30, 50)));
             Necromancer.Add(AnimationType.Run, new Animation(NecromancerSpritesheet, 0.1f, NecromancerRun));
 
+            List<FrameHelper> NecromancerDeath = new List<FrameHelper>();
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(310, 382, 20, 49)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(406, 380, 20, 51)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(502, 379, 20, 52)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(598, 376, 20, 55)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(694, 375, 22, 56)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(790, 374, 22, 57)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(886, 373, 21, 58)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(981, 376, 25, 55)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1076, 379, 28, 52)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1170, 388, 30, 43)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1265, 387, 29, 44)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1361, 390, 30, 41)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1457, 395, 25, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1553, 395, 25, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1650, 395, 24, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1745, 395, 25, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1846, 395, 20, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(499, 477, 20, 36)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(595, 478, 18, 35)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(691, 480, 16, 33)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(787, 484, 20, 29)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(883, 488, 23, 25)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(979, 507, 19, 6)));
+            NecromancerDeath.Add(new FrameHelper(new Rectangle(1075, 505, 19, 8)));
+            Necromancer.Add(AnimationType.Death, new Animation(NecromancerSpritesheet, 0.1f, NecromancerDeath));
+
             List<FrameHelper> NecromancerStand = new List<FrameHelper>();
             NecromancerStand.Add(new FrameHelper(new Rectangle(38, 17, 28, 49)));
             NecromancerStand.Add(new FrameHelper(new Rectangle(134, 17, 28, 49)));
@@ -484,6 +510,7 @@ namespace FightingGame
             {
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 60, 0, false),
                 [AnimationType.Ability1] = new NecromancerSummon(AnimationType.Ability1, 0, 600, 20, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -587,73 +614,76 @@ namespace FightingGame
             #endregion
 
             #region Ghost Warrior
-            EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
-            EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));
-            Dictionary<AnimationType, Animation> GhostWarrior = new Dictionary<AnimationType, Animation>();
+            //EntitySpriteSheets.Add(EntityName.GhostWarrior, content.Load<Texture2D>("GhostWarrior"));
+            //EntityTextures.Add(EntityName.GhostWarrior, new Rectangle(49, 130, 77, 56));
+            //Dictionary<AnimationType, Animation> GhostWarrior = new Dictionary<AnimationType, Animation>();
 
-            List<FrameHelper> GhostWarriorStand = new List<FrameHelper>();
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(49, 130, 77, 56)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(179, 129, 77, 57)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(309, 127, 77, 59)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(439, 126, 77, 60)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(569, 129, 77, 57)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(699, 129, 77, 57)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(829, 127, 77, 59)));
-            GhostWarriorStand.Add(new FrameHelper(new Rectangle(959, 129, 77, 57)));
-            GhostWarrior.Add(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorStand));
+            //List<FrameHelper> GhostWarriorStand = new List<FrameHelper>();
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(49, 130, 77, 56)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(179, 129, 77, 57)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(309, 127, 77, 59)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(439, 126, 77, 60)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(569, 129, 77, 57)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(699, 129, 77, 57)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(829, 127, 77, 59)));
+            //GhostWarriorStand.Add(new FrameHelper(new Rectangle(959, 129, 77, 57)));
+            //GhostWarrior.Add(AnimationType.Stand, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorStand));
 
-            List<FrameHelper> GhostWarriorDeath = new List<FrameHelper>();
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(47, 339, 64, 58)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(177, 340, 66, 57)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(307, 341, 63, 56)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(437, 337, 63, 60)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(567, 339, 63, 58)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(697, 333, 63, 64)));
-            GhostWarriorDeath.Add(new FrameHelper(new Rectangle(0, 0, 0, 0)));
-            GhostWarrior.Add(AnimationType.Death, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorDeath));
-
-
-            List<FrameHelper> GhostWarriorBasicAttack = new List<FrameHelper>();
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(49, 39, 77, 56), new Rectangle(49, 39, 36, 56)));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(179, 40, 74, 55), new Rectangle(179, 40, 32, 55)));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(309, 38, 79, 57), new Rectangle(339, 45, 49, 36), new Rectangle(309, 38, 32, 57), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(416, 7, 78, 88), new Rectangle(412, 3, 57, 85), new Rectangle(439, 44, 30, 51), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(546, 14, 54, 81), new Rectangle(546, 14, 38, 75), new Rectangle(569, 46, 31, 49), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(675, 35, 56, 60), new Rectangle(675, 46, 37, 45), new Rectangle(699, 48, 32, 47), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(811, 3, 96, 92), new Rectangle(833, 3, 74, 92), new Rectangle(829, 58, 29, 36), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1088, 55, 72, 40), new Rectangle(1105, 80, 55, 15), new Rectangle(1088, 55, 35, 40), canHit));
-            GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1219, 52, 78, 43)));
-            GhostWarrior.Add(AnimationType.BasicAttack, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorBasicAttack));
+            //List<FrameHelper> GhostWarriorDeath = new List<FrameHelper>();
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(47, 339, 64, 58)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(177, 340, 66, 57)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(307, 341, 63, 56)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(437, 337, 63, 60)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(567, 339, 63, 58)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(697, 333, 63, 64)));
+            //GhostWarriorDeath.Add(new FrameHelper(new Rectangle(0, 0, 0, 0)));
+            //GhostWarrior.Add(AnimationType.Death, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorDeath));
 
 
-            List<FrameHelper> GhostWarriorRun = new List<FrameHelper>();
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(43, 232, 70, 58), new Rectangle(43, 232, 35, 58)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(176, 228, 67, 62), new Rectangle(176, 228, 30, 62)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(307, 227, 66, 63), new Rectangle(307, 227, 29, 63)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(437, 231, 66, 59), new Rectangle(437, 231, 30, 59)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(568, 233, 65, 57), new Rectangle(568, 233, 30, 57)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(700, 229, 63, 61), new Rectangle(700, 229, 26, 61)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(830, 233, 63, 57), new Rectangle(830, 233, 26, 57)));
-            GhostWarriorRun.Add(new FrameHelper(new Rectangle(956, 231, 67, 59), new Rectangle(956, 231, 31, 59)));
-            GhostWarrior.Add(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorRun));
+            //List<FrameHelper> GhostWarriorBasicAttack = new List<FrameHelper>();
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(49, 39, 77, 56), new Rectangle(49, 39, 36, 56)));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(179, 40, 74, 55), new Rectangle(179, 40, 32, 55)));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(309, 38, 79, 57), new Rectangle(339, 45, 49, 36), new Rectangle(309, 38, 32, 57), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(416, 7, 78, 88), new Rectangle(412, 3, 57, 85), new Rectangle(439, 44, 30, 51), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(546, 14, 54, 81), new Rectangle(546, 14, 38, 75), new Rectangle(569, 46, 31, 49), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(675, 35, 56, 60), new Rectangle(675, 46, 37, 45), new Rectangle(699, 48, 32, 47), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(811, 3, 96, 92), new Rectangle(833, 3, 74, 92), new Rectangle(829, 58, 29, 36), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1088, 55, 72, 40), new Rectangle(1105, 80, 55, 15), new Rectangle(1088, 55, 35, 40), canHit));
+            //GhostWarriorBasicAttack.Add(new FrameHelper(new Rectangle(1219, 52, 78, 43)));
+            //GhostWarrior.Add(AnimationType.BasicAttack, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorBasicAttack));
 
 
-            Dictionary<AnimationType, AnimationBehaviour> GhostWarriorAnimations = new Dictionary<AnimationType, AnimationBehaviour>()
-            {
-                [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 12, 100, 0, false),
-                [AnimationType.Death] = new Death(AnimationType.Death),
-                [AnimationType.Stand] = new Stand(AnimationType.Stand),
-            };
+            //List<FrameHelper> GhostWarriorRun = new List<FrameHelper>();
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(43, 232, 70, 58), new Rectangle(43, 232, 35, 58)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(176, 228, 67, 62), new Rectangle(176, 228, 30, 62)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(307, 227, 66, 63), new Rectangle(307, 227, 29, 63)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(437, 231, 66, 59), new Rectangle(437, 231, 30, 59)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(568, 233, 65, 57), new Rectangle(568, 233, 30, 57)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(700, 229, 63, 61), new Rectangle(700, 229, 26, 61)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(830, 233, 63, 57), new Rectangle(830, 233, 26, 57)));
+            //GhostWarriorRun.Add(new FrameHelper(new Rectangle(956, 231, 67, 59), new Rectangle(956, 231, 31, 59)));
+            //GhostWarrior.Add(AnimationType.Run, new Animation(EntitySpriteSheets[EntityName.GhostWarrior], 0.1f, GhostWarriorRun));
 
-            EntityAnimations.Add(EntityName.GhostWarrior, GhostWarrior);
-            EntityAnimationBehaviours.Add(EntityName.GhostWarrior, GhostWarriorAnimations);
-            //EntityActions.Add(EntityName.GhostWarrior, GhostWarriorActions);
+
+            //Dictionary<AnimationType, AnimationBehaviour> GhostWarriorAnimations = new Dictionary<AnimationType, AnimationBehaviour>()
+            //{
+            //    [AnimationType.Run] = new Run(AnimationType.Run),
+            //    [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 12, 100, 0, false),
+            //    [AnimationType.Death] = new Death(AnimationType.Death),
+            //    [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            //};
+
+            //EntityAnimations.Add(EntityName.GhostWarrior, GhostWarrior);
+            //EntityAnimationBehaviours.Add(EntityName.GhostWarrior, GhostWarriorAnimations);
+            ////EntityActions.Add(EntityName.GhostWarrior, GhostWarriorActions);
             #endregion
 
             #region Ghost Warrior 2
-            EntitySpriteSheets.Add(EntityName.GhostWarrior2, content.Load<Texture2D>("GhostWarrior2"));
+            var GhostWarrior2Spritesheet = content.Load<Texture2D>("GhostWarrior2");
+            EntitySpriteSheets.Add(EntityName.GhostWarrior2, GhostWarrior2Spritesheet);
             EntityTextures.Add(EntityName.GhostWarrior2, new Rectangle(49, 130, 77, 56));
+
+            Dictionary<AnimationType, Animation> GhostWarrior2 = new Dictionary<AnimationType, Animation>();
 
             List<FrameHelper> GhostWarrior2Run = new List<FrameHelper>();
             GhostWarrior2Run.Add(new FrameHelper(new Rectangle(52, 477, 52, 53)));
@@ -664,6 +694,7 @@ namespace FightingGame
             GhostWarrior2Run.Add(new FrameHelper(new Rectangle(853, 481, 51, 54)));
             GhostWarrior2Run.Add(new FrameHelper(new Rectangle(1013, 475, 51, 58)));
             GhostWarrior2Run.Add(new FrameHelper(new Rectangle(1173, 474, 51, 56)));
+            GhostWarrior2.Add(AnimationType.Run, new Animation(GhostWarrior2Spritesheet, 0.1f, GhostWarrior2Run));
 
             List<FrameHelper> GhostWarrior2BasicAttack = new List<FrameHelper>();
             GhostWarrior2BasicAttack.Add(new FrameHelper(new Rectangle(45, 51, 44, 56)));
@@ -686,6 +717,7 @@ namespace FightingGame
             GhostWarrior2BasicAttack.Add(new FrameHelper(new Rectangle(1157, 160, 82, 69), new Rectangle(1157, 160, 82, 69), new Rectangle(1181, 175, 31, 54), canHit));
             GhostWarrior2BasicAttack.Add(new FrameHelper(new Rectangle(1322, 158, 65, 71), new Rectangle(1322, 158, 65, 71), new Rectangle(1336, 175, 36, 54), canHit));
             GhostWarrior2BasicAttack.Add(new FrameHelper(new Rectangle(1479, 176, 53, 55), new Rectangle(1499, 176, 33, 55)));
+            GhostWarrior2.Add(AnimationType.BasicAttack, new Animation(GhostWarrior2Spritesheet, 0.1f, GhostWarrior2BasicAttack));
 
             List<FrameHelper> GhostWarrior2Death = new List<FrameHelper>();
             GhostWarrior2Death.Add(new FrameHelper(new Rectangle(59, 676, 48, 69)));
@@ -702,6 +734,7 @@ namespace FightingGame
             GhostWarrior2Death.Add(new FrameHelper(new Rectangle(1796, 644, 82, 85)));
             GhostWarrior2Death.Add(new FrameHelper(new Rectangle(1956, 642, 82, 85)));
             GhostWarrior2Death.Add(new FrameHelper(new Rectangle(2118, 649, 79, 73)));
+            GhostWarrior2.Add(AnimationType.Death, new Animation(GhostWarrior2Spritesheet, 0.1f, GhostWarrior2Death));
 
             List<FrameHelper> GhostWarrior2Stand = new List<FrameHelper>();
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(68, 283, 35, 82)));
@@ -709,6 +742,7 @@ namespace FightingGame
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(388, 289, 38, 75)));
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(548, 280, 40, 84)));
             GhostWarrior2Stand.Add(new FrameHelper(new Rectangle(708, 279, 43, 83)));
+            GhostWarrior2.Add(AnimationType.Stand, new Animation(GhostWarrior2Spritesheet, 0.1f, GhostWarrior2Stand));
 
             //Dictionary<AnimationType, EntityAction> GhostWarrior2Actions = new Dictionary<AnimationType, EntityAction>()
             //{
@@ -717,7 +751,16 @@ namespace FightingGame
             //    [AnimationType.Run] = new Run(AnimationType.Run, GhostWarrior2Run, CanBeCanceled, 0.2f),
             //    [AnimationType.Stand] = new Stand(AnimationType.Stand, GhostWarrior2Stand, CanBeCanceled, 0.1f),
             //};
+            Dictionary<AnimationType, AnimationBehaviour> GhostWarrior2Behaviours = new Dictionary<AnimationType, AnimationBehaviour>()
+            {
+                [AnimationType.Run] = new Run(AnimationType.Run),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 70, 0, false),
+                [AnimationType.Death] = new Death(AnimationType.Death),
+                [AnimationType.Stand] = new Stand(AnimationType.Stand),
+            };
 
+            EntityAnimationBehaviours.Add(EntityName.GhostWarrior2, GhostWarrior2Behaviours);
+            EntityAnimations.Add(EntityName.GhostWarrior2, GhostWarrior2);
             //EntityActions.Add(EntityName.GhostWarrior2, GhostWarrior2Actions);
             #endregion
 
