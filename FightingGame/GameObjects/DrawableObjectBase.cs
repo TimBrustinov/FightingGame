@@ -8,17 +8,23 @@ namespace FightingGame
 {
     public abstract class DrawableObjectBase
     {
+       
+
         public Texture2D Texture { get; set; }
         public virtual Vector2 Position { get; set; }
         public Vector2 Dimentions { get; set; }
         public Color Color { get; set; }
 
-        public DrawableObjectBase(Texture2D texture, Vector2 position, Vector2 dimentions, Color color)
+        Action pressedAction;
+
+        public DrawableObjectBase(Texture2D texture, Vector2 position, Vector2 dimentions, Color color, Action pressAction)
         {
             Texture = texture;
             Position = position;
             Dimentions = dimentions;
             Color = color;
+            
+            this.pressedAction = pressAction;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

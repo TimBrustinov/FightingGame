@@ -111,4 +111,15 @@ namespace FightingGame
         CultistFireBall,
         BringerOfDeathPortalSummon,
     }
+
+    public enum PowerUpType
+    {
+        HealthRegen,
+        MaxHealthIncrease,
+        MaxStaminaIncrease,
+        DamageIncrease,
+        Bleed,
+        LifeSteal,
+        Overshield,
+    }
 }
