@@ -145,7 +145,7 @@ namespace FightingGame
             HashashinAbility3.Add(new FrameHelper(new Rectangle(7938, 1244, 42, 34)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8212, 1243, 39, 36)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8478, 1243, 39, 36)));
-            Hashashin.Add(AnimationType.Ability3, new Animation(HashashinTexture, 0.1f, HashashinAbility3));
+            Hashashin.Add(AnimationType.Ability3, new Animation(HashashinTexture, 0.06f, HashashinAbility3));
 
 
             //List<FrameHelper> HashashinAbility3 = new List<FrameHelper>();
