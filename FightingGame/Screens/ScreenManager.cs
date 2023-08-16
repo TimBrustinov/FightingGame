@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace FightingGame.Screens
+namespace FightingGame
 {
     public class ScreenManager<TEnum> where TEnum : Enum
     {

@@ -57,7 +57,7 @@ namespace FightingGame
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAttackDamage);
+                    TakeDamage(character.CurrentAttackDamage, Color.White);
                     HasBeenHit = true;
                 }
             }
@@ -110,7 +110,6 @@ namespace FightingGame
             {
                 IsSpawning = false;
                 return AnimationType.Spawn;
-
             }
             if (RemainingHealth <= 0)
             {

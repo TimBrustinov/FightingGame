@@ -11,9 +11,9 @@ namespace FightingGame.Screens
 {
     public class StartMenuScreen : Screen<Screenum>
     {
-        public override Screenum ScreenType { get; protected set; }
+        public override Screenum ScreenType { get; protected set; } = Screenum.StartMenuScreen;
         public override bool IsActive { get; set; }
-        public override bool CanBeDrawnUnder { get; set; }
+        public override bool CanBeDrawnUnder { get; set; } = false;
 
         public int buttonSpacing = 100;
 

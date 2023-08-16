@@ -16,8 +16,8 @@ namespace FightingGame
         public Camera Camera;
 
         private Matrix Transform;
-        public override Screenum ScreenType { get; protected set; }
-        public override bool IsActive { get; set; }
+        public override Screenum ScreenType { get; protected set; } = Screenum.GameScreen;
+        public override bool IsActive { get; set; } = true;
         public override bool CanBeDrawnUnder { get; set; }
 
         Character Hashashin;
@@ -110,7 +110,15 @@ namespace FightingGame
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             EnemyManager.Update(SelectedCharacter, Camera);
             ProjectileManager.UpdateEnemyProjectiles();
-            return Screenum.GameScreen;
+            DamageNumberManager.Instance.Update();
+            if (keysPressed.Contains(Keys.O))
+            {
+                return Screenum.CardSelectionScreen;
+            }
+            else
+            {
+                return Screenum.GameScreen;
+            } 
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -122,6 +130,7 @@ namespace FightingGame
             EnemyManager.Draw();
             ProjectileManager.DrawEnemyProjectiles();
             CharacterUIManager.Draw(spriteBatch, Camera.Corner);
+            DamageNumberManager.Instance.Draw();
 
             spriteBatch.End();
         }

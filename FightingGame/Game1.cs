@@ -62,10 +62,12 @@ namespace FightingGame
 
             #endregion
             StartMenuScreen startMenuScreen = new StartMenuScreen(startMenuTextures, graphics);
-            GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics); 
+            GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics);
+            CardSelectionScreen cardSelectionScreen = new CardSelectionScreen();
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.StartMenuScreen, startMenuScreen);
             ScreenManager<Screenum>.Instance.ActivateScreen(startMenuScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.GameScreen, gameScreen);
+            ScreenManager<Screenum>.Instance.AddScreen(Screenum.CardSelectionScreen, cardSelectionScreen);
             // TODO: use this.Content to load your game content here
         }
 

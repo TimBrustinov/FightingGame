@@ -311,8 +311,8 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 15),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 7, 0, 0, true),
-                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 10, 0, 2, true),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 0, 0, true),
+                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 7, 0, 2, true),
                 [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 5, 0, 3, true),
                 [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 7, 0, 2, false),
                 [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 6, 0, 0, false),
@@ -326,27 +326,7 @@ namespace FightingGame
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
-            //Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
-            //{
-            //    [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.07f, 0, default, 5, true),
-            //    [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
-            //    [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.1f, 15, 5),
-            //    [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.115f, 2, default, 7, true),
-            //    [AnimationType.Ability2] = new Ability(AnimationType.Ability2, HashashinAbility2, !CanBeCanceled, 0.1f, 2, default, 5, true),
-            //    [AnimationType.Ability3] = new Ability(AnimationType.Ability3, HashashinAbility3, !CanBeCanceled, 0.065f, 3, default, 8, false),
-            //    [AnimationType.UltimateTransform] = new Ability(AnimationType.UltimateTransform, HashashinUltimateTransformation, !CanBeCanceled, 0.1f, 60, 0, 5, false),
-            //    [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand, HashashinUltimateStand, CanBeCanceled, 0.1f),
-            //    [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun, HashashinUltimateRun, CanBeCanceled, 0.1f),
-            //    [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, HashashinUltimateAbility1, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, HashashinUltimateAbility2, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, HashashinUltimateAbility3, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 0, default, 8, true),
-            //    [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, HashashinUltimateDodge, !CanBeCanceled, 0.1f, 15, 5),
-            //    [AnimationType.UndoTransform] = new Ability(AnimationType.UndoTransform, HashashinUndoTransform, !CanBeCanceled, 0.1f, 5, 0, 0, false),
-            //    [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
-            //};
 
-            //EntityActions.Add(EntityName.Hashashin, HashashinAbilites);
             EntityAnimations.Add(EntityName.Hashashin, Hashashin);
             EntityAnimationBehaviours.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);

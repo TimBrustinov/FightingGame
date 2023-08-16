@@ -15,16 +15,12 @@ namespace FightingGame
         public Vector2 Dimentions { get; set; }
         public Color Color { get; set; }
 
-        Action pressedAction;
-
-        public DrawableObjectBase(Texture2D texture, Vector2 position, Vector2 dimentions, Color color, Action pressAction)
+        public DrawableObjectBase(Texture2D texture, Vector2 position, Vector2 dimentions, Color color)
         {
             Texture = texture;
             Position = position;
             Dimentions = dimentions;
             Color = color;
-            
-            this.pressedAction = pressAction;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
