@@ -25,7 +25,7 @@ namespace FightingGame
             if(pool.Count > 0)
             {
                 var damageNumber = pool.Dequeue();
-                damageNumber.Activate(damage, new Vector2(position.X + random.Next(-15, 15), position.Y), color, 1);
+                damageNumber.Activate(damage, new Vector2(position.X + random.Next(-15, 15), position.Y), color, timeToLive);
                 damageNumbers.Add(damageNumber);
             }
             else

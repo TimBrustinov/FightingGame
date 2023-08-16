@@ -24,6 +24,8 @@ namespace FightingGame
 
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
+
+        public Dictionary<PowerUpType, Texture2D> PowerUpCards;
         private ContentManager()
         {
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
@@ -32,6 +34,7 @@ namespace FightingGame
             EntityAnimationBehaviours = new Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
             EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
+            PowerUpCards = new Dictionary<PowerUpType, Texture2D>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -41,6 +44,11 @@ namespace FightingGame
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
+
+            #region Power Up Cards
+            //PowerUpCards.Add(PowerUpType.LifeSteal, content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"));
+            //PowerUpCards.Add(PowerUpType.Bleed, content.Load<Texture2D>("Bloodspiller_Scythe_Card"));
+            #endregion
 
             #region Hashashin
             Texture2D HashashinTexture = content.Load<Texture2D>("HashashinFullSpritesheet");
