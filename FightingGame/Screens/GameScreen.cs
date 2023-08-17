@@ -115,6 +115,7 @@ namespace FightingGame
             EnemyManager.Update(SelectedCharacter, Camera);
             ProjectileManager.UpdateEnemyProjectiles();
             DamageNumberManager.Instance.Update();
+            CharacterUIManager.Update();
             if (keysPressed.Contains(Keys.O))
             {
                 return Screenum.CardSelectionScreen;

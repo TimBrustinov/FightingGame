@@ -14,27 +14,62 @@ namespace FightingGame
     public class UIManager
     {
         private Character character;
-        private Dictionary<AnimationType, Rectangle> AbilityIcons;
-        private int offset;
-        private Camera Camera;
-        private Vector2 Corner => Camera.Corner;
         private SpriteBatch SpriteBatch => Globals.SpriteBatch;
+        private Dictionary<AnimationType, Rectangle> AbilityIcons;
+        private Camera Camera;
+        private Vector2 TopLeft => Camera.Corner;
+        private Vector2 TopRight => Camera.Corner + new Vector2(Camera.CameraView.Width, 0);
+        private Vector2 BottomLeft => Camera.Corner + new Vector2(0, Camera.CameraView.Height);
+        private Vector2 BottomRight => Camera.Corner + new Vector2(Camera.CameraView.Width, Camera.CameraView.Height);
 
 
-        private Vector2 iconPosition;
-        private Vector2 xpBarPosition;
+
         private Vector2 healthBarPosition;
-        private Vector2 staminaBarPosition;
-        private Vector2 ultimateMeterPosition;
+        private Point healthBarDimentions;
 
-        private float portraitScale = 0.7f;
+        private Vector2 xpBarPosition;
+        private Point xpBarDimentions;
+
+        private Vector2 abilityPosition;
+        private Point abilityDimentions;
+        private int abilityOffset;
+
+        //private Vector2 iconPosition;
+        //private Vector2 xpBarPosition;
+        //private Vector2 healthBarPosition;
+        //private Vector2 staminaBarPosition;
+        //private Vector2 ultimateMeterPosition;
+
+
+
+
+
 
         public UIManager(Character character, Camera camera)
         {
             this.character = character;
             AbilityIcons = ContentManager.Instance.CharacterAbilityIcons[character.Name];
             Camera = camera;
-            offset = 55;
+            SetUI();
+        }
+
+        private void SetUI()
+        {
+            healthBarPosition = new Vector2(BottomLeft.X + 150, BottomLeft.Y - 50);
+            healthBarDimentions = new Point(300, 20);
+
+            xpBarDimentions = new Point(200, 10);
+            xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y + xpBarDimentions.Y + 5);
+
+            abilityDimentions = new Point(50, 50);
+            //abilityPosition = new Vector2(BottomRight.X - 120, BottomRight.Y - 70);
+            abilityOffset = 5;
+        }
+        public void Update()
+        {
+            healthBarPosition = new Vector2(BottomLeft.X + 150, BottomLeft.Y - 50);
+            xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y - xpBarDimentions.Y - 5);
+            abilityPosition = new Vector2(BottomRight.X - 400, BottomRight.Y - 80);
         }
         public void Draw(SpriteBatch spriteBatch, Vector2 cameraCorner)
         {
@@ -43,12 +78,78 @@ namespace FightingGame
             //DrawStaminaBar(spriteBatch, cameraCorner); 
             //DrawIcons(spriteBatch, cameraCorner);
             //DrawUltimateMeter(spriteBatch, cameraCorner);
+            healthBar();
+            xpBar();
+            abilities();
+        }
+
+        private void healthBar()
+        {
+            float healthPercentage = character.RemainingHealth / character.TotalHealth; 
+            int foregroundWidth = (int)(healthPercentage * healthBarDimentions.X); 
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, healthBarDimentions.X, healthBarDimentions.Y), new Color(30, 30, 30, 200));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, foregroundWidth, healthBarDimentions.Y), new Color(105, 187, 60));
         }
 
         private void xpBar()
         {
-
+            float xpPercentage = character.XP / character.xpToLevelUp; 
+            int foregroundWidth = (int)(xpPercentage * xpBarDimentions.X);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, xpBarDimentions.X, xpBarDimentions.Y), new Color(30, 30, 30, 200));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, foregroundWidth, xpBarDimentions.Y), new Color(138, 43, 226));
         }
+
+        public void abilities()
+        {
+            int i = 0;
+            if(character.InUltimateForm)
+            {
+                foreach (var icon in ContentManager.Instance.CharacterAbilityIcons[character.Name])
+                {
+                    if(icon.Key != AnimationType.Ability1 && icon.Key != AnimationType.Ability2 && icon.Key != AnimationType.Ability3 && icon.Key != AnimationType.Dodge)
+                    {
+                        Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
+                        SpriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], position, icon.Value, Color.White);
+                        if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
+                        {
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
+                            int foregroundHeight = (int)(cooldownPercentage * abilityDimentions.X); 
+                            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0));
+                        }
+                        i++;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var icon in ContentManager.Instance.CharacterAbilityIcons[character.Name])
+                {
+                    if (icon.Key != AnimationType.UltimateAbility1 && icon.Key != AnimationType.UltimateAbility2 && icon.Key != AnimationType.UltimateAbility3 && icon.Key != AnimationType.UltimateDodge)
+                    {
+                        Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
+                        DrawIconBackground(position);
+                        SpriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], position, icon.Value, Color.White);
+                        if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
+                        {
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
+                            int foregroundHeight = (int)(cooldownPercentage * abilityDimentions.X); 
+                            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0));
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+
+        private void DrawIconBackground(Vector2 position)
+        {
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 1, position.Y - 1), new Rectangle(0, 0, abilityDimentions.X + 2, abilityDimentions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, abilityDimentions.X, abilityDimentions.Y), new Color(30, 30, 30, 255));
+        }
+        //private void xpBar()
+        //{
+
+        //}
 
         //private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
         //{
@@ -136,7 +237,7 @@ namespace FightingGame
         //    spriteBatch.DrawString(ContentManager.Instance.Font, healthText, healthTextPosition, Color.White);
 
         //    //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X + 5 + foregroundWidth, healthBarPosition.Y + 5), new Rectangle(0, 0, overShieldWidth, 20), Color.Yellow);
-           
+
         //}
         //private void DrawStaminaBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         //{
