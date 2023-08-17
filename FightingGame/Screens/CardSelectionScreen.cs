@@ -18,11 +18,17 @@ namespace FightingGame
         
         public override void Initialize() 
         {
-            for (int i = 0; i < Cards.Length; i++)
-            {
-                Texture2D cardTexture = ContentManager.Instance.Pixel;
-                Cards[i] = new Card(cardTexture, new Vector2(100 + i * 100, 100), new Vector2(100, 100), Color.White, PowerUps.Instance.MaxHealthIncrease);
-            }
+            Cards[0] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenAmmountIncrease];
+            Cards[0].Position = new Vector2(300, 200);
+            Cards[1] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenRateIncrease];
+            Cards[1].Position = new Vector2(800, 200);
+            Cards[2] = ContentManager.Instance.PowerUpCards[PowerUpType.Overshield];
+            Cards[2].Position = new Vector2(1300, 200);
+            //for (int i = 0; i < Cards.Length; i++)
+            //{
+            //    Cards[i] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenAmmountIncrease];
+            //    Cards[i].Position = new Vector2(i * 200, 200);
+            //}
         }
 
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)

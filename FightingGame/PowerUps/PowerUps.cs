@@ -8,6 +8,7 @@ namespace FightingGame
 {
     public class PowerUps
     {
+        private Character SelectedCharacter => GameObjects.Instance.SelectedCharacter;
         private PowerUps()
         {
 
@@ -17,35 +18,51 @@ namespace FightingGame
 
         public void MaxHealthIncrease()
         {
-            GameObjects.Instance.SelectedCharacter.TotalHealth += 5;
+            SelectedCharacter.TotalHealth += 5;
+        }
+        public void HealthRegenAmmountIncrease()
+        {
+            SelectedCharacter.HealthRegen = SelectedCharacter.HealthRegen + 1;
         }
         public void HealthRegenRateIncrease()
         {
-            GameObjects.Instance.SelectedCharacter.healthRegenPerSecond = GameObjects.Instance.SelectedCharacter.healthRegenPerSecond * 0.1f;
+            var healthRegenScript = (HealthRegenScript)SelectedCharacter.PowerUps[PowerUpType.HealthRegenRateIncrease];
+            healthRegenScript.regenerationInterval = Math.Max(1, healthRegenScript.regenerationInterval - healthRegenScript.regenerationInterval * 0.05f);
+        }
+        public void Overshield()
+        {
+            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.Overshield))
+            {
+                SelectedCharacter.PowerUps.Add(PowerUpType.Overshield, new OvershieldScript(PowerUpType.Overshield));
+            }
+            SelectedCharacter.Overshield += 5;
+            SelectedCharacter.MaxOvershield = SelectedCharacter.Overshield;
+            SelectedCharacter.OvershieldBarWidth = Math.Min(SelectedCharacter.MaxOvershield, 300);
         }
         public void Bleed()
         {
-            if(!GameObjects.Instance.SelectedCharacter.PowerUps.ContainsKey(PowerUpType.Bleed))
+            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.Bleed))
             {
-                GameObjects.Instance.SelectedCharacter.PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
+                SelectedCharacter.PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
             }
             else
             {
-                var bleed = (BleedScript)GameObjects.Instance.SelectedCharacter.PowerUps[PowerUpType.Bleed];
+                var bleed = (BleedScript)SelectedCharacter.PowerUps[PowerUpType.Bleed];
                 bleed.BleedDamage += bleed.BleedDamage;
             }
         }
         public void LifesSteal()
         {
-            if (!GameObjects.Instance.SelectedCharacter.PowerUps.ContainsKey(PowerUpType.LifeSteal))
+            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.LifeSteal))
             {
-                GameObjects.Instance.SelectedCharacter.PowerUps.Add(PowerUpType.LifeSteal, new BleedScript(PowerUpType.LifeSteal));
+                SelectedCharacter.PowerUps.Add(PowerUpType.LifeSteal, new BleedScript(PowerUpType.LifeSteal));
             }
             else
             {
-                var lifesteal = (LifeStealScript)GameObjects.Instance.SelectedCharacter.PowerUps[PowerUpType.LifeSteal];
+                var lifesteal = (LifeStealScript)SelectedCharacter.PowerUps[PowerUpType.LifeSteal];
                 lifesteal.HealthPerHit += lifesteal.HealthPerHit;
             }
         }
+
     }
 }

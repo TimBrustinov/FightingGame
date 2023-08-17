@@ -58,7 +58,6 @@ namespace FightingGame
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
                     TakeDamage(character.CurrentAttackDamage, Color.White);
-                    HasBeenHit = true;
                 }
             }
             else
@@ -136,6 +135,12 @@ namespace FightingGame
             {
                 return AnimationType.Stand;
             }
+        }
+        public void TakeDamage(float damage, Color damageColor)
+        {
+            HasBeenHit = true;
+            RemainingHealth -= damage;
+            DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 30), damageColor);
         }
     }
 }

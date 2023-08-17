@@ -176,11 +176,7 @@ namespace FightingGame
             minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);
             maxPosition = new Vector2(mapSize.Width - Dimentions.X / 2, mapSize.Height - Dimentions.Y / 2);
         }
-        public void TakeDamage(float damage, Color damageColor)
-        {
-            RemainingHealth -= damage;
-            DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 20), damageColor);
-        }
+       
 
     }
 }

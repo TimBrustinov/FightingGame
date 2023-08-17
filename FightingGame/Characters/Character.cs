@@ -25,11 +25,11 @@ namespace FightingGame
         public Color MeterColor;
 
         private double staminaRegenInterval = 1500;
-        
 
-        public float healthRegenPerSecond; 
-        private float timeElapsed = 0f;
-        private float regenerationInterval; // Time interval for health regeneration in seconds
+        public float HealthRegen;
+        public float MaxOvershield;
+        public float OvershieldBarWidth;
+        public float Overshield;
 
         public bool InUltimateForm = false;
         private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
@@ -53,7 +53,7 @@ namespace FightingGame
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
             Speed = speed;
             TotalHealth = health;
-            RemainingHealth = 10;
+            RemainingHealth = TotalHealth;
             TotalStamina = 50;
             RemainingStamina = TotalStamina;
 
@@ -68,11 +68,12 @@ namespace FightingGame
             xpToLevelUp = 100;
             maxXpForCurrentLevel = 100;
 
-            regenerationInterval = 8f;
-            healthRegenPerSecond = 0.02f;
+            HealthRegen = 1;
+            MaxOvershield = 0;
 
-            PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
-            PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
+            PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
+            //PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
+            //PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
 
         }
         public override void Update(AnimationType animation, Vector2 direction)
@@ -120,8 +121,6 @@ namespace FightingGame
                 RemainingUltimateMeter = 0;
             }
 
-            UpdateHealthBar();
-            base.Update(animation, direction);
             foreach (var powerUp in PowerUps)
             {
                 powerUp.Value.Update();
@@ -131,17 +130,15 @@ namespace FightingGame
             {
                 LevelUp();
             }
-            
+
+            base.Update(animation, direction);
         }
-        
+
         public override void Draw()
         {
             base.Draw();
             DrawHealthBar(Globals.SpriteBatch);
-            DrawStaminaBar();
         }
-        
-
         public void DrawHealthBar(SpriteBatch spriteBatch)
         {
             int width = 75;
@@ -151,26 +148,6 @@ namespace FightingGame
             int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
             spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - height * 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Green); // Draw the foreground health bar
         }
-        public void DrawStaminaBar()
-        {
-            int width = 75;
-            int height = 10;
-            staminaTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (staminaTimer >= staminaRegenInterval && RemainingStamina < TotalStamina)
-            {
-                RemainingStamina++;
-            }
-
-            if(RemainingStamina >= TotalStamina)
-            {
-                staminaTimer = 0;
-            }
-
-            float healthPercentage = (float)RemainingStamina / TotalStamina; // Calculate the percentage of remaining health
-            int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - (height * 4) - 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Gray);
-        }
         private void LevelUp()
         {
             Level++;
@@ -178,23 +155,29 @@ namespace FightingGame
             maxXpForCurrentLevel = xpToLevelUp;
             XP = 0; 
         }
-        private void UpdateHealthBar()
+        public void TakeDamage(float damage, Color damageColor)
         {
-            if (RemainingHealth < TotalHealth)
+            HasBeenHit = true;
+            if (Overshield > 0)
             {
-                timeElapsed += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-                if (timeElapsed >= regenerationInterval)
+                if (damage <= Overshield)
                 {
-                    int healthToRegen = (int)(TotalHealth * healthRegenPerSecond);
-                    RemainingHealth = Math.Min(TotalHealth, RemainingHealth + healthToRegen);
-                    timeElapsed -= regenerationInterval;
+                    Overshield -= damage;
+                }
+                else
+                {
+                    damage -= Overshield;
+                    Overshield = 0;
+                    RemainingHealth -= damage;
+                    DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 40), damageColor);
                 }
             }
+            else
+            {
+                RemainingHealth -= damage;
+                DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 40), damageColor);
+            }
         }
-        private void HandleUltimateForm(AnimationType animation)
-        {
-           
 
-        }
     }
 }

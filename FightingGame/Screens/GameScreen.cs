@@ -99,6 +99,10 @@ namespace FightingGame
                             break;
                         }
                     }
+                    if(key == Keys.Q)
+                    {
+                        SelectedCharacter.TakeDamage(1, Color.White);
+                    }
                 }
             }
             if(SelectedCharacter.RemainingHealth <= 0)

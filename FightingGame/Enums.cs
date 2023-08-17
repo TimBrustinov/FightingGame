@@ -115,12 +115,19 @@ namespace FightingGame
 
     public enum PowerUpType
     {
-        HealthRegen,
+        HealthRegenAmmountIncrease,
+        HealthRegenRateIncrease,
         MaxHealthIncrease,
         MaxStaminaIncrease,
         DamageIncrease,
         Bleed,
         LifeSteal,
         Overshield,
+    }
+    public enum CardRarity
+    {
+        Common,
+        Rare, 
+        Legendary,
     }
 }

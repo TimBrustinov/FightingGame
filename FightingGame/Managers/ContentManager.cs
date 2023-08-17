@@ -25,7 +25,7 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
 
-        public Dictionary<PowerUpType, Texture2D> PowerUpCards;
+        public Dictionary<PowerUpType, Card> PowerUpCards;
         private ContentManager()
         {
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
@@ -34,7 +34,7 @@ namespace FightingGame
             EntityAnimationBehaviours = new Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
             EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
-            PowerUpCards = new Dictionary<PowerUpType, Texture2D>();
+            PowerUpCards = new Dictionary<PowerUpType, Card>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -46,6 +46,13 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Power Up Cards
+            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease));
+            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease));
+            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease));
+            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal));
+            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed));
+            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield));
+            //PowerUpCards.Add(PowerUpType, new Card(content.Load<Texture2D>("Serenity's_Resurgence_Vial_Card"), Color.White, PowerUps.Instance.HealthRegenRateIncrease));
             //PowerUpCards.Add(PowerUpType.LifeSteal, content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"));
             //PowerUpCards.Add(PowerUpType.Bleed, content.Load<Texture2D>("Bloodspiller_Scythe_Card"));
             #endregion
@@ -318,7 +325,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> HashashinAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 15),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 2),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 0, 0, true),
                 [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 7, 0, 2, true),
                 [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 5, 0, 3, true),
