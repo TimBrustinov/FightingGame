@@ -67,6 +67,7 @@ namespace FightingGame
                 [AnimationType.Ability1] = new Rectangle(988, 597, 50, 50),
                 [AnimationType.Ability2] = new Rectangle(5677, 1106, 50, 50),
                 [AnimationType.Ability3] = new Rectangle(1300, 1236, 50, 50),
+                [AnimationType.Dodge] = new Rectangle(982, 728, 50, 50),
                 [AnimationType.UltimateAbility1] = new Rectangle(690, 2361, 50, 50),
                 [AnimationType.UltimateAbility2] = new Rectangle(4836, 2743, 50, 50),
                 [AnimationType.UltimateAbility3] = new Rectangle(1601, 2884, 50, 50),
