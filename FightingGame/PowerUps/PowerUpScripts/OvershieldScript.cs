@@ -18,12 +18,12 @@ namespace FightingGame
         {
             var selectedCharacter = GameObjects.Instance.SelectedCharacter;
             overshieldRechargeTimer += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-            if(overshieldRechargeTimer >= 5 && selectedCharacter.Overshield < selectedCharacter.MaxOvershield)
+            if(overshieldRechargeTimer >= 2 && selectedCharacter.Overshield < selectedCharacter.MaxOvershield)
             {
                 selectedCharacter.Overshield++;
             }
 
-            if(selectedCharacter.Overshield >= selectedCharacter.MaxOvershield || selectedCharacter.HasBeenHit)
+            if(selectedCharacter.Overshield >= selectedCharacter.MaxOvershield)
             {
                 overshieldRechargeTimer = 0;
             }

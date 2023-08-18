@@ -13,18 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../../../Desktop/Glintweave_Overshield_Card.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:../../../../../Desktop/Glintweave_Overshield_Card.png;Glintweave_Overshield_Card.png
-
 #begin Bloodspiller_Scythe_Card.png
 /importer:TextureImporter
 /processor:TextureProcessor

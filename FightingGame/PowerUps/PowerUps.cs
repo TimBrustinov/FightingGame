@@ -35,9 +35,16 @@ namespace FightingGame
             {
                 SelectedCharacter.PowerUps.Add(PowerUpType.Overshield, new OvershieldScript(PowerUpType.Overshield));
             }
-            SelectedCharacter.Overshield += 5;
-            SelectedCharacter.MaxOvershield = SelectedCharacter.Overshield;
-            SelectedCharacter.OvershieldBarWidth = Math.Min(SelectedCharacter.MaxOvershield, 300);
+            if(SelectedCharacter.MaxOvershield < 100)
+            {
+                if (SelectedCharacter.Overshield >= SelectedCharacter.MaxOvershield)
+                {
+                    SelectedCharacter.Overshield = SelectedCharacter.MaxOvershield + 5;
+                }
+                SelectedCharacter.MaxOvershield += 5;
+            }
+            //SelectedCharacter.MaxOvershield = SelectedCharacter.Overshield;
+            SelectedCharacter.OvershieldBarWidth = Math.Min(SelectedCharacter.MaxOvershield, 100);
         }
         public void Bleed()
         {

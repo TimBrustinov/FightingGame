@@ -16,7 +16,6 @@ namespace FightingGame
         public int Level;
 
         public float xpToLevelUp;
-        private float maxXpForCurrentLevel;
 
         public float UltimateMeterMax;
         public float RemainingUltimateMeter;
@@ -65,8 +64,7 @@ namespace FightingGame
 
             XP = 0;
             Level = 1;
-            xpToLevelUp = 100;
-            maxXpForCurrentLevel = 100;
+            xpToLevelUp = 15;
 
             HealthRegen = 1;
             MaxOvershield = 0;
@@ -151,9 +149,8 @@ namespace FightingGame
         private void LevelUp()
         {
             Level++;
-            xpToLevelUp *= 1.25f;
-            maxXpForCurrentLevel = xpToLevelUp;
-            XP = 0; 
+            xpToLevelUp *= 1.1f;
+            XP = 0;
         }
         public void TakeDamage(float damage, Color damageColor)
         {
