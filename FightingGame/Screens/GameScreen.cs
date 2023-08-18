@@ -134,7 +134,7 @@ namespace FightingGame
             SelectedCharacter.Draw();
             EnemyManager.Draw();
             ProjectileManager.DrawEnemyProjectiles();
-            CharacterUIManager.Draw(spriteBatch, Camera.Corner);
+            CharacterUIManager.Draw();
             DamageNumberManager.Instance.Draw();
 
             spriteBatch.End();

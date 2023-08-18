@@ -58,8 +58,8 @@ namespace FightingGame
 
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
-            ultimateFillRate = UltimateMeterMax / 50;
-             ultimateDrainRate = UltimateMeterMax / 20f;
+            ultimateFillRate = UltimateMeterMax / 5;
+            ultimateDrainRate = UltimateMeterMax / 20f;
             MeterColor = Color.Gold;
 
             XP = 0;

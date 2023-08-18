@@ -124,6 +124,18 @@ namespace FightingGame
         LifeSteal,
         Overshield,
     }
+    public enum IconType
+    {
+        HashashinAbility1,
+        HashashinAbility2,
+        HashashinAbility3,
+        HashashinDodge,
+        HashashinUltimateAbility1,
+        HashashinUltimateAbility2,
+        HashashinUltimateAbility3,
+        HashashinUltimateDodge,
+
+    }
     public enum CardRarity
     {
         Common,

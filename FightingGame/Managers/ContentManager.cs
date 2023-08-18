@@ -22,13 +22,13 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>> EntityAnimationBehaviours;
         public Dictionary<EntityName, Dictionary<AnimationType, Animation>> EntityAnimations;
 
-        public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
+        public Dictionary<EntityName, Dictionary<AnimationType, Icon>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
 
         public Dictionary<PowerUpType, Card> PowerUpCards;
         private ContentManager()
         {
-            CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
+            CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Icon>>();
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
             EntityAnimationBehaviours = new Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>>();
@@ -62,18 +62,20 @@ namespace FightingGame
             EntitySpriteSheets.Add(EntityName.Hashashin, HashashinTexture);
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
-            Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
-            { 
-                [AnimationType.Ability1] = new Rectangle(988, 597, 50, 50),
-                [AnimationType.Ability2] = new Rectangle(5677, 1106, 50, 50),
-                [AnimationType.Ability3] = new Rectangle(1300, 1236, 50, 50),
-                [AnimationType.Dodge] = new Rectangle(982, 728, 50, 50),
-                [AnimationType.UltimateAbility1] = new Rectangle(690, 2361, 50, 50),
-                [AnimationType.UltimateAbility2] = new Rectangle(4836, 2743, 50, 50),
-                [AnimationType.UltimateAbility3] = new Rectangle(1601, 2884, 50, 50),
+            Dictionary<AnimationType, Icon> HashashinAbilityIcons = new Dictionary<AnimationType, Icon>()
+            {
+                [AnimationType.Ability1] = new Icon(IconType.HashashinAbility1, HashashinTexture, new Rectangle(988, 597, 50, 50), 1f),
+                [AnimationType.Ability2] = new Icon(IconType.HashashinAbility2, HashashinTexture, new Rectangle(5677, 1106, 50, 50), 1f),
+                [AnimationType.Ability3] = new Icon(IconType.HashashinAbility3, HashashinTexture, new Rectangle(1300, 1236, 50, 50), 0.9f),
+                [AnimationType.Dodge] = new Icon(IconType.HashashinDodge, HashashinTexture, new Rectangle(982, 728, 50, 50), 1f),
+
+                [AnimationType.UltimateAbility1] = new Icon(IconType.HashashinUltimateAbility1, HashashinTexture, new Rectangle(1853, 2748, 52, 50), new Vector2(0.95f, 1f)),
+                [AnimationType.UltimateAbility2] = new Icon(IconType.HashashinUltimateAbility2, HashashinTexture, new Rectangle(4495, 2686, 64, 62), new Vector2(0.78f, 0.78f)),
+                [AnimationType.UltimateAbility3] = new Icon(IconType.HashashinUltimateAbility3, HashashinTexture, new Rectangle(2154, 2859, 84, 67), new Vector2(0.6f, 0.7f)),
+                [AnimationType.UltimateDodge] = new Icon(IconType.HashashinUltimateDodge, HashashinTexture, new Rectangle(1618, 1235, 50, 50), 1f),
             };
             Dictionary<CharacterPortrait, Texture2D> HashashinPortraits = new Dictionary<CharacterPortrait, Texture2D>()
-            { 
+            {
                 [CharacterPortrait.HashashinBase] = content.Load<Texture2D>("wind_hashashin"),
                 [CharacterPortrait.HashashinElemental] = content.Load<Texture2D>("wind_elemental"),
             };
@@ -92,7 +94,7 @@ namespace FightingGame
 
             List<FrameHelper> HashashinBasicAttack = new List<FrameHelper>();
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(135, 858, 48, 37), new Rectangle(145, 858, 38, 25), canHit));
-            HashashinBasicAttack.Add(new FrameHelper(new Rectangle(424, 858, 28, 37),  new Rectangle(435, 858, 23, 19), canHit));
+            HashashinBasicAttack.Add(new FrameHelper(new Rectangle(424, 858, 28, 37), new Rectangle(435, 858, 23, 19), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(691, 858, 58, 37), new Rectangle(690, 859, 61, 30), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(978, 858, 45, 37), new Rectangle(970, 867, 35, 20), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1273, 858, 40, 37), new Rectangle(1270, 863, 21, 19), canHit));

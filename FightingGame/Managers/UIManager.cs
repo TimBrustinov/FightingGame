@@ -15,7 +15,7 @@ namespace FightingGame
     {
         private Character character;
         private SpriteBatch SpriteBatch => Globals.SpriteBatch;
-        private Dictionary<AnimationType, Rectangle> AbilityIcons;
+        private Dictionary<AnimationType, Icon> AbilityIcons;
         private Camera Camera;
         private Vector2 TopLeft => Camera.Corner;
         private Vector2 TopRight => Camera.Corner + new Vector2(Camera.CameraView.Width, 0);
@@ -65,7 +65,7 @@ namespace FightingGame
             abilityPosition = new Vector2(BottomRight.X - 400, BottomRight.Y - 80);
             ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - (ultimateBarDimentions.Y + 5));
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        public void Draw()
         {
             healthBarOutline();
             healthBar();
@@ -122,7 +122,7 @@ namespace FightingGame
                     {
                         Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
                         drawIconBackground(position);
-                        SpriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], position, icon.Value, Color.White);
+                        SpriteBatch.Draw(icon.Value.Texture, position, icon.Value.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Value.Scale, SpriteEffects.None, 0);
                         
                         if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
                         {
@@ -142,7 +142,7 @@ namespace FightingGame
                     {
                         Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
                         drawIconBackground(position);
-                        SpriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], position, icon.Value, Color.White);
+                        SpriteBatch.Draw(icon.Value.Texture, position, icon.Value.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Value.Scale, SpriteEffects.None, 0);
                         if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
                         {
                             float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
@@ -158,6 +158,10 @@ namespace FightingGame
         {
             SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 1, position.Y - 1), new Rectangle(0, 0, abilityDimentions.X + 2, abilityDimentions.Y + 2), Color.White);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, abilityDimentions.X, abilityDimentions.Y), new Color(30, 30, 30, 255));
+        }
+        private void powerUps()
+        {
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, )
         }
         private void drawText(Vector2 position, string text)
         {
