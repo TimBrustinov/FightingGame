@@ -128,7 +128,7 @@ namespace FightingGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             Transform = Camera.GetTransformMatrix();
-            spriteBatch.Begin(transformMatrix: Transform);
+            spriteBatch.Begin(transformMatrix: Transform , samplerState: SamplerState.PointClamp);
 
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();

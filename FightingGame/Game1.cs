@@ -85,6 +85,7 @@ namespace FightingGame
             GraphicsDevice.Clear(Color.Black);
             //spriteBatch.Begin();
             ScreenManager<Screenum>.Instance.Draw(spriteBatch, graphics);
+
             //spriteBatch.End();
             base.Draw(gameTime);
         }

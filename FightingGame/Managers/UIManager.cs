@@ -22,8 +22,6 @@ namespace FightingGame
         private Vector2 BottomLeft => Camera.Corner + new Vector2(0, Camera.CameraView.Height);
         private Vector2 BottomRight => Camera.Corner + new Vector2(Camera.CameraView.Width, Camera.CameraView.Height);
 
-
-
         private Vector2 healthBarPosition;
         private Point healthBarDimentions;
 
@@ -39,10 +37,6 @@ namespace FightingGame
         //private Vector2 healthBarPosition;
         //private Vector2 staminaBarPosition;
         //private Vector2 ultimateMeterPosition;
-
-
-
-
 
 
         public UIManager(Character character, Camera camera)
@@ -82,13 +76,27 @@ namespace FightingGame
             xpBar();
             abilities();
         }
+        //private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        //{
+        //    Vector2 xpBarPosition = new Vector2(cameraCorner.X, cameraCorner.Y);
+        //    spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(xpBarPosition.X, xpBarPosition.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 20), new Color(30, 30, 30, 255));
+        //    float xpPercentage = character.XP / character.xpToLevelUp; // Calculate the percentage of XP progress
+        //    int foregroundWidth = (int)(xpPercentage * Camera.CameraView.Width); // Calculate the width of the foreground XP bar
+        //    spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(xpBarPosition.X + 5, xpBarPosition.Y + 7), new Rectangle(0, 0, foregroundWidth, 15), Color.MediumPurple);
 
+        //    // Draw XP progress text
+        //    string xpText = $"{character.XP} / {(int)character.xpToLevelUp}";
+        //    Vector2 xpTextPosition = new Vector2(xpBarPosition.X + Camera.CameraView.Width / 2 - ContentManager.Instance.Font.MeasureString(xpText).X / 2, xpBarPosition.Y + 7);
+        //    spriteBatch.DrawString(ContentManager.Instance.Font, xpText, xpTextPosition, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //}
         private void healthBar()
         {
             float healthPercentage = character.RemainingHealth / character.TotalHealth; 
             int foregroundWidth = (int)(healthPercentage * healthBarDimentions.X); 
             SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, healthBarDimentions.X, healthBarDimentions.Y), new Color(30, 30, 30, 200));
             SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, foregroundWidth, healthBarDimentions.Y), new Color(105, 187, 60));
+            string text = $"{character.RemainingHealth} / {character.TotalHealth}";
+            DrawText(new Vector2(healthBarPosition.X + healthBarDimentions.X / 2 - ContentManager.Instance.Font.MeasureString(text).X / 2, healthBarPosition.Y + 3), text);
         }
 
         private void xpBar()
@@ -97,6 +105,8 @@ namespace FightingGame
             int foregroundWidth = (int)(xpPercentage * xpBarDimentions.X);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, xpBarDimentions.X, xpBarDimentions.Y), new Color(30, 30, 30, 200));
             SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, foregroundWidth, xpBarDimentions.Y), new Color(138, 43, 226));
+            string text = $"Lv: {character.Level}";
+            DrawText(new Vector2(xpBarPosition.X - 50, xpBarPosition.Y - 5), text);
         }
 
         public void abilities()
@@ -145,6 +155,12 @@ namespace FightingGame
         {
             SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 1, position.Y - 1), new Rectangle(0, 0, abilityDimentions.X + 2, abilityDimentions.Y + 2), Color.White);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, abilityDimentions.X, abilityDimentions.Y), new Color(30, 30, 30, 255));
+        }
+
+      
+        private void DrawText(Vector2 position, string text)
+        {
+            SpriteBatch.DrawString(ContentManager.Instance.Font, text, position, Color.White);
         }
         //private void xpBar()
         //{
@@ -206,7 +222,7 @@ namespace FightingGame
         //}
         //private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
         //{
-        //    xpBarPosition = new Vector2(cameraCorner.X, cameraCorner.Y);
+        //    Vector2 xpBarPosition = new Vector2(cameraCorner.X, cameraCorner.Y);
         //    spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(xpBarPosition.X, xpBarPosition.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 20), new Color(30, 30, 30, 255));
         //    float xpPercentage = character.XP / character.xpToLevelUp; // Calculate the percentage of XP progress
         //    int foregroundWidth = (int)(xpPercentage * Camera.CameraView.Width); // Calculate the width of the foreground XP bar
