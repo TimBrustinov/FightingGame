@@ -46,12 +46,12 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Power Up Cards
-            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease));
-            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease));
-            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease));
-            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal));
-            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed));
-            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield));
+            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease));
+            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease));
+            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease));
+            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal));
+            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed));
+            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield));
             //PowerUpCards.Add(PowerUpType, new Card(content.Load<Texture2D>("Serenity's_Resurgence_Vial_Card"), Color.White, PowerUps.Instance.HealthRegenRateIncrease));
             //PowerUpCards.Add(PowerUpType.LifeSteal, content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"));
             //PowerUpCards.Add(PowerUpType.Bleed, content.Load<Texture2D>("Bloodspiller_Scythe_Card"));

@@ -22,6 +22,8 @@ namespace FightingGame
         private Vector2 BottomLeft => Camera.Corner + new Vector2(0, Camera.CameraView.Height);
         private Vector2 BottomRight => Camera.Corner + new Vector2(Camera.CameraView.Width, Camera.CameraView.Height);
 
+        private Vector2 HealthBarBackgroundPosition;
+        private Point HealthbarBackgroundDimensions;
         private Vector2 healthBarPosition;
         private Point healthBarDimentions;
 
@@ -48,6 +50,11 @@ namespace FightingGame
 
         private void SetUI()
         {
+            //SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 21, xpBarPosition.Y - 21), new Rectangle(0, 0, healthBarDimentions.X + 42, healthBarDimentions.Y + 52), Color.White);
+            //SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 20, xpBarPosition.Y - 20), new Rectangle(0, 0, healthBarDimentions.X + 40, healthBarDimentions.Y + 50), new Color(30, 30, 30, 255));
+
+            HealthBarBackgroundPosition = new Vector2(BottomLeft.X + 130,  BottomLeft.Y - 90);
+            HealthbarBackgroundDimensions = new Point(300 + 40, 20 + 50);
             healthBarPosition = new Vector2(BottomLeft.X + 150, BottomLeft.Y - 50);
             healthBarDimentions = new Point(300, 20);
 
@@ -96,7 +103,7 @@ namespace FightingGame
         {
             //Console.WriteLine((healthBarPosition.X - 21) + BottomLeft.X);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 21, xpBarPosition.Y - 21), new Rectangle(0, 0, healthBarDimentions.X + 42, healthBarDimentions.Y + 52), Color.White);
-            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 20, xpBarPosition.Y - 20), new Rectangle(0, 0, healthBarDimentions.X + 40, healthBarDimentions.Y + 50), new Color(30, 30, 30, 255));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, HealthBarBackgroundPosition, new Rectangle(0, 0, HealthbarBackgroundDimensions.X, HealthbarBackgroundDimensions.Y), new Color(30, 30, 30, 255));
         }
         private void xpBar()
         {
