@@ -35,6 +35,9 @@ namespace FightingGame
         private Vector2 ultimateBarPosition;
         private Point ultimateBarDimentions;
 
+        private Vector2 powerUpBackgroundPosition;
+        private Point powerUpBackgroundDimensions;
+
         public UIManager(Character character, Camera camera)
         {
             this.character = character;
@@ -52,11 +55,14 @@ namespace FightingGame
             xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y + xpBarDimentions.Y + 5);
 
             abilityDimentions = new Point(50, 50);
-            //abilityPosition = new Vector2(BottomRight.X - 120, BottomRight.Y - 70);
+            abilityPosition = new Vector2(BottomRight.X - 400, BottomRight.Y - 80);
             abilityOffset = 5;
 
             ultimateBarDimentions = new Point(4 * (abilityDimentions.X + abilityOffset) - abilityOffset, 10);
             ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - ultimateBarDimentions.Y + 5);
+
+            powerUpBackgroundDimensions = new Point(Camera.CameraView.Width / 2, 50);
+            powerUpBackgroundPosition = new Vector2(BottomLeft.X + Camera.CameraView.Width / 2 - powerUpBackgroundDimensions.X / 2, 20);
         }
         public void Update()
         {
@@ -64,11 +70,14 @@ namespace FightingGame
             xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y - xpBarDimentions.Y - 5);
             abilityPosition = new Vector2(BottomRight.X - 400, BottomRight.Y - 80);
             ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - (ultimateBarDimentions.Y + 5));
+            powerUpBackgroundPosition = new Vector2(BottomLeft.X + 10 + Camera.CameraView.Width / 2 - powerUpBackgroundDimensions.X / 2, BottomLeft.Y - powerUpBackgroundDimensions.Y - 20);
         }
         public void Draw()
         {
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Camera.CameraView.Width - 10, Camera.CameraView.Height - 10), new Rectangle(0, 0, 10, 10), Color.Red);
             healthBarOutline();
             healthBar();
+            powerUps();
             overShield();
             xpBar();
             abilities();
@@ -85,6 +94,7 @@ namespace FightingGame
         }
         private void healthBarOutline()
         {
+            //Console.WriteLine((healthBarPosition.X - 21) + BottomLeft.X);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 21, xpBarPosition.Y - 21), new Rectangle(0, 0, healthBarDimentions.X + 42, healthBarDimentions.Y + 52), Color.White);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X - 20, xpBarPosition.Y - 20), new Rectangle(0, 0, healthBarDimentions.X + 40, healthBarDimentions.Y + 50), new Color(30, 30, 30, 255));
         }
@@ -143,6 +153,11 @@ namespace FightingGame
                         Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
                         drawIconBackground(position);
                         SpriteBatch.Draw(icon.Value.Texture, position, icon.Value.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Value.Scale, SpriteEffects.None, 0);
+                        if (i == 3)
+                        {
+                            Console.WriteLine(BottomRight.X - position.X + abilityDimentions.X);
+                            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X + abilityDimentions.X, position.Y), new Rectangle(0, 0, 10, 285), Color.Red); 
+                        }
                         if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
                         {
                             float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
@@ -161,7 +176,7 @@ namespace FightingGame
         }
         private void powerUps()
         {
-            SpriteBatch.Draw(ContentManager.Instance.Pixel, )
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, powerUpBackgroundPosition, new Rectangle(0, 0, powerUpBackgroundDimensions.X, powerUpBackgroundDimensions.Y), new Color(30, 30, 30, 200));
         }
         private void drawText(Vector2 position, string text)
         {

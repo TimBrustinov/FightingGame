@@ -34,6 +34,7 @@ namespace FightingGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             graphics.PreferredBackBufferWidth = 1000;
             graphics.PreferredBackBufferHeight = 1000;
             graphics.ApplyChanges();

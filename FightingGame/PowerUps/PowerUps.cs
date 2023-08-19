@@ -9,6 +9,7 @@ namespace FightingGame
     public class PowerUps
     {
         private Character SelectedCharacter => GameObjects.Instance.SelectedCharacter;
+        public Dictionary<PowerUpType, float> NumPowerUps = new Dictionary<PowerUpType, float>();
         private PowerUps()
         {
 

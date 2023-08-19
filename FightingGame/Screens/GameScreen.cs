@@ -58,7 +58,7 @@ namespace FightingGame
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
             graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1000;
+            graphics.PreferredBackBufferHeight = 1080;
             graphics.ApplyChanges();
 
             //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -69,6 +69,7 @@ namespace FightingGame
         }
         public override void Initialize()
         {
+            Graphics.IsFullScreen = true;
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
