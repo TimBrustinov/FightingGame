@@ -9,7 +9,7 @@ namespace FightingGame
     public class PowerUps
     {
         private Character SelectedCharacter => GameObjects.Instance.SelectedCharacter;
-        public Dictionary<PowerUpType, float> NumPowerUps = new Dictionary<PowerUpType, float>();
+        public Dictionary<IconType, Icon> PowerUpIcons = new Dictionary<IconType, Icon>();
         private PowerUps()
         {
 
@@ -56,14 +56,14 @@ namespace FightingGame
             else
             {
                 var bleed = (BleedScript)SelectedCharacter.PowerUps[PowerUpType.Bleed];
-                bleed.BleedDamage += bleed.BleedDamage;
+                bleed.BleedDamage += 2;
             }
         }
         public void LifesSteal()
         {
             if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.LifeSteal))
             {
-                SelectedCharacter.PowerUps.Add(PowerUpType.LifeSteal, new BleedScript(PowerUpType.LifeSteal));
+                SelectedCharacter.PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
             }
             else
             {
@@ -72,5 +72,17 @@ namespace FightingGame
             }
         }
 
+
+        public void AddPowerUpIcon(Icon icon)
+        {
+            if (PowerUpIcons.ContainsKey(icon.Type))
+            {
+                PowerUpIcons[icon.Type].Ammount++;
+            }
+            else
+            {
+                PowerUpIcons.Add(icon.Type, icon);
+            }
+        }
     }
 }

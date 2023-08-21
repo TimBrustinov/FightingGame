@@ -46,15 +46,13 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Power Up Cards
-            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease));
-            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease));
-            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease));
-            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal));
-            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed));
-            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield));
-            //PowerUpCards.Add(PowerUpType, new Card(content.Load<Texture2D>("Serenity's_Resurgence_Vial_Card"), Color.White, PowerUps.Instance.HealthRegenRateIncrease));
-            //PowerUpCards.Add(PowerUpType.LifeSteal, content.Load<Texture2D>("Lifedrain_Tempest_Katana_Card"));
-            //PowerUpCards.Add(PowerUpType.Bleed, content.Load<Texture2D>("Bloodspiller_Scythe_Card"));
+            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease, new Icon(IconType.ElixirofEternal, content.Load<Texture2D>("CardIcons/drops_64"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease, new Icon(IconType.SwifthealMedalion, content.Load<Texture2D>("CardIcons/accessory_84"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed, new Icon(IconType.BloodspillerScythe, content.Load<Texture2D>("CardIcons/scythe"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield, new Icon(IconType.GlintweaveOvershield, content.Load<Texture2D>("CardIcons/shield_15"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
+            
             #endregion
 
             #region Hashashin
@@ -340,7 +338,7 @@ namespace FightingGame
                 [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 5, 0, 1, true),
                 [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 10, 0, 3, true),
                 [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 5, 0, 4, true),
-                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 12),
+                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 1),
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };

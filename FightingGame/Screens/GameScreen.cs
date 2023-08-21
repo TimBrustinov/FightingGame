@@ -69,7 +69,7 @@ namespace FightingGame
         }
         public override void Initialize()
         {
-            Graphics.IsFullScreen = true;
+            //Graphics.IsFullScreen = true;
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;

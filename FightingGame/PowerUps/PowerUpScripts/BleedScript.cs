@@ -24,6 +24,7 @@ namespace FightingGame
 
         public override void Update()
         {
+            Console.WriteLine(BleedDamage);
             foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
             {
                 if (enemy.HasBeenHit && !bleedingEnemies.ContainsKey(enemy))

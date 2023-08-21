@@ -134,7 +134,12 @@ namespace FightingGame
         HashashinUltimateAbility2,
         HashashinUltimateAbility3,
         HashashinUltimateDodge,
-
+        SwifthealMedalion,
+        GlintweaveOvershield,
+        LifedrainTempestKatana,
+        ElixirofEternal,
+        DraconicVitalityWing,
+        BloodspillerScythe,
     }
     public enum CardRarity
     {

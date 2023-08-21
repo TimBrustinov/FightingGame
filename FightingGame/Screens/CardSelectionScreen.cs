@@ -11,24 +11,79 @@ namespace FightingGame
 {
     public class CardSelectionScreen : Screen<Screenum>
     {
-        Card[] Cards = new Card[3];
         public override Screenum ScreenType { get; protected set; } = Screenum.CardSelectionScreen;
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; } = true;
-        
+
+        Random random = new Random();
+        List<Card> CommonCards;
+        List<Card> RareCards;
+        List<Card> LegendaryCards;
+        List<Card> DisplayCards;
+        public CardSelectionScreen()
+        {
+            CommonCards = new List<Card>();
+            RareCards = new List<Card>();
+            LegendaryCards = new List<Card>();
+            DisplayCards = new List<Card>();
+            foreach (var card in ContentManager.Instance.PowerUpCards.Values)
+            {
+                if(card.Rarity == CardRarity.Common)
+                {
+                    CommonCards.Add(card);
+                }
+                else if(card.Rarity == CardRarity.Rare)
+                {
+                    RareCards.Add(card);
+                }
+                else
+                {
+                    LegendaryCards.Add(card);
+                }
+            }
+        }
         public override void Initialize() 
         {
-            Cards[0] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenAmmountIncrease];
-            Cards[0].Position = new Vector2(300, 200);
-            Cards[1] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenRateIncrease];
-            Cards[1].Position = new Vector2(800, 200);
-            Cards[2] = ContentManager.Instance.PowerUpCards[PowerUpType.Overshield];
-            Cards[2].Position = new Vector2(1300, 200);
-            //for (int i = 0; i < Cards.Length; i++)
-            //{
-            //    Cards[i] = ContentManager.Instance.PowerUpCards[PowerUpType.HealthRegenAmmountIncrease];
-            //    Cards[i].Position = new Vector2(i * 200, 200);
-            //}
+            DisplayCards.Clear();
+            for (int i = 0; i < 3; i++)
+            {
+                DisplayCards.Add(chooseRandomCard());
+            }
+        }
+        private Card chooseRandomCard()
+        {
+            double randomNumber = random.NextDouble();
+            Card chosenCard = null;
+
+            while (chosenCard == null)
+            {
+                if (randomNumber < 0.15)
+                {
+                    var num = random.Next(0, RareCards.Count);
+                    chosenCard = RareCards[num];
+                    // 15% chance for Rare cards
+                }
+                else if (randomNumber < 0.05)
+                {
+                    var num = random.Next(0, LegendaryCards.Count);
+                    chosenCard = LegendaryCards[num];
+                    // 5% chance for Legendary cards
+                }
+                else
+                {
+                    var num = random.Next(0, CommonCards.Count);
+                    chosenCard = CommonCards[num];
+                    // 80% chance for Common cards
+                }
+
+                // Check if the chosen card is already in DisplayCards
+                if (DisplayCards.Contains(chosenCard))
+                {
+                    chosenCard = null; // Retry with a different card
+                }
+            }
+
+            return chosenCard;
         }
 
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
@@ -38,11 +93,12 @@ namespace FightingGame
 
         public override Screenum Update(MouseState ms)
         {
-            for (int i = 0; i < Cards.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if(Cards[i].GetMouseAction(ms) == ClickResult.LeftClicked)
+                if(DisplayCards[i].GetMouseAction(ms) == ClickResult.LeftClicked)
                 {
-                    Cards[i].PowerUp.Invoke();
+                    PowerUps.Instance.AddPowerUpIcon(DisplayCards[i].Icon);
+                    DisplayCards[i].PowerUp.Invoke();
                     ScreenManager<Screenum>.Instance.GoBack();
                     return Screenum.GameScreen;
                 }
@@ -53,9 +109,11 @@ namespace FightingGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            foreach (var card in Cards)
+            float spacing = 100 + DisplayCards[0].Dimentions.X;
+            for (int i = 0; i < DisplayCards.Count; i++)
             {
-                card.Draw(spriteBatch);
+                DisplayCards[i].Position = new Vector2(i * spacing, 200);
+                DisplayCards[i].Draw(spriteBatch);
             }
             spriteBatch.End();
         }

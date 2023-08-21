@@ -52,19 +52,25 @@ namespace FightingGame
         {
             Camera = camera;
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if (enemySpawnTimer >= enemySpawnRate)
-            {
-                SpawnEnemies();
-                enemySpawnTimer = 0;
-            }
 
-            bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if (bossSpawnTimer >= bossSpawnRate)
+            if (enemyPoolIndex <= 3)
             {
-                int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
-                SpawnBoss(BossWaves[currentWave][randomNumber]);
-                bossSpawnTimer = 0;
+                if (enemySpawnTimer >= enemySpawnRate)
+                {
+                    SpawnEnemies();
+                    enemySpawnTimer = 0;
+                }
+
+                bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+                if (bossSpawnTimer >= bossSpawnRate)
+                {
+                    int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
+                    SpawnBoss(BossWaves[currentWave][randomNumber]);
+                    bossSpawnTimer = 0;
+                }
             }
+           
+            
             for (int i = 0; i < enemyPoolIndex; i++)
             {
                 if (EnemyPool[i].IsBoss && EnemyPool[i].IsDead)

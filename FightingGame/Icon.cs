@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace FightingGame
 {
-    public struct Icon
+    public class Icon
     {
         public IconType Type;
         public Texture2D Texture;
         public Rectangle SourceRectangle;
         public Vector2 Scale;
         public Vector2 Dimensions;
+        public int Ammount = 1;
         public Icon(IconType type, Texture2D texture, float scale)
         {
             Type = type;
