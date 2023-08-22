@@ -61,7 +61,7 @@ namespace FightingGame
             }
             else
             {
-                var newEnemy = new Enemy(GameObjects.Instance.EnemyManager.SkeletonPreset);
+                var newEnemy = GameObjects.Instance.EnemyManager.SkeletonPreset.Clone();
                 newEnemy.SetBounds(Globals.Tilemap);
                 newEnemy.Spawn(position);
                 GameObjects.Instance.EnemyManager.EnemyPool.Add(newEnemy);

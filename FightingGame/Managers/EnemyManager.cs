@@ -11,7 +11,7 @@ namespace FightingGame
         private DrawableObject Tilemap;
 
         private int enemySpawnAmmountMax = 3;
-        private int enemySpawnRate = 5000;
+        private int enemySpawnRate = 10000;
         private double enemySpawnTimer;
         private int bossSpawnRate = 40000;
         private double bossSpawnTimer;
@@ -21,7 +21,7 @@ namespace FightingGame
         public List<Enemy> ReservePool;
         private Random random;
 
-
+        private int num = 0;
         private Dictionary<int, List<Enemy>> EnemyWaves;
         private Dictionary<int, List<Enemy>> BossWaves;
         private int currentWave = 0;
@@ -121,10 +121,13 @@ namespace FightingGame
                 }
                 else
                 {
-                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count); 
-                    var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
+                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count);
+                    var newEnemy = EnemyWaves[currentWave][randomEnemy].Clone();
+                    //var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
                     newEnemy.SetBounds(Tilemap.HitBox);
                     newEnemy.Spawn(GetSpawnLocation());
+                    newEnemy.NUM = num;
+                    num++;
                     EnemyPool.Add(newEnemy);
                 }
             }

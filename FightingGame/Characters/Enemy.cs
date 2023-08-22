@@ -138,9 +138,17 @@ namespace FightingGame
         }
         public void TakeDamage(float damage, Color damageColor)
         {
+            //if(damage == 2)
+            //{
+            //    Console.WriteLine($"enemy {NUM} is bleeding");
+            //}
             HasBeenHit = true;
             RemainingHealth -= damage;
             DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 30), damageColor);
+        }
+        public Enemy Clone()
+        {
+            return new Enemy(Name, IsBoss, TotalHealth, Speed, EntityScale, leftFacingSprite, WaveNum);
         }
     }
 }

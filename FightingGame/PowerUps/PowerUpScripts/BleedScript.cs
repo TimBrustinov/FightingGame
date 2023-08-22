@@ -12,6 +12,7 @@ namespace FightingGame
         public int BleedDamage;
         private float bleedProcInterval;
         private Dictionary<Enemy, float> bleedingEnemies;
+        private List<Enemy> enemiesToRemove;
         private float bleedTime;
 
         public BleedScript(PowerUpType type) : base(type)
@@ -20,11 +21,11 @@ namespace FightingGame
             bleedProcInterval = 2f;
             bleedTime = 10;
             bleedingEnemies = new Dictionary<Enemy, float>();
+            enemiesToRemove = new List<Enemy>();
         }
 
         public override void Update()
         {
-            Console.WriteLine(BleedDamage);
             foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
             {
                 if (enemy.HasBeenHit && !bleedingEnemies.ContainsKey(enemy))
@@ -46,15 +47,23 @@ namespace FightingGame
                     bleedProcInterval += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
                     if(bleedProcInterval >= 2)
                     {
+                        Console.WriteLine($"enemy {bleedingEnemy.Key.NUM} is bleeding");
                         bleedingEnemy.Key.TakeDamage(BleedDamage, Color.White);
                         bleedProcInterval = 0;
                     }
                 }
                 else
                 {
-                    bleedingEnemies.Remove(bleedingEnemy.Key);
+                    enemiesToRemove.Add(bleedingEnemy.Key);
                 }
             }
+
+            foreach (var enemy in enemiesToRemove)
+            {
+                Console.WriteLine($"enemy {enemy.NUM} is removed");
+                bleedingEnemies.Remove(enemy);
+            }
+            enemiesToRemove.Clear();
         }
     }
 }
