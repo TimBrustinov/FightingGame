@@ -15,6 +15,7 @@ namespace FightingGame
         public override bool IsActive { get; set; }
         public override bool CanBeDrawnUnder { get; set; } = true;
 
+        Vector2 Position;
         Random random = new Random();
         List<Card> CommonCards;
         List<Card> RareCards;
@@ -22,6 +23,8 @@ namespace FightingGame
         List<Card> DisplayCards;
         public CardSelectionScreen()
         {
+
+            Position = new Vector2(300, 200);
             CommonCards = new List<Card>();
             RareCards = new List<Card>();
             LegendaryCards = new List<Card>();
@@ -112,7 +115,7 @@ namespace FightingGame
             float spacing = 100 + DisplayCards[0].Dimentions.X;
             for (int i = 0; i < DisplayCards.Count; i++)
             {
-                DisplayCards[i].Position = new Vector2(i * spacing, 200);
+                DisplayCards[i].Position = new Vector2(Position.X + i * spacing, Position.Y);
                 DisplayCards[i].Draw(spriteBatch);
             }
             spriteBatch.End();

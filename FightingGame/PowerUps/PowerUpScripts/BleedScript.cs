@@ -1,17 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace FightingGame
 {
+    
+
     public class BleedScript : PowerUpScript
     {
+        private class Bleed
+        {
+            public float BleedTime;
+            public float BleedInterval;
+
+            public Bleed(float time, float interval)
+            {
+                BleedTime = time;
+                BleedInterval = interval;
+            }
+        }
+
         public int BleedDamage;
         private float bleedProcInterval;
-        private Dictionary<Enemy, float> bleedingEnemies;
+        private Dictionary<Enemy, Bleed> bleedingEnemies;
         private List<Enemy> enemiesToRemove;
         private float bleedTime;
 
@@ -20,7 +35,7 @@ namespace FightingGame
             BleedDamage = 2;
             bleedProcInterval = 2f;
             bleedTime = 10;
-            bleedingEnemies = new Dictionary<Enemy, float>();
+            bleedingEnemies = new Dictionary<Enemy, Bleed>();
             enemiesToRemove = new List<Enemy>();
         }
 
@@ -30,7 +45,7 @@ namespace FightingGame
             {
                 if (enemy.HasBeenHit && !bleedingEnemies.ContainsKey(enemy))
                 {
-                    bleedingEnemies.Add(enemy, bleedTime);
+                    bleedingEnemies.Add(enemy, new Bleed(bleedTime, 0));
                 }
             }
             UpdateBleedingEnemies();
@@ -41,15 +56,14 @@ namespace FightingGame
         {
             foreach (var bleedingEnemy in bleedingEnemies)
             {
-                if(bleedingEnemy.Value > 0 && !bleedingEnemy.Key.IsDead)
+                if(bleedingEnemy.Value.BleedTime > 0 && !bleedingEnemy.Key.IsDead)
                 {
-                    bleedingEnemies[bleedingEnemy.Key] -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-                    bleedProcInterval += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
-                    if(bleedProcInterval >= 2)
+                    bleedingEnemies[bleedingEnemy.Key].BleedTime -= (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                    bleedingEnemies[bleedingEnemy.Key].BleedInterval += (float)Globals.GameTime.ElapsedGameTime.TotalSeconds;
+                    if(bleedingEnemies[bleedingEnemy.Key].BleedInterval >= 2)
                     {
-                        Console.WriteLine($"enemy {bleedingEnemy.Key.NUM} is bleeding");
                         bleedingEnemy.Key.TakeDamage(BleedDamage, Color.White);
-                        bleedProcInterval = 0;
+                        bleedingEnemies[bleedingEnemy.Key].BleedInterval = 0;
                     }
                 }
                 else
@@ -60,7 +74,6 @@ namespace FightingGame
 
             foreach (var enemy in enemiesToRemove)
             {
-                Console.WriteLine($"enemy {enemy.NUM} is removed");
                 bleedingEnemies.Remove(enemy);
             }
             enemiesToRemove.Clear();
