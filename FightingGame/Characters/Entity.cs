@@ -30,6 +30,7 @@ namespace FightingGame
         public bool IsFacingLeft;
         public bool HasBeenHit;
         public bool HasFrameChanged;
+        public bool IsAttacking;
 
         public EntityName Name;
         public float TotalHealth;
@@ -39,7 +40,7 @@ namespace FightingGame
         public double staminaTimer;
         public float Speed;
         public float SpeedMultiplier = 0;
-        public float CurrentAttackDamage;
+        public float CurrentAbilityDamage;
         public float AttackDamageMultiplier = 0;
         public float EntityScale;
 

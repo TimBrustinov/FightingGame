@@ -13,6 +13,54 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../../../../Desktop/Game Assets/Cards/Card Icons/drops_06.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../../Desktop/Game Assets/Cards/Card Icons/drops_06.png;CardIcons/drops_06.png
+
+#begin ../../../../../Desktop/Game Assets/Cards/FinishedCards/Serrated_Claw_Card.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../../Desktop/Game Assets/Cards/FinishedCards/Serrated_Claw_Card.png;Cards/Serrated_Claw_Card.png
+
+#begin ../../../../../Desktop/Game Assets/Cards/FinishedCards/Soaring_Swiftness_Plume_Card.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../../Desktop/Game Assets/Cards/FinishedCards/Soaring_Swiftness_Plume_Card.png;Cards/Soaring_Swiftness_Plume_Card.png
+
+#begin ../../../../../Desktop/Game Assets/Cards/FinishedCards/Veilstrike_Critblade_Card.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../../../../Desktop/Game Assets/Cards/FinishedCards/Veilstrike_Critblade_Card.png;Cards/Veilstrike_Critblade_Card.png
+
 #begin Bringer-of-Death-SpritSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -72,6 +120,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:CardIcons/Corrupted Sword.png
+
+#begin CardIcons/drops_25.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CardIcons/drops_25.png
 
 #begin CardIcons/drops_32.png
 /importer:TextureImporter
@@ -144,6 +204,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:CardIcons/shield_15.png
+
+#begin CardIcons/weapon_245.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CardIcons/weapon_245.png
 
 #begin CardIcons/weapon_311.png
 /importer:TextureImporter

@@ -26,6 +26,7 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             GetProjectile();
+            animator.Entity.IsAttacking = true;
             if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
@@ -55,6 +56,7 @@ namespace FightingGame
         }
         public override void OnStateExit(Animator animator)
         {
+            animator.Entity.IsAttacking = false;
             animator.SetAnimation(AnimationType.Stand);
         }
         public override AnimationBehaviour Clone()

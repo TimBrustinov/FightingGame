@@ -57,7 +57,7 @@ namespace FightingGame
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAttackDamage, Color.White);
+                    TakeDamage(character.CurrentAbilityDamage, Color.White);
                 }
             }
             else

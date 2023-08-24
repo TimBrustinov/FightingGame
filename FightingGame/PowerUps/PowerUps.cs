@@ -71,8 +71,30 @@ namespace FightingGame
                 lifesteal.HealthPerHit += lifesteal.HealthPerHit;
             }
         }
-
-
+        public void SpeedIncrease()
+        {
+            float speedIncrease = SelectedCharacter.Speed * 0.08f;
+            SelectedCharacter.Speed += speedIncrease;
+        }
+        public void AbilityDamageIncrease()
+        {
+            Multipliers.Instance.AbilityDamageMultiplier += 0.1f;
+        }
+        public void CriticalChanceIncrease()
+        {
+            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.CriticalChanceIncrease))
+            {
+                SelectedCharacter.PowerUps.Add(PowerUpType.CriticalChanceIncrease, new CriticalChanceScript(PowerUpType.CriticalChanceIncrease));
+            }
+            else
+            {
+                var criticalChanceScript = (CriticalChanceScript)SelectedCharacter.PowerUps[PowerUpType.CriticalChanceIncrease];
+                if(criticalChanceScript.CriticalChance < 1f)
+                {
+                    criticalChanceScript.CriticalChance += 0.1f;
+                }
+            }
+        }
         public void AddPowerUpIcon(Icon icon)
         {
             if (PowerUpIcons.ContainsKey(icon.Type))

@@ -52,7 +52,9 @@ namespace FightingGame
             PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield, new Icon(IconType.GlintweaveOvershield, content.Load<Texture2D>("CardIcons/shield_15"), 1.7f)));
             PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
             PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
-            
+            PowerUpCards.Add(PowerUpType.SpeedIncrease, new Card(content.Load<Texture2D>("Cards/Soaring_Swiftness_Plume_Card"), CardRarity.Common, Color.White, PowerUps.Instance.SpeedIncrease, new Icon(IconType.SoaringSwiftnessPlume, content.Load<Texture2D>("CardIcons/drops_25"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.AbilityDamageIncrease, new Card(content.Load<Texture2D>("Cards/Serrated_Claw_Card"), CardRarity.Common, Color.White, PowerUps.Instance.AbilityDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/drops_06"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
             #endregion
 
             #region Hashashin

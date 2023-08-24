@@ -17,7 +17,7 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
-            entity.CurrentAttackDamage = Damage;
+            entity.CurrentAbilityDamage = Damage;
             if(entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;

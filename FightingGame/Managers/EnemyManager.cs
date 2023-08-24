@@ -11,7 +11,7 @@ namespace FightingGame
         private DrawableObject Tilemap;
 
         private int enemySpawnAmmountMax = 3;
-        private int enemySpawnRate = 10000;
+        private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
         private int bossSpawnRate = 40000;
         private double bossSpawnTimer;
@@ -25,7 +25,7 @@ namespace FightingGame
         private Dictionary<int, List<Enemy>> EnemyWaves;
         private Dictionary<int, List<Enemy>> BossWaves;
         private int currentWave = 0;
-
+         
         #region Enemy Presets
         public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);

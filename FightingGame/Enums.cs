@@ -119,13 +119,16 @@ namespace FightingGame
         HealthRegenRateIncrease,
         MaxHealthIncrease,
         MaxStaminaIncrease,
-        DamageIncrease,
+        AbilityDamageIncrease,
         Bleed,
         LifeSteal,
         Overshield,
+        SpeedIncrease,
+        CriticalChanceIncrease,
     }
     public enum IconType
     {
+        //character icons
         HashashinAbility1,
         HashashinAbility2,
         HashashinAbility3,
@@ -134,12 +137,17 @@ namespace FightingGame
         HashashinUltimateAbility2,
         HashashinUltimateAbility3,
         HashashinUltimateDodge,
+
+        //card icons
         SwifthealMedalion,
         GlintweaveOvershield,
         LifedrainTempestKatana,
         ElixirofEternal,
         DraconicVitalityWing,
         BloodspillerScythe,
+        SoaringSwiftnessPlume,
+        SerratedClaw,
+        VeilstrikeCritblade,
     }
     public enum CardRarity
     {
