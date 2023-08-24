@@ -8,22 +8,38 @@ namespace FightingGame
 {
     public abstract class AttackBehaviour : AnimationBehaviour
     {
-        public int Damage;
+        public float Damage;
         public int AttackRange;
         public int Cooldown;
         protected bool canMove;
         public bool IsRanged = false;
-        public AttackBehaviour(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType)
+        public bool HasHit = false;
+        public float baseDamage {  get; private set; }
+        public AttackBehaviour(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType)
         {
+            baseDamage = damage;
             Damage = damage;
             AttackRange = attackRange;
             Cooldown = cooldown;
             this.canMove = canMove;
         }
 
-        public override void OnStateEnter(Animator animator) { }
-        public override void OnStateExit(Animator animator) { }
+        public override void OnStateEnter(Animator animator) 
+        {
+            animator.Entity.IsAttacking = true;
+            animator.Entity.CurrentAbility = this;
+            Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
+        }
         public override void OnStateUpdate(Animator animator) { }
-        
+        public override void OnStateExit(Animator animator) 
+        {
+            animator.Entity.IsAttacking = false;
+            HasHit = false;
+            Damage = baseDamage;
+        }
+        public void Crit()
+        {
+            Damage += Damage * 2;
+        }
     }
 }

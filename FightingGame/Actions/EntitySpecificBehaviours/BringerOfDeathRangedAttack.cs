@@ -12,7 +12,7 @@ namespace FightingGame
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
         
-        public BringerOfDeathRangedAttack(AnimationType animationType, StationaryProjectile projectile, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public BringerOfDeathRangedAttack(AnimationType animationType, StationaryProjectile projectile, Rectangle projectileTriggerFrame, float projectileSpeed, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
@@ -43,6 +43,7 @@ namespace FightingGame
         public override void OnStateExit(Animator animator)
         {
             animator.SetAnimation(AnimationType.Stand);
+            base.OnStateExit(animator);
         }
         public override AnimationBehaviour Clone()
         {

@@ -10,7 +10,7 @@ namespace FightingGame
     {
         Character selectedCharacter;
         Rectangle teleportFrame;
-        public AssassinCultistAmbush(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public AssassinCultistAmbush(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             teleportFrame = new Rectangle(233, 238, 21, 20);
             IsRanged = true;
@@ -19,6 +19,7 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator) 
         {
             selectedCharacter = GameObjects.Instance.SelectedCharacter;
+            base.OnStateEnter(animator);
             if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
@@ -42,6 +43,7 @@ namespace FightingGame
         public override void OnStateExit(Animator animator) 
         {
             animator.CurrentAnimation.frameTime = 0.1f;
+            base.OnStateExit(animator);
             animator.SetAnimation(AnimationType.Stand);
         }
 

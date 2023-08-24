@@ -19,6 +19,7 @@ namespace FightingGame
         public bool IsBoss;
         private Vector2 direction;
         public bool leftFacingSprite;
+        private Random random = new Random();
 
         public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
@@ -54,10 +55,12 @@ namespace FightingGame
                 if (character.HasFrameChanged)
                 {
                     HasBeenHit = false;
+                    character.CurrentAbility.HasHit = false;
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAbilityDamage, Color.White);
+                    TakeDamage(character.CurrentAbility.Damage, Color.White);
+                    character.CurrentAbility.HasHit = true;
                 }
             }
             else
@@ -138,12 +141,19 @@ namespace FightingGame
         }
         public void TakeDamage(float damage, Color damageColor)
         {
-            //if(damage == 2)
-            //{
-            //    Console.WriteLine($"enemy {NUM} is bleeding");
-            //}
+            
             HasBeenHit = true;
-            RemainingHealth -= damage;
+            damage = (int)damage;
+            if (random.NextDouble() < Multipliers.Instance.CriticalChance && Multipliers.Instance.CriticalChance != 0)
+            {
+                damage = (int)(damage * Multipliers.Instance.CriticalDamageMultiplier);
+                RemainingHealth -= damage;
+                damageColor = Color.Red;
+            }
+            else
+            {
+                RemainingHealth -= damage;
+            }
             DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 30), damageColor);
         }
         public Enemy Clone()
@@ -151,4 +161,4 @@ namespace FightingGame
             return new Enemy(Name, IsBoss, TotalHealth, Speed, EntityScale, leftFacingSprite, WaveNum);
         }
     }
-}
+}  

@@ -8,15 +8,12 @@ using Microsoft.Xna.Framework;
 
 namespace FightingGame
 {
-    
-
     public class BleedScript : PowerUpScript
     {
         private class Bleed
         {
             public float BleedTime;
             public float BleedInterval;
-
             public Bleed(float time, float interval)
             {
                 BleedTime = time;
@@ -25,7 +22,6 @@ namespace FightingGame
         }
 
         public int BleedDamage;
-        private float bleedProcInterval;
         private Dictionary<Enemy, Bleed> bleedingEnemies;
         private List<Enemy> enemiesToRemove;
         private float bleedTime;
@@ -33,7 +29,6 @@ namespace FightingGame
         public BleedScript(PowerUpType type) : base(type)
         {
             BleedDamage = 2;
-            bleedProcInterval = 2f;
             bleedTime = 10;
             bleedingEnemies = new Dictionary<Enemy, Bleed>();
             enemiesToRemove = new List<Enemy>();

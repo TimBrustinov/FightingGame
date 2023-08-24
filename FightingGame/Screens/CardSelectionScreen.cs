@@ -16,9 +16,9 @@ namespace FightingGame
         public override bool CanBeDrawnUnder { get; set; } = true;
         Vector2 Position;
         Random random = new Random();
-        List<Card> CommonCards;
-        List<Card> RareCards;
-        List<Card> LegendaryCards;
+        Dictionary<Rarity, List<Card>> Cards;
+       
+        
         List<Card> DisplayCards;
 
         private float CardScale = 0.5f;
@@ -36,17 +36,19 @@ namespace FightingGame
             SizeIncreaseFactor = CardScale + 0.05f;
             cardScales = new float[] { CardScale, CardScale, CardScale };
             Position = new Vector2(500, 500);
-            CommonCards = new List<Card>();
-            RareCards = new List<Card>();
-            LegendaryCards = new List<Card>();
             DisplayCards = new List<Card>();
+            Cards = new Dictionary<Rarity, List<Card>>();
+
+            List<Card> CommonCards = new List<Card>();
+            List<Card> RareCards = new List<Card>();
+            List<Card> LegendaryCards = new List<Card>();
             foreach (var card in ContentManager.Instance.PowerUpCards.Values)
             {
-                if(card.Rarity == CardRarity.Common)
+                if(card.Rarity == Rarity.Common)
                 {
                     CommonCards.Add(card);
                 }
-                else if(card.Rarity == CardRarity.Rare)
+                else if(card.Rarity == Rarity.Rare)
                 {
                     RareCards.Add(card);
                 }
@@ -55,6 +57,9 @@ namespace FightingGame
                     LegendaryCards.Add(card);
                 }
             }
+            Cards.Add(Rarity.Common, CommonCards);
+            Cards.Add(Rarity.Rare, RareCards);
+            Cards.Add(Rarity.Legendary, LegendaryCards);
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
@@ -63,10 +68,24 @@ namespace FightingGame
         public override void Initialize() 
         {
             DisplayCards.Clear();
-            for (int i = 0; i < 3; i++)
+            if(GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
             {
-                DisplayCards.Add(chooseRandomCard());
+                Rarity selectedRarity = GameObjects.Instance.DropManager.SelectedRarity;
+                for (int i = 0; i < 3; i++)
+                {
+                    var num = random.Next(0, Cards[selectedRarity].Count);
+                    DisplayCards.Add(Cards[selectedRarity][num]); 
+                }
+                GameObjects.Instance.DropManager.SelectedRarity = Rarity.None;
             }
+            else
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    DisplayCards.Add(chooseRandomCard());
+                }
+            }
+            
         }
         private Card chooseRandomCard()
         {
@@ -75,23 +94,20 @@ namespace FightingGame
 
             while (chosenCard == null)
             {
-                if (randomNumber < 0.15)
+                if (randomNumber < 0.04)
                 {
-                    var num = random.Next(0, RareCards.Count);
-                    chosenCard = RareCards[num];
-                    // 15% chance for Rare cards
+                    var num = random.Next(0, Cards[Rarity.Legendary].Count);
+                    chosenCard = Cards[Rarity.Legendary][num];
                 }
-                else if (randomNumber < 0.05)
+                else if (randomNumber < 0.15)
                 {
-                    var num = random.Next(0, LegendaryCards.Count);
-                    chosenCard = LegendaryCards[num];
-                    // 5% chance for Legendary cards
+                    var num = random.Next(0, Cards[Rarity.Rare].Count);
+                    chosenCard = Cards[Rarity.Rare][num];
                 }
                 else
                 {
-                    var num = random.Next(0, CommonCards.Count);
-                    chosenCard = CommonCards[num];
-                    // 80% chance for Common cards
+                    var num = random.Next(0, Cards[Rarity.Common].Count);
+                    chosenCard = Cards[Rarity.Common][num];
                 }
 
                 // Check if the chosen card is already in DisplayCards

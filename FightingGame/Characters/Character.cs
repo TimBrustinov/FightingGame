@@ -119,10 +119,7 @@ namespace FightingGame
                 RemainingUltimateMeter = 0;
             }
 
-            foreach (var powerUp in PowerUps)
-            {
-                powerUp.Value.Update();
-            }
+            
 
             if (XP >= xpToLevelUp)
             {
@@ -130,6 +127,10 @@ namespace FightingGame
             }
 
             base.Update(animation, direction);
+            foreach (var powerUp in PowerUps)
+            {
+                powerUp.Value.Update();
+            }
         }
 
         public override void Draw()

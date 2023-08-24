@@ -9,7 +9,7 @@ namespace FightingGame
     public class MeleeAttack : AttackBehaviour
     {
         Entity entity;
-        public MeleeAttack(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public MeleeAttack(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
 
         }
@@ -17,11 +17,12 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
-            entity.CurrentAbilityDamage = Damage;
+            Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
             if(entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
             }
+            base.OnStateEnter(animator);
             return;
         }
         public override void OnStateUpdate(Animator animator)
@@ -34,11 +35,13 @@ namespace FightingGame
             {
                 entity.Position += Vector2.Normalize(entity.Direction) * entity.Speed;
             }
+            base.OnStateUpdate(animator);
         }
 
         public override void OnStateExit(Animator animator)
         {
             animator.SetAnimation(AnimationType.Stand);
+            base.OnStateExit(animator);
         }
 
         public override AnimationBehaviour Clone()

@@ -26,6 +26,7 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
 
         public Dictionary<PowerUpType, Card> PowerUpCards;
+        public Dictionary<IconType, Drop> EnemyDrops;
         private ContentManager()
         {
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Icon>>();
@@ -35,6 +36,7 @@ namespace FightingGame
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
             EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
             PowerUpCards = new Dictionary<PowerUpType, Card>();
+            EnemyDrops = new Dictionary<IconType, Drop>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -45,16 +47,24 @@ namespace FightingGame
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
 
+            #region Drops
+            EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.7f)));
+            EnemyDrops.Add(IconType.RareScroll, new Drop(Rarity.Rare, new Icon(IconType.RareScroll, content.Load<Texture2D>("Drops/quest_06"), 1.7f)));
+            EnemyDrops.Add(IconType.LegendaryScroll, new Drop(Rarity.Legendary, new Icon(IconType.LegendaryScroll, content.Load<Texture2D>("Drops/quest_03"), 1.7f)));
+
+            #endregion
+
             #region Power Up Cards
-            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease, new Icon(IconType.ElixirofEternal, content.Load<Texture2D>("CardIcons/drops_64"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), CardRarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease, new Icon(IconType.SwifthealMedalion, content.Load<Texture2D>("CardIcons/accessory_84"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.Bleed, new Icon(IconType.BloodspillerScythe, content.Load<Texture2D>("CardIcons/scythe"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), CardRarity.Common, Color.White, PowerUps.Instance.Overshield, new Icon(IconType.GlintweaveOvershield, content.Load<Texture2D>("CardIcons/shield_15"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), CardRarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.SpeedIncrease, new Card(content.Load<Texture2D>("Cards/Soaring_Swiftness_Plume_Card"), CardRarity.Common, Color.White, PowerUps.Instance.SpeedIncrease, new Icon(IconType.SoaringSwiftnessPlume, content.Load<Texture2D>("CardIcons/drops_25"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.AbilityDamageIncrease, new Card(content.Load<Texture2D>("Cards/Serrated_Claw_Card"), CardRarity.Common, Color.White, PowerUps.Instance.AbilityDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/drops_06"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), CardRarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), Rarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease, new Icon(IconType.ElixirofEternal, content.Load<Texture2D>("CardIcons/drops_64"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), Rarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease, new Icon(IconType.SwifthealMedalion, content.Load<Texture2D>("CardIcons/accessory_84"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), Rarity.Rare, Color.White, PowerUps.Instance.Bleed, new Icon(IconType.BloodspillerScythe, content.Load<Texture2D>("CardIcons/scythe"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), Rarity.Common, Color.White, PowerUps.Instance.Overshield, new Icon(IconType.GlintweaveOvershield, content.Load<Texture2D>("CardIcons/shield_15"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), Rarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), Rarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.SpeedIncrease, new Card(content.Load<Texture2D>("Cards/Soaring_Swiftness_Plume_Card"), Rarity.Common, Color.White, PowerUps.Instance.SpeedIncrease, new Icon(IconType.SoaringSwiftnessPlume, content.Load<Texture2D>("CardIcons/drops_25"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.AbilityDamageIncrease, new Card(content.Load<Texture2D>("Cards/Serrated_Claw_Card"), Rarity.Common, Color.White, PowerUps.Instance.AbilityDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/drops_06"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), Rarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
             #endregion
 
             #region Hashashin

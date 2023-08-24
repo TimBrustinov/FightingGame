@@ -82,18 +82,11 @@ namespace FightingGame
         }
         public void CriticalChanceIncrease()
         {
-            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.CriticalChanceIncrease))
-            {
-                SelectedCharacter.PowerUps.Add(PowerUpType.CriticalChanceIncrease, new CriticalChanceScript(PowerUpType.CriticalChanceIncrease));
-            }
-            else
-            {
-                var criticalChanceScript = (CriticalChanceScript)SelectedCharacter.PowerUps[PowerUpType.CriticalChanceIncrease];
-                if(criticalChanceScript.CriticalChance < 1f)
-                {
-                    criticalChanceScript.CriticalChance += 0.1f;
-                }
-            }
+            Multipliers.Instance.CriticalChance += 0.1f;
+        }
+        public void CriticalDamageIncrease()
+        {
+            Multipliers.Instance.CriticalDamageMultiplier += 2f;
         }
         public void AddPowerUpIcon(Icon icon)
         {

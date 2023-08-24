@@ -19,12 +19,13 @@ namespace FightingGame
 
         public override void OnStateEnter(Animator animator)
         {
-            return;
+            GameObjects.Instance.DropManager.RollForDrop(animator.Entity.Position);
         }
 
         public override void OnStateExit(Animator animator)
         {
             animator.SetAnimation(AnimationType.Stand);
+           
             animator.Entity.IsDead = true;
         }
 

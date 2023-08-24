@@ -19,9 +19,7 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public AnimationBehaviour CurrentAction;
         public int NUM;
-       // public Attack CurrentAttack;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -30,7 +28,7 @@ namespace FightingGame
         public bool IsFacingLeft;
         public bool HasBeenHit;
         public bool HasFrameChanged;
-        public bool IsAttacking;
+        public bool IsAttacking { get; set; }
 
         public EntityName Name;
         public float TotalHealth;
@@ -40,8 +38,7 @@ namespace FightingGame
         public double staminaTimer;
         public float Speed;
         public float SpeedMultiplier = 0;
-        public float CurrentAbilityDamage;
-        public float AttackDamageMultiplier = 0;
+        public AttackBehaviour CurrentAbility;
         public float EntityScale;
 
         public Animator Animator;
@@ -167,7 +164,6 @@ namespace FightingGame
         {
             RemainingHealth = TotalHealth;
             RemainingStamina = TotalStamina;
-            CurrentAction = null;
             IsDead = false;
             overrideAnimation = false;
         }

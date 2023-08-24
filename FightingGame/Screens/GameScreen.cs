@@ -40,8 +40,6 @@ namespace FightingGame
         AnimationType currentAnimation = AnimationType.Stand;
         
         UIManager CharacterUIManager;
-        EnemyManager EnemyManager;
-        ProjectileManager ProjectileManager;
 
         #region DrawableObjects
         DrawableObject Tilemap;
@@ -73,12 +71,11 @@ namespace FightingGame
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
-            EnemyManager = new EnemyManager(Tilemap);
-            ProjectileManager = new ProjectileManager();
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
-            GameObjects.Instance.EnemyManager = EnemyManager;
+            GameObjects.Instance.EnemyManager = new EnemyManager(Tilemap);
             GameObjects.Instance.SelectedCharacter = SelectedCharacter;
-            GameObjects.Instance.ProjectileManager = ProjectileManager;
+            GameObjects.Instance.ProjectileManager = new ProjectileManager();
+            GameObjects.Instance.DropManager = new DropManager();
         }
         public override Screenum Update(MouseState ms)
         {
@@ -113,11 +110,11 @@ namespace FightingGame
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
-            EnemyManager.Update(SelectedCharacter, Camera);
-            ProjectileManager.UpdateEnemyProjectiles();
             DamageNumberManager.Instance.Update();
-            CharacterUIManager.Update();
-            if (keysPressed.Contains(Keys.O))
+            GameObjects.Instance.Update();
+            CharacterUIManager.Update(); 
+            
+            if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
             {
                 return Screenum.CardSelectionScreen;
             }
@@ -133,11 +130,9 @@ namespace FightingGame
 
             Tilemap.Draw(spriteBatch);
             SelectedCharacter.Draw();
-            EnemyManager.Draw();
-            ProjectileManager.DrawEnemyProjectiles();
             CharacterUIManager.Draw();
             DamageNumberManager.Instance.Draw();
-
+            GameObjects.Instance.Draw();
             spriteBatch.End();
         }
         public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)

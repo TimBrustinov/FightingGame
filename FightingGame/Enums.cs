@@ -118,13 +118,13 @@ namespace FightingGame
         HealthRegenAmmountIncrease,
         HealthRegenRateIncrease,
         MaxHealthIncrease,
-        MaxStaminaIncrease,
         AbilityDamageIncrease,
         Bleed,
         LifeSteal,
         Overshield,
         SpeedIncrease,
         CriticalChanceIncrease,
+        CriticalDamageIncrease,
     }
     public enum IconType
     {
@@ -148,9 +148,16 @@ namespace FightingGame
         SoaringSwiftnessPlume,
         SerratedClaw,
         VeilstrikeCritblade,
+        DirestrikeCritblade,
+
+        //drops icon
+        LegendaryScroll,
+        RareScroll,
+        CommonScroll,
     }
-    public enum CardRarity
+    public enum Rarity
     {
+        None,
         Common,
         Rare, 
         Legendary,

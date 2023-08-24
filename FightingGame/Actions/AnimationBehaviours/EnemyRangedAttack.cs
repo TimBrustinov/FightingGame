@@ -15,7 +15,7 @@ namespace FightingGame
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
 
-        public EnemyRangedAttack(AnimationType animationType, MovingProjectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public EnemyRangedAttack(AnimationType animationType, MovingProjectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             this.projectileAttachmentPoint = projectileAttachmentPoint;
             this.projectileTriggerFrame = projectileTriggerFrame;
@@ -31,6 +31,7 @@ namespace FightingGame
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
             }
+            base.OnStateEnter(animator);
             return;
         }
         public override void OnStateUpdate(Animator animator)
@@ -58,6 +59,7 @@ namespace FightingGame
         {
             animator.Entity.IsAttacking = false;
             animator.SetAnimation(AnimationType.Stand);
+            base.OnStateExit(animator);
         }
         public override AnimationBehaviour Clone()
         {
