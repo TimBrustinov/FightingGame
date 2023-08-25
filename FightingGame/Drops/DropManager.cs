@@ -46,15 +46,15 @@ namespace FightingGame
         }
         public void RollForDrop(Vector2 position)
         {
-            if (random.NextDouble() < 1f)
+            if (random.NextDouble() < 0.2f)
             {
                 double randomNumber = random.NextDouble();
                 
-                if (randomNumber < 0.03)
+                if (randomNumber < 0.08)
                 {
                     AddDrop(IconType.LegendaryScroll, position);
                 }
-                else if (randomNumber < 0.5)
+                else if (randomNumber < 0.3)
                 {
                     AddDrop(IconType.RareScroll, position);
                 }
@@ -64,14 +64,14 @@ namespace FightingGame
                 }
             }
         }
-        private void AddDrop(IconType type, Vector2 position)
+        public void AddDrop(IconType type, Vector2 position)
         {
             var drop = TryGetDrop(type);
             if(drop == null)
             {
                 drop = dropsDictionary[type].Clone();
             }
-            drop.Activate(position);
+            drop.Activate(new Vector2(position.X + random.Next(-15, 15), position.Y));
             drops.Add(drop);
         }
         private Drop TryGetDrop(IconType type)

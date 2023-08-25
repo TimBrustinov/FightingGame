@@ -21,16 +21,16 @@ namespace FightingGame
 
         public void Update()
         {
+            DropManager.Update();
             EnemyManager.Update(SelectedCharacter, Globals.Camera);
             ProjectileManager.UpdateEnemyProjectiles();
-            DropManager.Update();
         }
 
         public void Draw()
         {
+            DropManager.Draw();
             EnemyManager.Draw();
             ProjectileManager.DrawEnemyProjectiles();
-            DropManager.Draw();
         }
     }
 }

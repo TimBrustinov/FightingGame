@@ -71,10 +71,16 @@ namespace FightingGame
             if(GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
             {
                 Rarity selectedRarity = GameObjects.Instance.DropManager.SelectedRarity;
-                for (int i = 0; i < 3; i++)
+                Card chosenCard = null;
+                while(DisplayCards.Count < 3)
                 {
                     var num = random.Next(0, Cards[selectedRarity].Count);
-                    DisplayCards.Add(Cards[selectedRarity][num]); 
+                    chosenCard = Cards[selectedRarity][num];
+
+                    if(!DisplayCards.Contains(chosenCard))
+                    {
+                        DisplayCards.Add(chosenCard);
+                    }
                 }
                 GameObjects.Instance.DropManager.SelectedRarity = Rarity.None;
             }

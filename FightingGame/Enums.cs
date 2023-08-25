@@ -154,6 +154,7 @@ namespace FightingGame
         LegendaryScroll,
         RareScroll,
         CommonScroll,
+        Coin,
     }
     public enum Rarity
     {

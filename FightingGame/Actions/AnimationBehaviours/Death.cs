@@ -20,6 +20,7 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             GameObjects.Instance.DropManager.RollForDrop(animator.Entity.Position);
+            GameObjects.Instance.DropManager.AddDrop(IconType.Coin, animator.Entity.Position);
         }
 
         public override void OnStateExit(Animator animator)

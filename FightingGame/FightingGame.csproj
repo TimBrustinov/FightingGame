@@ -15,7 +15,11 @@
     <None Remove="Content\Blade_of_Frenzied_Might_Card.png" />
     <None Remove="Content\Bloodspiller_Scythe_1692047646868.png" />
     <None Remove="Content\Bloodspiller_Scythe_Card.png" />
+    <None Remove="Content\CardIcons\drops_06.png" />
     <None Remove="Content\Cards\drops_25.png" />
+    <None Remove="Content\Cards\Serrated_Claw_Card.png" />
+    <None Remove="Content\Cards\Soaring_Swiftness_Plume_Card.png" />
+    <None Remove="Content\Cards\Veilstrike_Critblade_Card.png" />
     <None Remove="Content\Corrupted Sword.png" />
     <None Remove="Content\Draconic_Vitality_Wing_Card.png" />
     <None Remove="Content\drops_32.png" />

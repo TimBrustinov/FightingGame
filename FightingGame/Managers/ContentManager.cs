@@ -48,10 +48,10 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
 
             #region Drops
-            EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.7f)));
-            EnemyDrops.Add(IconType.RareScroll, new Drop(Rarity.Rare, new Icon(IconType.RareScroll, content.Load<Texture2D>("Drops/quest_06"), 1.7f)));
-            EnemyDrops.Add(IconType.LegendaryScroll, new Drop(Rarity.Legendary, new Icon(IconType.LegendaryScroll, content.Load<Texture2D>("Drops/quest_03"), 1.7f)));
-
+            EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.3f)));
+            EnemyDrops.Add(IconType.RareScroll, new Drop(Rarity.Rare, new Icon(IconType.RareScroll, content.Load<Texture2D>("Drops/quest_06"), 1.3f)));
+            EnemyDrops.Add(IconType.LegendaryScroll, new Drop(Rarity.Legendary, new Icon(IconType.LegendaryScroll, content.Load<Texture2D>("Drops/quest_03"), 1.3f)));
+            EnemyDrops.Add(IconType.Coin, new Drop(Rarity.None, new Icon(IconType.Coin, content.Load<Texture2D>("Drops/material_125"), 1.3f)));
             #endregion
 
             #region Power Up Cards
