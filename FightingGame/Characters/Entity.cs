@@ -72,19 +72,7 @@ namespace FightingGame
                     CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
                 }
             }
-            //Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
-            //foreach (var animationBehaviour in ContentManager.Instance.EntityAnimationBehaviours[Name])
-            //{
-            //    Animator.AddAnimation(animationBehaviour.Key, animationBehaviour.Value.Animation);
-            //    Animator.AnimationBehaviours.Add(animationBehaviour.Key, animationBehaviour.Value);
-            //    if (animationBehaviour.Value is AttackBehaviour)
-            //    {
-            //        var attack = (AttackBehaviour)animationBehaviour.Value;
-            //        Attacks.Add(attack.AnimationType, attack);
-            //        CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
-            //    }
-            //}
-            ;
+            Animator.Animations[Animator.CurrentAnimationType].Start();
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)

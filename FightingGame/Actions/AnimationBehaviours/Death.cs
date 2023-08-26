@@ -18,7 +18,7 @@ namespace FightingGame
         {
             for (int i = 0; i < Multipliers.Instance.CoinWorth; i++)
             {
-                GameObjects.Instance.DropManager.AddDrop(IconType.Coin, animator.Entity.Position);
+                GameObjects.Instance.DropManager.AddDrop(IconType.Coin, animator.Entity.Position, true);
             }
         }
         public override void OnStateUpdate(Animator animator)

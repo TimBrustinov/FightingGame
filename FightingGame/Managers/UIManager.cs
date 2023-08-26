@@ -108,7 +108,6 @@ namespace FightingGame
             string text = $"{character.RemainingHealth} / {character.TotalHealth}";
             drawText(new Vector2(healthBarPosition.X + healthBarDimentions.X / 2 - ContentManager.Instance.Font.MeasureString(text).X / 2, healthBarPosition.Y + 3), text);
         }
-       
         private void xpBar()
         {
             float xpPercentage = character.XP / character.xpToLevelUp; 

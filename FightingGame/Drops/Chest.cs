@@ -15,6 +15,7 @@ namespace FightingGame
         private Animation openAnimation;
         public Vector2 Position;
         public Rectangle Hitbox;
+        public Vector2 topLeftCorner { get; private set; }
         public int CoinsToOpen;
         private bool isKeyPressed;
         public bool IsOpen { get; private set; }
@@ -28,7 +29,8 @@ namespace FightingGame
         {
             Position = position;
             CoinsToOpen = coinsToOpen;
-            Hitbox = new Rectangle((int)position.X - 15, (int)position.Y - 15, (int)Icon.Dimensions.X + 30, (int)Icon.Dimensions.Y + 30);
+            topLeftCorner = Position - Icon.Dimensions / 2;
+            Hitbox = new Rectangle((int)topLeftCorner.X - 20, (int)topLeftCorner.Y - 20, (int)Icon.Dimensions.X + 40, (int)Icon.Dimensions.Y + 40);
         }
 
         private bool isDisplayingCoinsPopup = false;
@@ -66,7 +68,9 @@ namespace FightingGame
 
         public void Draw()
         {
-            
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Hitbox, Color.Red);
+            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, topLeftCorner, new Rectangle(0, 0, 5, 5), Color.Blue);
+
             if (openAnimation.active)
             {
                 openAnimation.Draw(Position, false, Icon.Scale.X, Color.White);
@@ -87,15 +91,30 @@ namespace FightingGame
 
         private void DrawCoinsPopup()
         {
-            
+            Vector2 coinPosition = topLeftCorner - new Vector2(-5, 20);
+            var coin = ContentManager.Instance.EnemyDrops[IconType.Coin].Icon;
+            Globals.SpriteBatch.Draw(coin.Texture, topLeftCorner - new Vector2(0, 20), coin.SourceRectangle, Color.White, 0, Vector2.Zero, coin.Scale, SpriteEffects.None, 0);
+            drawText(coinPosition + new Vector2(coin.Texture.Width, 0), $"{CoinsToOpen}");
         }
 
-
+        /*
+         * private void money()
+        {
+            var coin = ContentManager.Instance.EnemyDrops[IconType.Coin];
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition - Vector2.One, new Rectangle(0, 0, moneyBackgroundDimensions.X + 2, moneyBackgroundDimensions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition, new Rectangle(0, 0, moneyBackgroundDimensions.X, moneyBackgroundDimensions.Y), new Color(30, 30, 30, 255));
+            SpriteBatch.Draw(coin.Icon.Texture, moneyBackgroundPosition, coin.Icon.SourceRectangle, Color.White, 0, Vector2.Zero, coin.Icon.Scale, SpriteEffects.None, 0);
+            string coinsText = $"{GameObjects.Instance.SelectedCharacter.Coins}";
+            Vector2 textDimensions = ContentManager.Instance.Font.MeasureString(coinsText);
+            Vector2 adjustedPosition = moneyBackgroundPosition + new Vector2(90 - textDimensions.X, 2);
+            drawText(adjustedPosition, coinsText);
+        }
+         */
 
 
         private void drawText(Vector2 position, string text)
         {
-            Globals.SpriteBatch.DrawString(ContentManager.Instance.Font, text, position, Color.White);
+            Globals.SpriteBatch.DrawString(ContentManager.Instance.Font, text, position, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
         }
 
         public Chest Clone()
@@ -150,7 +169,7 @@ namespace FightingGame
                 if (chest.IsOpen)
                 {
                     deleteChests.Add(chest);
-                    GameObjects.Instance.DropManager.AddDrop(chestToDropType[chest.Icon.Type], chest.Position);
+                    GameObjects.Instance.DropManager.AddDrop(chestToDropType[chest.Icon.Type], chest.Position, false);
                 }
             }
 
@@ -176,17 +195,17 @@ namespace FightingGame
             int roll = random.Next(100);
             int chestPrice;
             IconType chestType;
-            if (roll < 10) 
+            if (roll < 10)
             {
                 chestType = IconType.LegendaryChest;
                 chestPrice = legendaryChestPrice;
             }
-            else if (roll < 40) 
+            else if (roll < 40)
             {
                 chestType = IconType.RareChest;
                 chestPrice = rareChestPrice;
             }
-            else 
+            else
             {
                 chestType = IconType.NormalChest;
                 chestPrice = commonChestPrice;

@@ -30,7 +30,7 @@ namespace FightingGame
                 Drop drop = drops[i];
                 if (GameObjects.Instance.SelectedCharacter.HitBox.Intersects(drop.Hitbox))
                 {
-                    if(drop.Icon.Type == IconType.Coin)
+                    if (drop.Icon.Type == IconType.Coin)
                     {
                         GameObjects.Instance.SelectedCharacter.Coins++;
                     }
@@ -53,29 +53,36 @@ namespace FightingGame
             if (random.NextDouble() < 0.2f)
             {
                 double randomNumber = random.NextDouble();
-                
+
                 if (randomNumber < 0.08)
                 {
-                    AddDrop(IconType.LegendaryScroll, position);
+                    AddDrop(IconType.LegendaryScroll, position, true);
                 }
                 else if (randomNumber < 0.3)
                 {
-                    AddDrop(IconType.RareScroll, position);
+                    AddDrop(IconType.RareScroll, position, true);
                 }
                 else
                 {
-                    AddDrop(IconType.CommonScroll, position);
+                    AddDrop(IconType.CommonScroll, position, true);
                 }
             }
         }
-        public void AddDrop(IconType type, Vector2 position)
+        public void AddDrop(IconType type, Vector2 position, bool isRandomDrop)
         {
             var drop = TryGetDrop(type);
-            if(drop == null)
+            if (drop == null)
             {
                 drop = dropsDictionary[type].Clone();
             }
-            drop.Activate(new Vector2(position.X + random.Next(-20, 20), position.Y + random.Next(-20, 20)));
+            if (isRandomDrop)
+            {
+                drop.Activate(new Vector2(position.X + random.Next(-30, 30), position.Y + random.Next(-30, 30)));
+            }
+            else
+            {
+                drop.Activate(position);
+            }
             drops.Add(drop);
         }
         private Drop TryGetDrop(IconType type)
