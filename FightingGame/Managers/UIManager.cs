@@ -40,6 +40,9 @@ namespace FightingGame
         private Vector2 powerUpBackgroundPosition;
         private Point powerUpBackgroundDimensions;
 
+        private Vector2 moneyBackgroundPosition;
+        private Point moneyBackgroundDimensions;
+
         public UIManager(Character character, Camera camera)
         {
             this.character = character;
@@ -67,6 +70,8 @@ namespace FightingGame
 
             powerUpBackgroundDimensions = new Point(800, 70);
             //powerUpBackgroundPosition = new Vector2(BottomLeft.X + Camera.CameraView.Width / 2 - powerUpBackgroundDimensions.X / 2, 20);
+
+            moneyBackgroundDimensions = new Point(100, 20);
         }
         public void Update()
         {
@@ -76,6 +81,7 @@ namespace FightingGame
             abilityPosition = new Vector2(BottomRight.X - 350, BottomRight.Y - 75);
             ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - (ultimateBarDimentions.Y + 5));
             powerUpBackgroundPosition = new Vector2(HealthBarBackgroundPosition.X + HealthbarBackgroundDimensions.X + 150, BottomLeft.Y - 95);
+            moneyBackgroundPosition = new Vector2(TopLeft.X + 130, TopLeft.Y + 955);
         }
         public void Draw()
         {
@@ -86,6 +92,7 @@ namespace FightingGame
             xpBar();
             abilities();
             ultimateBar();
+            money();
         }
         private void bottomLeftUIBackground()
         {
@@ -189,6 +196,17 @@ namespace FightingGame
                 }
                 i++;
             }
+        }
+        private void money()
+        {
+            var coin = ContentManager.Instance.EnemyDrops[IconType.Coin];
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition - Vector2.One, new Rectangle(0, 0, moneyBackgroundDimensions.X + 2, moneyBackgroundDimensions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition, new Rectangle(0, 0, moneyBackgroundDimensions.X, moneyBackgroundDimensions.Y), new Color(30, 30, 30, 255));
+            SpriteBatch.Draw(coin.Icon.Texture, moneyBackgroundPosition, coin.Icon.SourceRectangle, Color.White, 0, Vector2.Zero, coin.Icon.Scale, SpriteEffects.None, 0);
+            string coinsText = $"{GameObjects.Instance.SelectedCharacter.Coins}";
+            Vector2 textDimensions = ContentManager.Instance.Font.MeasureString(coinsText);
+            Vector2 adjustedPosition = moneyBackgroundPosition + new Vector2(90 - textDimensions.X, 2);
+            drawText(adjustedPosition, coinsText);
         }
         private void drawText(Vector2 position, string text)
         { 

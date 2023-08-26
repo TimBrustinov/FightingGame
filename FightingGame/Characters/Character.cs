@@ -29,6 +29,7 @@ namespace FightingGame
         public float MaxOvershield;
         public float OvershieldBarWidth;
         public float Overshield;
+        public float Coins;
 
         public bool InUltimateForm = false;
         private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
@@ -68,6 +69,7 @@ namespace FightingGame
 
             HealthRegen = 1;
             MaxOvershield = 0;
+            Coins = 0;
 
             PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
             //PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));

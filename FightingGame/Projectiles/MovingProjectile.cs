@@ -30,6 +30,7 @@ namespace FightingGame
             startPosition = position;
             Direction = direction;
             Speed = speed;
+            ProjectileAnimation.Start();
             IsActive = true;
         }
        
@@ -48,6 +49,7 @@ namespace FightingGame
             }
             else
             {
+                ImpactAnimation.Start();
                 ImpactAnimation.Update();
                 Position += Direction * Speed / 2;
             }

@@ -16,6 +16,7 @@ namespace FightingGame
 
         public void Activate(Vector2 position)
         {
+            ProjectileAnimation.Start();
             IsActive = true;
             Position = position;
         }

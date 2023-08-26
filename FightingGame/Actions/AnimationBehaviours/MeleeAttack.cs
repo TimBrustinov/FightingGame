@@ -9,6 +9,7 @@ namespace FightingGame
     public class MeleeAttack : AttackBehaviour
     {
         Entity entity;
+        bool savedDirection;
         public MeleeAttack(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
 
@@ -17,6 +18,7 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
+            savedDirection = animator.Entity.IsFacingLeft;
             Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
             if(entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
@@ -27,6 +29,7 @@ namespace FightingGame
         }
         public override void OnStateUpdate(Animator animator)
         {
+            entity.IsFacingLeft = savedDirection;
             if(entity.RemainingHealth <= 0)
             {
                 animator.SetAnimation(AnimationType.Death);

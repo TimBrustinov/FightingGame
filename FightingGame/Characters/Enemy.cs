@@ -20,7 +20,6 @@ namespace FightingGame
         private Vector2 direction;
         public bool leftFacingSprite;
         private Random random = new Random();
-
         public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
@@ -50,7 +49,7 @@ namespace FightingGame
         public void Update(Character character)
         {
             direction = Vector2.Normalize(character.Position - Position);
-            if (character.WeaponHitBox.Intersects(HitBox))
+            if (character.WeaponHitBox.Intersects(HitBox) && character.CurrentAbility != null)
             {
                 if (character.HasFrameChanged)
                 {

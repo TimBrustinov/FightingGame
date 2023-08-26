@@ -14,7 +14,6 @@ namespace FightingGame
         public Vector2 Position;
         public Rectangle Hitbox;
         public Rarity Rarity;
-
         private float elapsedTime = 0.0f;
         private float oscillationSpeed = 2f; 
         private float oscillationAmplitude = 3f; 
@@ -38,8 +37,6 @@ namespace FightingGame
             Globals.SpriteBatch.Draw(Icon.Texture, positionWithOscillation, Icon.SourceRectangle, Color.White, 0, Vector2.Zero, Icon.Scale, SpriteEffects.None, 0);
             Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(Hitbox.X, Hitbox.Y + Hitbox.Height + 3, Hitbox.Width, 10), new Color(255, 255, 255, 100));
         }
-
-
 
         public Drop Clone()
         {

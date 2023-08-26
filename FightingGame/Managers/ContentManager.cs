@@ -27,6 +27,7 @@ namespace FightingGame
 
         public Dictionary<PowerUpType, Card> PowerUpCards;
         public Dictionary<IconType, Drop> EnemyDrops;
+        public Dictionary<IconType, Chest> Chests; 
         private ContentManager()
         {
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Icon>>();
@@ -37,6 +38,7 @@ namespace FightingGame
             EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
             PowerUpCards = new Dictionary<PowerUpType, Card>();
             EnemyDrops = new Dictionary<IconType, Drop>();
+            Chests = new Dictionary<IconType, Chest>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -52,6 +54,44 @@ namespace FightingGame
             EnemyDrops.Add(IconType.RareScroll, new Drop(Rarity.Rare, new Icon(IconType.RareScroll, content.Load<Texture2D>("Drops/quest_06"), 1.3f)));
             EnemyDrops.Add(IconType.LegendaryScroll, new Drop(Rarity.Legendary, new Icon(IconType.LegendaryScroll, content.Load<Texture2D>("Drops/quest_03"), 1.3f)));
             EnemyDrops.Add(IconType.Coin, new Drop(Rarity.None, new Icon(IconType.Coin, content.Load<Texture2D>("Drops/material_125"), 1.3f)));
+            #endregion
+
+            #region Chests
+            var legendaryChestTexture = content.Load<Texture2D>("Chests/Chest02");
+            List<FrameHelper> legendaryChestOpen = new List<FrameHelper>();
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(12, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(55, 34, 44, 25), new Rectangle(62, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(112, 24, 26, 35), new Rectangle(112, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(162, 5, 26, 54), new Rectangle(162, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(212, 4, 26, 55), new Rectangle(212, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(262, 25, 26, 34), new Rectangle(262, 35, 26, 24)));
+            Chest legendaryChest = new Chest(new Icon(IconType.LegendaryChest, legendaryChestTexture, new Rectangle(12, 35, 26, 25), 1.6f), new Animation(legendaryChestTexture, 0.2f, legendaryChestOpen));
+            Chests.Add(IconType.LegendaryChest, legendaryChest);
+
+
+            var commonChestTexture = content.Load<Texture2D>("Chests/Chest07");
+            List<FrameHelper> commonChestOpen = new List<FrameHelper>();
+            commonChestOpen.Add(new FrameHelper(new Rectangle(12, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(51, 37, 48, 24), new Rectangle(62, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(112, 26, 27, 35), new Rectangle(112, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(162, 2, 26, 59), new Rectangle(162, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(212, 2, 26, 59), new Rectangle(212, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(262, 27, 26, 34), new Rectangle(262, 37, 26, 24)));
+            Chest normalChest = new Chest(new Icon(IconType.NormalChest, commonChestTexture, new Rectangle(12, 37, 26, 24), 1.6f), new Animation(commonChestTexture, 0.2f, commonChestOpen));
+            Chests.Add(IconType.NormalChest, normalChest);
+
+            var rareChestTexture = content.Load<Texture2D>("Chests/Chest09");
+            List<FrameHelper> rareChestOpen = new List<FrameHelper>();
+            rareChestOpen.Add(new FrameHelper(new Rectangle(11, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(51, 33, 47, 28), new Rectangle(61, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(111, 26, 25, 35), new Rectangle(111, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(161, 3, 25, 58), new Rectangle(161, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(211, 5, 25, 56), new Rectangle(211, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(261, 27, 25, 34), new Rectangle(261, 34, 25, 27)));
+            Chest rareChest = new Chest(new Icon(IconType.RareChest, rareChestTexture, new Rectangle(11, 34, 25, 27), 1.6f), new Animation(rareChestTexture, 0.2f, rareChestOpen));
+            Chests.Add(IconType.RareChest, rareChest);
+
+            //Chests.Add(IconType.NormalChest, new Chest(new Icon(IconType.NormalChest, content.Load<Texture2D>("Chests/Chest02"), new Rectangle( ), 1f), new Animation ))
             #endregion
 
             #region Power Up Cards

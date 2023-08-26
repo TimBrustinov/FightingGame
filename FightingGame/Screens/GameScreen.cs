@@ -40,6 +40,7 @@ namespace FightingGame
         AnimationType currentAnimation = AnimationType.Stand;
         
         UIManager CharacterUIManager;
+        ChestManager ChestManager;
 
         #region DrawableObjects
         DrawableObject Tilemap;
@@ -76,6 +77,7 @@ namespace FightingGame
             GameObjects.Instance.SelectedCharacter = SelectedCharacter;
             GameObjects.Instance.ProjectileManager = new ProjectileManager();
             GameObjects.Instance.DropManager = new DropManager();
+            ChestManager = new ChestManager();
         }
         public override Screenum Update(MouseState ms)
         {
@@ -112,6 +114,7 @@ namespace FightingGame
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
             DamageNumberManager.Instance.Update();
             GameObjects.Instance.Update();
+            ChestManager.Update();
             CharacterUIManager.Update(); 
             
             if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
@@ -129,10 +132,11 @@ namespace FightingGame
             spriteBatch.Begin(transformMatrix: Transform , samplerState: SamplerState.PointClamp);
 
             Tilemap.Draw(spriteBatch);
+            ChestManager.Draw();
             SelectedCharacter.Draw();
-            CharacterUIManager.Draw();
             DamageNumberManager.Instance.Draw();
             GameObjects.Instance.Draw();
+            CharacterUIManager.Draw();
             spriteBatch.End();
         }
         public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)

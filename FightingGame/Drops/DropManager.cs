@@ -30,6 +30,10 @@ namespace FightingGame
                 Drop drop = drops[i];
                 if (GameObjects.Instance.SelectedCharacter.HitBox.Intersects(drop.Hitbox))
                 {
+                    if(drop.Icon.Type == IconType.Coin)
+                    {
+                        GameObjects.Instance.SelectedCharacter.Coins++;
+                    }
                     SelectedRarity = drop.Rarity;
                     dropsPool.Add(drop);
                     drops.Remove(drop);
@@ -71,7 +75,7 @@ namespace FightingGame
             {
                 drop = dropsDictionary[type].Clone();
             }
-            drop.Activate(new Vector2(position.X + random.Next(-15, 15), position.Y));
+            drop.Activate(new Vector2(position.X + random.Next(-20, 20), position.Y + random.Next(-20, 20)));
             drops.Add(drop);
         }
         private Drop TryGetDrop(IconType type)

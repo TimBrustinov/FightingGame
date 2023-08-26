@@ -150,11 +150,17 @@ namespace FightingGame
         VeilstrikeCritblade,
         DirestrikeCritblade,
 
-        //drops icon
+        //drops icons
         LegendaryScroll,
         RareScroll,
         CommonScroll,
         Coin,
+
+        //chest icons
+        LegendaryChest,
+        RareChest,
+        NormalChest,
+
     }
     public enum Rarity
     {

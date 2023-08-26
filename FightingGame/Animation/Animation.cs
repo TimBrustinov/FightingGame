@@ -19,7 +19,7 @@ namespace FightingGame
         public bool hasFrameChanged;
         public int animationFramesIndex = 0;
         public float frameTime;
-        private bool active = true;
+        public bool active { get; private set; }
         private float frameTimer = 0;
 
         public Animation(Texture2D texture, float frametime, List<FrameHelper> sourceRectangles)

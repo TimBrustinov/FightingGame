@@ -11,6 +11,7 @@ namespace FightingGame
         public float AbilityDamageMultiplier;
         public float CriticalChance;
         public float CriticalDamageMultiplier = 2f;
+        public int CoinWorth = 2;
         private Multipliers()
         {
 
