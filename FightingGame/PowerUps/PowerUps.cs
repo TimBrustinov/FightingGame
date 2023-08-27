@@ -16,6 +16,17 @@ namespace FightingGame
         }
 
         public static PowerUps Instance { get; } = new PowerUps();
+        public void AddPowerUpIcon(Icon icon)
+        {
+            if (PowerUpIcons.ContainsKey(icon.Type))
+            {
+                PowerUpIcons[icon.Type].Ammount++;
+            }
+            else
+            {
+                PowerUpIcons.Add(icon.Type, icon);
+            }
+        }
 
         public void MaxHealthIncrease()
         {
@@ -76,9 +87,10 @@ namespace FightingGame
             float speedIncrease = SelectedCharacter.Speed * 0.08f;
             SelectedCharacter.Speed += speedIncrease;
         }
-        public void AbilityDamageIncrease()
+        public void BaseDamageIncrease()
         {
-            Multipliers.Instance.AbilityDamageMultiplier += 0.1f;
+            //Multipliers.Instance.AbilityDamageMultiplier += 0.1f;
+            SelectedCharacter.BaseDamage += SelectedCharacter.BaseDamage * 0.1f;
         }
         public void CriticalChanceIncrease()
         {
@@ -88,16 +100,15 @@ namespace FightingGame
         {
             Multipliers.Instance.CriticalDamageMultiplier += 2f;
         }
-        public void AddPowerUpIcon(Icon icon)
+        public void GoldDropIncrease()
         {
-            if (PowerUpIcons.ContainsKey(icon.Type))
-            {
-                PowerUpIcons[icon.Type].Ammount++;
-            }
-            else
-            {
-                PowerUpIcons.Add(icon.Type, icon);
-            }
+            Multipliers.Instance.CoinWorth *= 2;
         }
+        public void LightningStrike()
+        {
+
+        }
+
+
     }
 }

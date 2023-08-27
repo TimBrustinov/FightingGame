@@ -27,11 +27,11 @@ namespace FightingGame
         private int currentWave = 0;
          
         #region Enemy Presets
-        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
+        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 100, 0.5f, 1.3f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
-        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 50, 0.8f, 1f, false, 0);
-        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 40, 0.5f, 1.2f, false, 0);
-        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, true, 50, 0.5f, 1f, true, 0);
+        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 200, 0.8f, 1f, false, 0);
+        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 200, 0.5f, 1.2f, false, 0);
+        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, true, 600, 0.5f, 1f, true, 0);
         Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
         Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);

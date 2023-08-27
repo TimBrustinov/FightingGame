@@ -26,9 +26,10 @@ namespace FightingGame
 
         public override void OnStateEnter(Animator animator) 
         {
+            Damage = animator.Entity.BaseDamage + baseDamage;
             animator.Entity.IsAttacking = true;
             animator.Entity.CurrentAbility = this;
-            Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
+            //Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
         }
         public override void OnStateUpdate(Animator animator) { }
         public override void OnStateExit(Animator animator) 

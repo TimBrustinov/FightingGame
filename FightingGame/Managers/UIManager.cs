@@ -191,7 +191,7 @@ namespace FightingGame
                 SpriteBatch.Draw(icon.Texture, position, icon.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Scale, SpriteEffects.None, 0);
                 if(icon.Ammount > 1)
                 {
-                    drawText(new Vector2(position.X + icon.Dimensions.X - 10, position.Y + icon.Dimensions.Y - 5), $"x {icon.Ammount}");
+                    drawText(new Vector2(position.X + icon.Dimensions.X - 10, position.Y + icon.Dimensions.Y - 5), $"x{icon.Ammount}");
                 }
                 i++;
             }

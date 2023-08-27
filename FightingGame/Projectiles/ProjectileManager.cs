@@ -10,17 +10,30 @@ namespace FightingGame
 {
     public class ProjectileManager
     {
+        private List<Projectile> ProjectilePresets;
         private List<Projectile> EnemyProjectiles;
-        public List<Projectile> ReserveEnemyProjectiles;
+        private List<Projectile> CharacterProjectiles;
+        public List<Projectile> ReserveProjectiles { get; set; }
 
         public ProjectileManager()
         {
             EnemyProjectiles = new List<Projectile>();
-            ReserveEnemyProjectiles = new List<Projectile>();
+            ReserveProjectiles = new List<Projectile>();
         }
         public void AddEnemyProjectile(Projectile projectile)
         {
             EnemyProjectiles.Add(projectile);
+        }
+        private Projectile TryGetProjectile(ProjectileType type)
+        {
+            foreach (var item in ReserveProjectiles)
+            {
+                if(item.ProjectileType == type)
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         public void UpdateEnemyProjectiles()
@@ -38,7 +51,7 @@ namespace FightingGame
                 }
                 else if(!EnemyProjectiles[i].IsActive)
                 {
-                    ReserveEnemyProjectiles.Add(EnemyProjectiles[i]);
+                    ReserveProjectiles.Add(EnemyProjectiles[i]);
                     EnemyProjectiles.Remove(EnemyProjectiles[i]);
                 }
             }

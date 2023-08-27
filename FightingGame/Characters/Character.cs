@@ -45,18 +45,16 @@ namespace FightingGame
             [AnimationType.Stand] = AnimationType.UltimateStand,
         };
         public Dictionary<PowerUpType, PowerUpScript> PowerUps = new Dictionary<PowerUpType, PowerUpScript>();
-        public Character(EntityName name, Texture2D texture, int health, float speed, float scale, Dictionary<AnimationType, AnimationBehaviour> abilites) : base(name) 
+        public Character(EntityName name, int health, int baseDamage, float speed, float scale) : base(name) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
+            BaseDamage = baseDamage;
             Position = new Vector2(500, 350);
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
             Speed = speed;
             TotalHealth = health;
             RemainingHealth = TotalHealth;
-            TotalStamina = 50;
-            RemainingStamina = TotalStamina;
-
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
             ultimateFillRate = UltimateMeterMax / 5;
@@ -70,7 +68,6 @@ namespace FightingGame
             HealthRegen = 1;
             MaxOvershield = 0;
             Coins = 0;
-
             PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
             //PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
             //PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));

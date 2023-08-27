@@ -51,15 +51,15 @@ namespace FightingGame
         }
         public void GetProjectile()
         {
-            if (GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Count > 0)
+            if (GameObjects.Instance.ProjectileManager.ReserveProjectiles.Count > 0)
             {
-                foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles)
+                foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveProjectiles)
                 {
                     if (projectile.ProjectileType == this.projectile.ProjectileType && projectile.GetType() == typeof(StationaryProjectile))
                     {
                         this.projectile = (StationaryProjectile)projectile;
                         this.projectile.Reset();
-                        GameObjects.Instance.ProjectileManager.ReserveEnemyProjectiles.Remove(projectile);
+                        GameObjects.Instance.ProjectileManager.ReserveProjectiles.Remove(projectile);
                         return;
                     }
                 }

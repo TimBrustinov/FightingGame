@@ -21,15 +21,6 @@ namespace FightingGame
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
-            if (entity.RemainingStamina - StaminaDrain <= 0)
-            {
-                animator.SetAnimation(AnimationType.UltimateStand);
-            }
-            else
-            {
-                entity.RemainingStamina -= StaminaDrain;
-                entity.staminaTimer = 0;
-            }
         }
         public override void OnStateUpdate(Animator animator)
         {

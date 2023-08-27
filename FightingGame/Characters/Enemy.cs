@@ -85,9 +85,16 @@ namespace FightingGame
         public override void Draw()
         {
             base.Draw();
-            float healthPercentage = (float)RemainingHealth / TotalHealth;
-            int foregroundWidth = (int)(healthPercentage * 30);
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), HealthBarColor);
+            DrawHealthBar(Globals.SpriteBatch);
+        }
+        public void DrawHealthBar(SpriteBatch spriteBatch)
+        {
+            int width = 50;
+            int height = 10;
+
+            float healthPercentage = RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
+            int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - height * 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Green); // Draw the foreground health bar
         }
         public void SpawnWithAnimation(Vector2 position)
         {

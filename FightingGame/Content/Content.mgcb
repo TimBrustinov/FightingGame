@@ -73,18 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:CardIcons/Corrupted Sword.png
 
-#begin CardIcons/drops_06.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:CardIcons/drops_06.png
-
 #begin CardIcons/drops_25.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -145,6 +133,18 @@
 /processorParam:TextureFormat=Color
 /build:CardIcons/Nature Boots.png
 
+#begin CardIcons/ring_168.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CardIcons/ring_168.png
+
 #begin CardIcons/scythe.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -168,6 +168,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:CardIcons/shield_15.png
+
+#begin CardIcons/weapon_07.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CardIcons/weapon_07.png
+
+#begin CardIcons/weapon_226.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:CardIcons/weapon_226.png
 
 #begin CardIcons/weapon_244.png
 /importer:TextureImporter
@@ -277,7 +301,7 @@
 /processorParam:TextureFormat=Color
 /build:Cards/Lifedrain_Tempest_Katana_Card.png
 
-#begin Cards/Serrated_Claw_Card.png
+#begin Cards/Ravager's_Blade_Card.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -287,7 +311,19 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Cards/Serrated_Claw_Card.png
+/build:Cards/Ravager's_Blade_Card.png
+
+#begin Cards/Rich_Merchant_Ring_Card.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Cards/Rich_Merchant_Ring_Card.png
 
 #begin Cards/Soaring_Swiftness_Plume_Card.png
 /importer:TextureImporter
@@ -300,6 +336,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Cards/Soaring_Swiftness_Plume_Card.png
+
+#begin Cards/Stormcaster_Bow_Card.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Cards/Stormcaster_Bow_Card.png
 
 #begin Cards/Swiftheal_Medallion_Card.png
 /importer:TextureImporter

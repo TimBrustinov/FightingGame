@@ -25,6 +25,7 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<AnimationType, Icon>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
 
+        public Dictionary<ProjectileType, Projectile> Projectiles;
         public Dictionary<PowerUpType, Card> PowerUpCards;
         public Dictionary<IconType, Drop> EnemyDrops;
         public Dictionary<IconType, Chest> Chests; 
@@ -48,6 +49,7 @@ namespace FightingGame
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
+            
 
             #region Drops
             EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.3f)));
@@ -102,9 +104,12 @@ namespace FightingGame
             PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), Rarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
             PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), Rarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
             PowerUpCards.Add(PowerUpType.SpeedIncrease, new Card(content.Load<Texture2D>("Cards/Soaring_Swiftness_Plume_Card"), Rarity.Common, Color.White, PowerUps.Instance.SpeedIncrease, new Icon(IconType.SoaringSwiftnessPlume, content.Load<Texture2D>("CardIcons/drops_25"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.AbilityDamageIncrease, new Card(content.Load<Texture2D>("Cards/Serrated_Claw_Card"), Rarity.Common, Color.White, PowerUps.Instance.AbilityDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/drops_06"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.BaseDamageIncrease, new Card(content.Load<Texture2D>("Cards/Ravager's_Blade_Card"), Rarity.Common, Color.White, PowerUps.Instance.BaseDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/weapon_07"), 1.7f)));
             PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), Rarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
             PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.GoldDropIncrease, new Card(content.Load<Texture2D>("Cards/Rich_Merchant_Ring_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.RichMerchantRing, content.Load<Texture2D>("CardIcons/ring_168"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
+
             #endregion
 
             #region Hashashin
@@ -975,6 +980,11 @@ namespace FightingGame
 
             EntityAnimationBehaviours.Add(EntityName.AssassinCultist, AssassinCultistBehaviours);
             EntityAnimations.Add(EntityName.AssassinCultist, AssassinCultist);
+            #endregion
+
+            #region Projectiles
+            Projectiles.Add(ProjectileType.CultistFireBall, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f));
+            Projectiles.Add(ProjectileType.BringerOfDeathPortalSummon, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f));
             #endregion
         }
     }

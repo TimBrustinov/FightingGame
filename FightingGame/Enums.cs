@@ -118,13 +118,15 @@ namespace FightingGame
         HealthRegenAmmountIncrease,
         HealthRegenRateIncrease,
         MaxHealthIncrease,
-        AbilityDamageIncrease,
+        BaseDamageIncrease,
         Bleed,
         LifeSteal,
         Overshield,
         SpeedIncrease,
         CriticalChanceIncrease,
         CriticalDamageIncrease,
+        GoldDropIncrease,
+        LightningStrike,
     }
     public enum IconType
     {
@@ -149,6 +151,8 @@ namespace FightingGame
         SerratedClaw,
         VeilstrikeCritblade,
         DirestrikeCritblade,
+        RichMerchantRing,
+        StormcasterBow,
 
         //drops icons
         LegendaryScroll,

@@ -31,13 +31,11 @@ namespace FightingGame
         public bool IsAttacking { get; set; }
 
         public EntityName Name;
+        public float BaseDamage;
         public float TotalHealth;
         public float RemainingHealth;
-        public float TotalStamina;
-        public float RemainingStamina;
         public double staminaTimer;
         public float Speed;
-        public float SpeedMultiplier = 0;
         public AttackBehaviour CurrentAbility;
         public float EntityScale;
 
@@ -78,7 +76,6 @@ namespace FightingGame
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
             Direction = direction;
-            Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             WantedAnimation = animation;
             Animator.Update();
@@ -151,7 +148,6 @@ namespace FightingGame
         public void Reset()
         {
             RemainingHealth = TotalHealth;
-            RemainingStamina = TotalStamina;
             IsDead = false;
             overrideAnimation = false;
         }
