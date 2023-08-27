@@ -68,8 +68,8 @@ namespace FightingGame
 
         public void Draw()
         {
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Hitbox, Color.Red);
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, topLeftCorner, new Rectangle(0, 0, 5, 5), Color.Blue);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Hitbox, Color.Red);
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, topLeftCorner, new Rectangle(0, 0, 5, 5), Color.Blue);
 
             if (openAnimation.active)
             {
@@ -130,7 +130,7 @@ namespace FightingGame
         private Random random = new Random();
         private float spawnTimer = 5f; // Time in seconds between chest spawns
         private float currentSpawnTime = 0.0f;
-        private int maxChests = 20;
+        public int maxChests = 25;
 
         private int commonChestPrice;
         private int rareChestPrice;
@@ -189,9 +189,11 @@ namespace FightingGame
             }
         }
 
-        private void SpawnChest()
+        public void SpawnChest()
         {
-            Vector2 spawnPosition = new Vector2(random.Next(Globals.Camera.CameraView.Width), random.Next(Globals.Camera.CameraView.Height));
+            Vector2 spawnPosition = new Vector2(random.Next(Globals.Tilemap.Width), random.Next(Globals.Tilemap.Height));
+            Rectangle mapSize = new Rectangle(Globals.Tilemap.X + 64, Globals.Tilemap.Y + 64, Globals.Tilemap.Width - 64, Globals.Tilemap.Height - 64);
+            Vector2.Clamp(spawnPosition, new Vector2(mapSize.X, mapSize.Y), new Vector2(mapSize.Width, mapSize.Height));
             int roll = random.Next(100);
             int chestPrice;
             IconType chestType;

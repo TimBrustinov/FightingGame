@@ -77,7 +77,12 @@ namespace FightingGame
             GameObjects.Instance.SelectedCharacter = SelectedCharacter;
             GameObjects.Instance.ProjectileManager = new ProjectileManager();
             GameObjects.Instance.DropManager = new DropManager();
+            
             ChestManager = new ChestManager();
+            for (int i = 0; i < ChestManager.maxChests; i++)
+            {
+                ChestManager.SpawnChest();
+            }
         }
         public override Screenum Update(MouseState ms)
         {
@@ -137,6 +142,7 @@ namespace FightingGame
             DamageNumberManager.Instance.Draw();
             GameObjects.Instance.Draw();
             CharacterUIManager.Draw();
+
             spriteBatch.End();
         }
         public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)
