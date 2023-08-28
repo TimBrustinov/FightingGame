@@ -147,7 +147,6 @@ namespace FightingGame
         }
         public void TakeDamage(float damage, Color damageColor)
         {
-            
             HasBeenHit = true;
             damage = (int)damage;
             if (random.NextDouble() < Multipliers.Instance.CriticalChance && Multipliers.Instance.CriticalChance != 0)

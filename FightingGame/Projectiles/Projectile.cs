@@ -10,6 +10,7 @@ namespace FightingGame
 {
     public abstract class Projectile 
     {
+        public List<Entity> HitEntities;
         public Animation ProjectileAnimation;
         public ProjectileType ProjectileType;
         public Texture2D ProjectileTexture;
@@ -23,9 +24,10 @@ namespace FightingGame
         public int Damage;
         public bool IsActive;
         public bool HasHit;
-
+        public abstract void Activate(Vector2 position, Vector2 direction, float speed, int damage);
         public Projectile(ProjectileType projectileType, int damage, Texture2D projectileTexture, List<FrameHelper> animationFrames, float animationSpeed, float scale)
         {
+            HitEntities = new List<Entity>();
             ProjectileAnimation = new Animation(projectileTexture, animationSpeed, animationFrames);
             ProjectileType = projectileType;
             Damage = damage;

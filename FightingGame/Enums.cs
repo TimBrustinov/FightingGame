@@ -111,6 +111,7 @@ namespace FightingGame
     {
         CultistFireBall,
         BringerOfDeathPortalSummon,
+        LightningStrike,
     }
 
     public enum PowerUpType

@@ -13,7 +13,7 @@ namespace FightingGame
         private int enemySpawnAmmountMax = 3;
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
-        private int bossSpawnRate = 40000;
+        private int bossSpawnRate = 4000;
         private double bossSpawnTimer;
 
         public int enemyPoolIndex;

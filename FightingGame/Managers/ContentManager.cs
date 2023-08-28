@@ -40,6 +40,7 @@ namespace FightingGame
             PowerUpCards = new Dictionary<PowerUpType, Card>();
             EnemyDrops = new Dictionary<IconType, Drop>();
             Chests = new Dictionary<IconType, Chest>();
+            Projectiles = new Dictionary<ProjectileType, Projectile>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -108,7 +109,7 @@ namespace FightingGame
             PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), Rarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
             PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
             PowerUpCards.Add(PowerUpType.GoldDropIncrease, new Card(content.Load<Texture2D>("Cards/Rich_Merchant_Ring_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.RichMerchantRing, content.Load<Texture2D>("CardIcons/ring_168"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Common, Color.White, PowerUps.Instance.LightningStrike, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
 
             #endregion
 
@@ -386,15 +387,15 @@ namespace FightingGame
                 [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 2),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 0, 0, true),
                 [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 7, 0, 2, true),
-                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 5, 0, 3, true),
-                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 7, 0, 2, false),
-                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 6, 0, 0, false),
+                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 10, 0, 3, true),
+                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 5, 0, 2, false),
+                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 1.0f, 0, 0, false),
                 [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand),
                 [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun),
-                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 7, 0, 0, true),
-                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 5, 0, 1, true),
-                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 10, 0, 3, true),
-                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 5, 0, 4, true),
+                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 2.0f, 0, 0, true),
+                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 1.5f, 0, 1, true),
+                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 2.2f, 0, 3, true),
+                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 1.7f, 0, 4, true),
                 [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 1),
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
@@ -657,7 +658,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
-                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, ProjectileType.BringerOfDeathPortalSummon, new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -882,7 +883,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Death] = new Death(AnimationType.Death),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, ProjectileType.CultistFireBall, new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
@@ -985,6 +986,25 @@ namespace FightingGame
             #region Projectiles
             Projectiles.Add(ProjectileType.CultistFireBall, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f));
             Projectiles.Add(ProjectileType.BringerOfDeathPortalSummon, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f));
+
+            Texture2D LightningStrikeTexture = content.Load<Texture2D>("CLOUD LIGHTNING ATTACK-Sheet");
+            List<FrameHelper> LightningStrike = new List<FrameHelper>();
+            LightningStrike.Add(new FrameHelper(new Rectangle(170, 19, 33, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(271, 15, 89, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(403, 18, 84, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(522, 17, 98, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(653, 17, 96, 198), new Rectangle(653, 17, 92, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(787, 18, 84, 196), new Rectangle(787, 18, 84, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(906, 17, 98, 198), new Rectangle(906, 17, 98, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1037, 17, 100, 199), new Rectangle(1037, 17, 92, 18)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1169, 18, 90, 195), new Rectangle(1171, 18, 84, 15)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1290, 17, 98, 196), new Rectangle(1290, 17, 98, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1521, 17, 92, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1546, 15, 95, 198), new Rectangle(1546, 15, 95, 22)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1683, 17, 85, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1808, 15, 93, 197), new Rectangle(1808, 15, 93, 24)));
+            Projectiles.Add(ProjectileType.LightningStrike, new StationaryProjectile(ProjectileType.LightningStrike, 50, LightningStrikeTexture, LightningStrike, 0.1f, 0.8f));
+
             #endregion
         }
     }

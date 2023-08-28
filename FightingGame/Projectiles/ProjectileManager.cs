@@ -10,37 +10,54 @@ namespace FightingGame
 {
     public class ProjectileManager
     {
-        private List<Projectile> ProjectilePresets;
+        private Dictionary<ProjectileType, Projectile> ProjectilePresets;
+
         private List<Projectile> EnemyProjectiles;
         private List<Projectile> CharacterProjectiles;
         public List<Projectile> ReserveProjectiles { get; set; }
 
         public ProjectileManager()
         {
+            ProjectilePresets = ContentManager.Instance.Projectiles;
             EnemyProjectiles = new List<Projectile>();
+            CharacterProjectiles = new List<Projectile>();
             ReserveProjectiles = new List<Projectile>();
         }
-        public void AddEnemyProjectile(Projectile projectile)
+
+
+        public void Update()
         {
-            EnemyProjectiles.Add(projectile);
+            UpdateEnemyProjectiles();
+            UpdateCharacterProjectiles();
         }
-        private Projectile TryGetProjectile(ProjectileType type)
+        public void Draw()
         {
-            foreach (var item in ReserveProjectiles)
-            {
-                if(item.ProjectileType == type)
-                {
-                    return item;
-                }
-            }
-            return null;
+            DrawEnemyProjectiles();
+            DrawCharacterProjectiles();
         }
 
-        public void UpdateEnemyProjectiles()
+        #region Enemy
+        public void AddEnemyProjectile(ProjectileType type, Vector2 attachmentPoint, Vector2 direction, float speed, int damage)
+        {
+            var projectile = TryGetProjectile(type);
+            if(projectile != null)
+            {
+                projectile.Reset();
+                ReserveProjectiles.Remove(projectile);
+            }
+            else
+            {
+                projectile = ProjectilePresets[type].Clone();
+            }
+            projectile.Activate(attachmentPoint, direction, speed, damage);
+            EnemyProjectiles.Add(projectile);
+        }
+
+        private void UpdateEnemyProjectiles()
         {
             for (int i = 0; i < EnemyProjectiles.Count; i++)
             {
-                if (EnemyProjectiles[i].IsActive)
+                if (EnemyProjectiles[i].IsActive )
                 {
                     EnemyProjectiles[i].Update();
 
@@ -55,10 +72,10 @@ namespace FightingGame
                     EnemyProjectiles.Remove(EnemyProjectiles[i]);
                 }
             }
-            
+
         }
 
-        public void DrawEnemyProjectiles()
+        private void DrawEnemyProjectiles()
         {
             foreach (var projectile in EnemyProjectiles)
             {
@@ -68,6 +85,71 @@ namespace FightingGame
                 }
             }
         }
-        
+        #endregion
+
+        #region Character
+        public void AddCharacterProjectile(ProjectileType type, Vector2 attachmentPoint, Vector2 direction, float speed, int damage)
+        {
+            var projectile = TryGetProjectile(type);
+            if (projectile != null)
+            {
+                projectile.Reset();
+                CharacterProjectiles.Remove(projectile);
+            }
+            else
+            {
+                projectile = ProjectilePresets[type].Clone();
+            }
+            projectile.Activate(attachmentPoint, direction, speed, damage);
+            CharacterProjectiles.Add(projectile);
+        }
+        private void UpdateCharacterProjectiles()
+        {
+            for (int i = 0; i < CharacterProjectiles.Count; i++)
+            {
+                if (CharacterProjectiles[i].IsActive)
+                {
+                    CharacterProjectiles[i].Update();
+
+                    foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
+                    {
+                        if(CharacterProjectiles[i].Hitbox.Intersects(enemy.HitBox) && !CharacterProjectiles[i].HitEntities.Contains(enemy))
+                        {
+                            CharacterProjectiles[i].HasHit = true;
+                            CharacterProjectiles[i].HitEntities.Add(enemy);
+                            enemy.TakeDamage(CharacterProjectiles[i].Damage, Color.White);
+                        }
+                    }
+                }
+                else if (!CharacterProjectiles[i].IsActive)
+                {
+                    ReserveProjectiles.Add(CharacterProjectiles[i]);
+                    CharacterProjectiles.Remove(CharacterProjectiles[i]);
+                }
+            }
+        }
+        private void DrawCharacterProjectiles()
+        {
+            foreach (var projectile in CharacterProjectiles)
+            {
+                if (projectile.IsActive)
+                {
+                    projectile.Draw();
+                }
+            }
+        }
+        #endregion
+
+        private Projectile TryGetProjectile(ProjectileType type)
+        {
+            foreach (var item in ReserveProjectiles)
+            {
+                if (item.ProjectileType == type)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
     }
 }

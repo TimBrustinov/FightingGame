@@ -23,9 +23,9 @@ namespace FightingGame
             IsActive = false;
             this.scale = scale;
         }
-       
-        public void Activate(Vector2 position, Vector2 direction, float speed)
+        public override void Activate(Vector2 position, Vector2 direction, float speed, int damage)
         {
+            Damage = damage;
             Position = position;
             startPosition = position;
             Direction = direction;
@@ -33,8 +33,6 @@ namespace FightingGame
             ProjectileAnimation.Start();
             IsActive = true;
         }
-       
-
         public override void Update()
         {
             if (Vector2.Distance(Position, startPosition) > 400)
@@ -74,6 +72,7 @@ namespace FightingGame
 
         public override void Reset()
         {
+            HitEntities.Clear();
             IsActive = false;
             HasHit = false;
             Direction = Vector2.Zero;
@@ -97,5 +96,6 @@ namespace FightingGame
         {
             return new MovingProjectile(ProjectileType, Damage, ProjectileTexture, ProjectileAnimation.AnimationFrames, ImpactAnimation.AnimationFrames, AnimationSpeed, Scale);
         }
+       
     }
 }

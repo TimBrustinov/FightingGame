@@ -106,7 +106,15 @@ namespace FightingGame
         }
         public void LightningStrike()
         {
-
+            if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.LightningStrike))
+            {
+                SelectedCharacter.PowerUps.Add(PowerUpType.LightningStrike, new LightningStrikeScript(PowerUpType.LightningStrike));
+            }
+            else
+            {
+                //var lifesteal = (LightningStrikeScript)SelectedCharacter.PowerUps[PowerUpType.LifeSteal];
+                
+            }
         }
 
 

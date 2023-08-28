@@ -10,22 +10,21 @@ namespace FightingGame
    
     public class EnemyRangedAttack : AttackBehaviour
     {
-        MovingProjectile projectile;
+        ProjectileType projectileType;
         Vector2 projectileAttachmentPoint;
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
 
-        public EnemyRangedAttack(AnimationType animationType, MovingProjectile projectile, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public EnemyRangedAttack(AnimationType animationType, ProjectileType projectileType, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
+            this.projectileType = projectileType;
             this.projectileAttachmentPoint = projectileAttachmentPoint;
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
-            this.projectile = projectile;
             IsRanged = true;
         }
         public override void OnStateEnter(Animator animator)
         {
-            GetProjectile();
             animator.Entity.IsAttacking = true;
             if (animator.Entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
@@ -36,7 +35,7 @@ namespace FightingGame
         }
         public override void OnStateUpdate(Animator animator)
         {
-            if(animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame && !projectile.IsActive)
+            if(animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame)
             {
                 Vector2 relativePosition = Vector2.Zero;
                 if(animator.Entity.IsFacingLeft)
@@ -51,8 +50,7 @@ namespace FightingGame
                 Vector2 attachmentPointRelative = projectileAttachmentPoint + relativePosition;
 
                 Vector2 projectileDirection = Vector2.Normalize(GameObjects.Instance.SelectedCharacter.Position - attachmentPointRelative);
-                GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectile);
-                projectile.Activate(attachmentPointRelative, projectileDirection, projectileSpeed);
+                GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectileType, attachmentPointRelative, projectileDirection, projectileSpeed, (int)Damage);
             }
         }
         public override void OnStateExit(Animator animator)
@@ -63,24 +61,24 @@ namespace FightingGame
         }
         public override AnimationBehaviour Clone()
         {
-            return new EnemyRangedAttack(AnimationType, projectile, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
+            return new EnemyRangedAttack(AnimationType, projectileType, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
         }
-        public void GetProjectile()
-        {
-            if (GameObjects.Instance.ProjectileManager.ReserveProjectiles.Count > 0)
-            {
-                foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveProjectiles)
-                {
-                    if (projectile.ProjectileType == this.projectile.ProjectileType && projectile.GetType() == typeof(MovingProjectile))
-                    {
-                        this.projectile = (MovingProjectile)projectile;
-                        this.projectile.Reset();
-                        GameObjects.Instance.ProjectileManager.ReserveProjectiles.Remove(projectile);
-                        return;
-                    }
-                }
-            }
-            projectile = (MovingProjectile)projectile.Clone();
-        }
+        //public void GetProjectile()
+        //{
+        //    if (GameObjects.Instance.ProjectileManager.ReserveProjectiles.Count > 0)
+        //    {
+        //        foreach (var projectile in GameObjects.Instance.ProjectileManager.ReserveProjectiles)
+        //        {
+        //            if (projectile.ProjectileType == this.projectile.ProjectileType && projectile.GetType() == typeof(MovingProjectile))
+        //            {
+        //                this.projectile = (MovingProjectile)projectile;
+        //                this.projectile.Reset();
+        //                GameObjects.Instance.ProjectileManager.ReserveProjectiles.Remove(projectile);
+        //                return;
+        //            }
+        //        }
+        //    }
+        //    projectile = (MovingProjectile)projectile.Clone();
+        //}
     }
 }

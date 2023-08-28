@@ -23,8 +23,6 @@ namespace FightingGame
         private float ultimateDrainRate;
         public Color MeterColor;
 
-        private double staminaRegenInterval = 1500;
-
         public float HealthRegen;
         public float MaxOvershield;
         public float OvershieldBarWidth;

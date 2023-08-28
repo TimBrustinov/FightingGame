@@ -27,7 +27,7 @@ namespace FightingGame
         public bool IsDead = false;
         public bool IsFacingLeft;
         public bool HasBeenHit;
-        public bool HasFrameChanged;
+        public bool HasFrameChanged; 
         public bool IsAttacking { get; set; }
 
         public EntityName Name;
