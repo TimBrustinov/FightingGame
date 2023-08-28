@@ -19,6 +19,7 @@
     <None Remove="Content\Cards\drops_25.png" />
     <None Remove="Content\Cards\Serrated_Claw_Card.png" />
     <None Remove="Content\Cards\Soaring_Swiftness_Plume_Card.png" />
+    <None Remove="Content\Cards\Stormcaster_Bow_Card.png" />
     <None Remove="Content\Cards\Veilstrike_Critblade_Card.png" />
     <None Remove="Content\Chests\Chest02.png" />
     <None Remove="Content\Chests\Chest12.png" />

@@ -90,7 +90,7 @@ namespace FightingGame
         public void BaseDamageIncrease()
         {
             //Multipliers.Instance.AbilityDamageMultiplier += 0.1f;
-            SelectedCharacter.BaseDamage += SelectedCharacter.BaseDamage * 0.1f;
+            SelectedCharacter.BaseDamage += SelectedCharacter.BaseDamage * 0.2f;
         }
         public void CriticalChanceIncrease()
         {
@@ -112,11 +112,10 @@ namespace FightingGame
             }
             else
             {
-                //var lifesteal = (LightningStrikeScript)SelectedCharacter.PowerUps[PowerUpType.LifeSteal];
+                var lightningStrike = (LightningStrikeScript)SelectedCharacter.PowerUps[PowerUpType.LightningStrike];
+                lightningStrike.DamageCoefficent *= 2;
                 
             }
         }
-
-
     }
 }

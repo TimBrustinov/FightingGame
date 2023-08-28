@@ -10,7 +10,7 @@ namespace FightingGame
     {
         Entity entity;
         bool savedDirection;
-        public MeleeAttack(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public MeleeAttack(AnimationType animationType, float damageCoefficent, int attackRange, int cooldown, bool canMove) : base(animationType, damageCoefficent, attackRange, cooldown, canMove)
         {
 
         }
@@ -19,7 +19,7 @@ namespace FightingGame
         {
             entity = animator.Entity;
             savedDirection = animator.Entity.IsFacingLeft;
-            Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
+            //Damage = Damage + Damage * Multipliers.Instance.AbilityDamageMultiplier;
             if(entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
                 entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;

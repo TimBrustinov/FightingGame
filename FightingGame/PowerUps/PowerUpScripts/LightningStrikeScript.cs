@@ -10,14 +10,14 @@ namespace FightingGame
     public class LightningStrikeScript : PowerUpScript
     {
         private ProjectileType projectileType;
-        public float DamagePercentage;
+        public float DamageCoefficent;
         private double timeInterval = 5;
         private double currentTime;
         Random random = new Random();
 
         public LightningStrikeScript(PowerUpType type) : base(type)
         {
-            DamagePercentage = 5;
+            DamageCoefficent = 10;
             projectileType = ProjectileType.LightningStrike;
         }
         public override void Update()
@@ -42,7 +42,7 @@ namespace FightingGame
                 {
                     int randomIndex = random.Next(enemiesInRange.Count);
                     Enemy randomEnemy = enemiesInRange[randomIndex];
-                    GameObjects.Instance.ProjectileManager.AddCharacterProjectile(projectileType, randomEnemy.Position - new Vector2(0, 120), Vector2.Zero, 0, (int)(GameObjects.Instance.SelectedCharacter.BaseDamage * DamagePercentage));
+                    GameObjects.Instance.ProjectileManager.AddCharacterProjectile(projectileType, randomEnemy.Position - new Vector2(0, 120), Vector2.Zero, 0, (int)(GameObjects.Instance.SelectedCharacter.BaseDamage * DamageCoefficent));
                     // Now you have a random enemy within range, you can perform actions with it
                 }
             }
