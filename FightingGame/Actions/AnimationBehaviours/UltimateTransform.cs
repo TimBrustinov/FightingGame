@@ -32,7 +32,7 @@ namespace FightingGame
         }
         public override AnimationBehaviour Clone()
         {
-            return new UltimateTransform(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new UltimateTransform(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
 
     }

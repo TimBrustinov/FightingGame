@@ -61,7 +61,7 @@ namespace FightingGame
         }
         public override AnimationBehaviour Clone()
         {
-            return new EnemyRangedAttack(AnimationType, projectileType, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
+            return new EnemyRangedAttack(AnimationType, projectileType, projectileAttachmentPoint, projectileTriggerFrame, projectileSpeed, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
         //public void GetProjectile()
         //{

@@ -15,10 +15,9 @@ namespace FightingGame
         protected bool canMove;
         public bool IsRanged = false;
         public bool HasHit = false;
-        public float baseDamage {  get; private set; }
         public AttackBehaviour(AnimationType animationType, float damageCoefficent, int attackRange, int cooldown, bool canMove) : base(animationType)
         {
-            Damage = damageCoefficent;
+            //Damage = damageCoefficent;
             DamageCoefficent = damageCoefficent;
             AttackRange = attackRange;
             Cooldown = cooldown;
@@ -36,7 +35,6 @@ namespace FightingGame
         {
             animator.Entity.IsAttacking = false;
             HasHit = false;
-            Damage = baseDamage;
         }
     }
 }

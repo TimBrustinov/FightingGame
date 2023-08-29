@@ -49,7 +49,7 @@ namespace FightingGame
 
         public override AnimationBehaviour Clone()
         {
-            return new AssassinCultistAmbush(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new AssassinCultistAmbush(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
     }
 }

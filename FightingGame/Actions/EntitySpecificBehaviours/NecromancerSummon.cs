@@ -48,7 +48,7 @@ namespace FightingGame
 
         public override AnimationBehaviour Clone()
         {
-            return new NecromancerSummon(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new NecromancerSummon(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
 
         private void SpawnEnemy(Vector2 position)

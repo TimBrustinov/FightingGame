@@ -49,7 +49,7 @@ namespace FightingGame
 
         public override AnimationBehaviour Clone()
         {
-            return new MeleeAttack(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new MeleeAttack(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
     }
 }

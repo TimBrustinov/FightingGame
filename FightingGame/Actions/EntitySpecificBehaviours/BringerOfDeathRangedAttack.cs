@@ -45,7 +45,7 @@ namespace FightingGame
         }
         public override AnimationBehaviour Clone()
         {
-            return new BringerOfDeathRangedAttack(AnimationType, projectileType, projectileTriggerFrame, projectileSpeed, Damage, AttackRange, Cooldown, canMove);
+            return new BringerOfDeathRangedAttack(AnimationType, projectileType, projectileTriggerFrame, projectileSpeed, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
     }
 }
