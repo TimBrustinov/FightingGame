@@ -19,7 +19,7 @@ namespace FightingGame
         public bool IsBoss;
         private Vector2 direction;
         public bool leftFacingSprite;
-
+        private Random random = new Random();
         public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
@@ -49,16 +49,17 @@ namespace FightingGame
         public void Update(Character character)
         {
             direction = Vector2.Normalize(character.Position - Position);
-            if (character.WeaponHitBox.Intersects(HitBox))
+            if (character.WeaponHitBox.Intersects(HitBox) && character.CurrentAbility != null)
             {
                 if (character.HasFrameChanged)
                 {
                     HasBeenHit = false;
+                    character.CurrentAbility.HasHit = false;
                 }
                 if (character.Animator.CurrentAnimation != null && character.Animator.CurrentAnimation.CurrerntFrame.CanHit && !HasBeenHit)
                 {
-                    TakeDamage(character.CurrentAttackDamage);
-                    HasBeenHit = true;
+                    TakeDamage(character.CurrentAbility.Damage, Color.White);
+                    character.CurrentAbility.HasHit = true;
                 }
             }
             else
@@ -84,9 +85,16 @@ namespace FightingGame
         public override void Draw()
         {
             base.Draw();
-            float healthPercentage = (float)RemainingHealth / TotalHealth;
-            int foregroundWidth = (int)(healthPercentage * 30);
-            Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle((int)TopLeft.X, (int)TopLeft.Y - 10, foregroundWidth, 3), HealthBarColor);
+            DrawHealthBar(Globals.SpriteBatch);
+        }
+        public void DrawHealthBar(SpriteBatch spriteBatch)
+        {
+            int width = 50;
+            int height = 10;
+
+            float healthPercentage = RemainingHealth / TotalHealth; // Calculate the percentage of remaining health
+            int foregroundWidth = (int)(healthPercentage * width); // Calculate the width of the foreground health bar
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(Position.X - width / 2, Position.Y - height * 5), new Rectangle(0, 0, foregroundWidth, 3), Color.Green); // Draw the foreground health bar
         }
         public void SpawnWithAnimation(Vector2 position)
         {
@@ -110,7 +118,6 @@ namespace FightingGame
             {
                 IsSpawning = false;
                 return AnimationType.Spawn;
-
             }
             if (RemainingHealth <= 0)
             {
@@ -138,5 +145,25 @@ namespace FightingGame
                 return AnimationType.Stand;
             }
         }
+        public void TakeDamage(float damage, Color damageColor)
+        {
+            HasBeenHit = true;
+            damage = (int)damage;
+            if (random.NextDouble() < Multipliers.Instance.CriticalChance && Multipliers.Instance.CriticalChance != 0)
+            {
+                damage = (int)(damage * Multipliers.Instance.CriticalDamageMultiplier);
+                RemainingHealth -= damage;
+                damageColor = Color.Red;
+            }
+            else
+            {
+                RemainingHealth -= damage;
+            }
+            DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 30), damageColor);
+        }
+        public Enemy Clone()
+        {
+            return new Enemy(Name, IsBoss, TotalHealth, Speed, EntityScale, leftFacingSprite, WaveNum);
+        }
     }
-}
+}  

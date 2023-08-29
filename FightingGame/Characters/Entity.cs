@@ -19,9 +19,7 @@ namespace FightingGame
         public Vector2 TopRight => Position + Dimentions / 2;
         public Vector2 Dimentions;
 
-        public AnimationBehaviour CurrentAction;
         public int NUM;
-       // public Attack CurrentAttack;
         public Rectangle WeaponHitBox;
         private int weaponVerticalOffset;
         private int weaponHorizontalOffset;
@@ -29,18 +27,16 @@ namespace FightingGame
         public bool IsDead = false;
         public bool IsFacingLeft;
         public bool HasBeenHit;
-        public bool HasFrameChanged;
+        public bool HasFrameChanged; 
+        public bool IsAttacking { get; set; }
 
         public EntityName Name;
+        public float BaseDamage;
         public float TotalHealth;
         public float RemainingHealth;
-        public float TotalStamina;
-        public float RemainingStamina;
         public double staminaTimer;
         public float Speed;
-        public float SpeedMultiplier = 0;
-        public float CurrentAttackDamage;
-        public float AttackDamageMultiplier = 0;
+        public AttackBehaviour CurrentAbility;
         public float EntityScale;
 
         public Animator Animator;
@@ -74,25 +70,12 @@ namespace FightingGame
                     CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
                 }
             }
-            //Animator.AnimationBehaviours = ContentManager.Instance.EntityAnimationBehaviours[Name];
-            //foreach (var animationBehaviour in ContentManager.Instance.EntityAnimationBehaviours[Name])
-            //{
-            //    Animator.AddAnimation(animationBehaviour.Key, animationBehaviour.Value.Animation);
-            //    Animator.AnimationBehaviours.Add(animationBehaviour.Key, animationBehaviour.Value);
-            //    if (animationBehaviour.Value is AttackBehaviour)
-            //    {
-            //        var attack = (AttackBehaviour)animationBehaviour.Value;
-            //        Attacks.Add(attack.AnimationType, attack);
-            //        CooldownManager.AddCooldown(attack.AnimationType, attack.Cooldown);
-            //    }
-            //}
-            ;
+            Animator.Animations[Animator.CurrentAnimationType].Start();
         }
 
         public virtual void Update(AnimationType animation, Vector2 direction)
         {
             Direction = direction;
-            Speed += Speed * SpeedMultiplier;
             Position = Vector2.Clamp(Position, minPosition, maxPosition);
             WantedAnimation = animation;
             Animator.Update();
@@ -165,8 +148,6 @@ namespace FightingGame
         public void Reset()
         {
             RemainingHealth = TotalHealth;
-            RemainingStamina = TotalStamina;
-            CurrentAction = null;
             IsDead = false;
             overrideAnimation = false;
         }
@@ -176,10 +157,7 @@ namespace FightingGame
             minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);
             maxPosition = new Vector2(mapSize.Width - Dimentions.X / 2, mapSize.Height - Dimentions.Y / 2);
         }
-        public void TakeDamage(float damage)
-        {
-            RemainingHealth -= damage;
-        }
+       
 
     }
 }

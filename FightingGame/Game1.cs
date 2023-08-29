@@ -34,6 +34,7 @@ namespace FightingGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
             graphics.PreferredBackBufferWidth = 1000;
             graphics.PreferredBackBufferHeight = 1000;
             graphics.ApplyChanges();
@@ -62,10 +63,12 @@ namespace FightingGame
 
             #endregion
             StartMenuScreen startMenuScreen = new StartMenuScreen(startMenuTextures, graphics);
-            GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics); 
+            GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics);
+            CardSelectionScreen cardSelectionScreen = new CardSelectionScreen();
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.StartMenuScreen, startMenuScreen);
             ScreenManager<Screenum>.Instance.ActivateScreen(startMenuScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.GameScreen, gameScreen);
+            ScreenManager<Screenum>.Instance.AddScreen(Screenum.CardSelectionScreen, cardSelectionScreen);
             // TODO: use this.Content to load your game content here
         }
 
@@ -83,6 +86,7 @@ namespace FightingGame
             GraphicsDevice.Clear(Color.Black);
             //spriteBatch.Begin();
             ScreenManager<Screenum>.Instance.Draw(spriteBatch, graphics);
+
             //spriteBatch.End();
             base.Draw(gameTime);
         }

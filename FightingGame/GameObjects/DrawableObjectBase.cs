@@ -8,6 +8,8 @@ namespace FightingGame
 {
     public abstract class DrawableObjectBase
     {
+       
+
         public Texture2D Texture { get; set; }
         public virtual Vector2 Position { get; set; }
         public Vector2 Dimentions { get; set; }

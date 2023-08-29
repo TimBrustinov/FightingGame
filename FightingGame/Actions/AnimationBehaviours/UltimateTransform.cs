@@ -8,7 +8,7 @@ namespace FightingGame
 {
     public class UltimateTransform : AttackBehaviour
     {
-        public UltimateTransform(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public UltimateTransform(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
         }
         public override void OnStateEnter(Animator animator)
@@ -19,20 +19,20 @@ namespace FightingGame
                 var character = (Character)entity;
                 character.InUltimateForm = true;
             }
+            base.OnStateEnter(animator);
         }
-
+        public override void OnStateUpdate(Animator animator)
+        {
+            return;
+        }
         public override void OnStateExit(Animator animator)
         {
             animator.SetAnimation(AnimationType.UltimateStand);
-        }
-
-        public override void OnStateUpdate(Animator animator)
-        {
-            return ;
+            base.OnStateExit(animator);
         }
         public override AnimationBehaviour Clone()
         {
-            return new UltimateTransform(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new UltimateTransform(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
 
     }

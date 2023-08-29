@@ -21,10 +21,6 @@ namespace FightingGame
         {
             Animations = new Dictionary<AnimationType, Animation>();
             AnimationBehaviours = new Dictionary<AnimationType, AnimationBehaviour>();
-            //foreach (var item in ContentManager.Instance.EntityActions[entity.Name].Values)
-            //{
-            //    AddAnimation(item.AnimationType, item.CanBeCanceled, ContentManager.Instance.EntitySpriteSheets[entity.Name], item.AnimationFrames, item.AnimationSpeed);
-            //}
             Entity = entity;
             CurrentAnimationType = AnimationType.Stand;
          }
@@ -35,8 +31,6 @@ namespace FightingGame
                 return;
             }
             Animations.Add(animationType, new Animation(texture, frameTime, sourceRectangles));
-            //CurrentAnimation = Animations[animationType];
-            //CurrentAnimationType = animationType;
         }
 
         public void Update()

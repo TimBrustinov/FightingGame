@@ -9,13 +9,15 @@ namespace FightingGame
 {
     public class StationaryProjectile : Projectile
     {
+        private Vector2 TopLeft;
         public StationaryProjectile(ProjectileType projectileType, int damage, Texture2D projectileTexture, List<FrameHelper> animationFrames, float animationSpeed, float scale) : base(projectileType, damage, projectileTexture, animationFrames, animationSpeed, scale)
         {
-
+            ProjectileAnimation = new Animation(ProjectileTexture, AnimationSpeed, animationFrames);
         }
-
-        public void Activate(Vector2 position)
+        public override void Activate(Vector2 position, Vector2 direction, float speed, int damage)
         {
+            Damage = damage;
+            ProjectileAnimation.Start();
             IsActive = true;
             Position = position;
         }
@@ -27,6 +29,7 @@ namespace FightingGame
 
         public override void Draw()
         {
+            //Globals.SpriteBatch.Draw(ContentManager.Instance.Pixel, Hitbox, Color.Red);
             ProjectileAnimation.Draw(Position, false, Scale, Color.White);
             if(ProjectileAnimation.IsAnimationDone)
             {
@@ -36,6 +39,7 @@ namespace FightingGame
 
         public override void Reset()
         {
+            HitEntities.Clear();
             ProjectileAnimation.Restart();
             IsActive = false;
             HasHit = false;
@@ -46,7 +50,8 @@ namespace FightingGame
         }
         private void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, ProjectileAnimation.PreviousFrame.SourceRectangle.Width, ProjectileAnimation.PreviousFrame.SourceRectangle.Height);
+            TopLeft = Position - new Vector2(ProjectileAnimation.PreviousFrame.SourceRectangle.Width / 2, ProjectileAnimation.PreviousFrame.SourceRectangle.Height / 2);
+            Hitbox = new Rectangle((int)TopLeft.X, (int)Position.Y, ProjectileAnimation.PreviousFrame.SourceRectangle.Width, ProjectileAnimation.PreviousFrame.SourceRectangle.Height);
         }
     }
 }

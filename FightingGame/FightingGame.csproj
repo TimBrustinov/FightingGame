@@ -11,12 +11,33 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\accessory_84.png" />
     <None Remove="Content\Blade_of_Frenzied_Might_Card.png" />
     <None Remove="Content\Bloodspiller_Scythe_1692047646868.png" />
+    <None Remove="Content\Bloodspiller_Scythe_Card.png" />
+    <None Remove="Content\CardIcons\drops_06.png" />
+    <None Remove="Content\Cards\drops_25.png" />
+    <None Remove="Content\Cards\Serrated_Claw_Card.png" />
+    <None Remove="Content\Cards\Soaring_Swiftness_Plume_Card.png" />
+    <None Remove="Content\Cards\Stormcaster_Bow_Card.png" />
+    <None Remove="Content\Cards\Veilstrike_Critblade_Card.png" />
+    <None Remove="Content\Chests\Chest02.png" />
+    <None Remove="Content\Chests\Chest12.png" />
+    <None Remove="Content\Corrupted Sword.png" />
+    <None Remove="Content\Draconic_Vitality_Wing_Card.png" />
+    <None Remove="Content\drops_32.png" />
+    <None Remove="Content\drops_64.png" />
+    <None Remove="Content\Elixir_of_Eternal_Renewal_Card.png" />
     <None Remove="Content\Glintweave_Overshield_Card.png" />
+    <None Remove="Content\Large Red Potion.png" />
     <None Remove="Content\Lifedrain_Tempest_Katana_Card.png" />
+    <None Remove="Content\Nature Boots.png" />
     <None Remove="Content\NecromancerFullSpritesheet.png" />
+    <None Remove="Content\scythe.png" />
     <None Remove="Content\Serenity%27s_Resurgence_Vial_Card.png" />
+    <None Remove="Content\shield_15.png" />
+    <None Remove="Content\Swiftheal_Medallion_Card.png" />
+    <None Remove="Content\weapon_311.png" />
     <None Remove="Content\Zephyr_Stride_Boots_Card.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />
@@ -28,6 +49,9 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\Chests\" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

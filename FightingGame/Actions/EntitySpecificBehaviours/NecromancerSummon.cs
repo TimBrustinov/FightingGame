@@ -10,7 +10,7 @@ namespace FightingGame
     {
         Rectangle summonFrame;
         bool hasSpawned = false;
-        public NecromancerSummon(AnimationType animationType, int damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
+        public NecromancerSummon(AnimationType animationType, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
             summonFrame = new Rectangle(1425, 288, 30, 47);
             IsRanged = true;
@@ -24,6 +24,7 @@ namespace FightingGame
             {
                 animator.Entity.CooldownManager.AnimationCooldown[AnimationType] = Cooldown;
             }
+            base.OnStateEnter(animator);
         }
 
         public override void OnStateUpdate(Animator animator)
@@ -42,11 +43,12 @@ namespace FightingGame
         {
             animator.SetAnimation(AnimationType.Stand);
             hasSpawned = false;
+            base.OnStateExit(animator);
         }
 
         public override AnimationBehaviour Clone()
         {
-            return new NecromancerSummon(AnimationType, Damage, AttackRange, Cooldown, canMove);
+            return new NecromancerSummon(AnimationType, DamageCoefficent, AttackRange, Cooldown, canMove);
         }
 
         private void SpawnEnemy(Vector2 position)
@@ -61,7 +63,7 @@ namespace FightingGame
             }
             else
             {
-                var newEnemy = new Enemy(GameObjects.Instance.EnemyManager.SkeletonPreset);
+                var newEnemy = GameObjects.Instance.EnemyManager.SkeletonPreset.Clone();
                 newEnemy.SetBounds(Globals.Tilemap);
                 newEnemy.Spawn(position);
                 GameObjects.Instance.EnemyManager.EnemyPool.Add(newEnemy);

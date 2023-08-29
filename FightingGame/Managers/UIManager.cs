@@ -14,61 +14,141 @@ namespace FightingGame
     public class UIManager
     {
         private Character character;
-        private Dictionary<AnimationType, Rectangle> AbilityIcons;
-        Dictionary<CharacterPortrait, Texture2D> Portraits;
-        private int offset;
+        private SpriteBatch SpriteBatch => Globals.SpriteBatch;
+
         private Camera Camera;
+        private Vector2 TopLeft => Camera.Corner;
+        private Vector2 TopRight => Camera.Corner + new Vector2(Camera.CameraView.Width, 0);
+        private Vector2 BottomLeft => Camera.Corner + new Vector2(0, Camera.CameraView.Height);
+        private Vector2 BottomRight => Camera.Corner + new Vector2(Camera.CameraView.Width, Camera.CameraView.Height);
 
-
-        private Vector2 iconPosition;
-        private Vector2 xpBarPosition;
+        private Vector2 HealthBarBackgroundPosition;
+        private Point HealthbarBackgroundDimensions;
         private Vector2 healthBarPosition;
-        private Vector2 staminaBarPosition;
-        private Vector2 ultimateMeterPosition;
+        private Point healthBarDimentions;
 
-        private float portraitScale = 0.7f;
+        private Vector2 xpBarPosition;
+        private Point xpBarDimentions;
+
+        private Vector2 abilityPosition;
+        private Point abilityDimentions;
+        private int abilityOffset;
+
+        private Vector2 ultimateBarPosition;
+        private Point ultimateBarDimentions;
+
+        private Vector2 powerUpBackgroundPosition;
+        private Point powerUpBackgroundDimensions;
+
+        private Vector2 moneyBackgroundPosition;
+        private Point moneyBackgroundDimensions;
 
         public UIManager(Character character, Camera camera)
         {
             this.character = character;
-            AbilityIcons = ContentManager.Instance.CharacterAbilityIcons[character.Name];
-            Portraits = ContentManager.Instance.CharacterPortraits[character.Name];
             Camera = camera;
-            offset = 55;
+            SetUI();
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraCorner)
+
+        private void SetUI()
         {
-            DrawHealthBar(spriteBatch, cameraCorner);
-            DrawXpBar(spriteBatch, cameraCorner);
-            DrawStaminaBar(spriteBatch, cameraCorner); 
-            DrawIcons(spriteBatch, cameraCorner);
-            DrawUltimateMeter(spriteBatch, cameraCorner);
+
+           // HealthBarBackgroundPosition = new Vector2(BottomLeft.X + 130,  BottomLeft.Y - 85);
+            HealthbarBackgroundDimensions = new Point(340, 70);
+            //healthBarPosition = new Vector2(HealthBarBackgroundPosition.X + 20, HealthBarBackgroundPosition.Y - 20);
+            healthBarDimentions = new Point(300, 20);
+
+            xpBarDimentions = new Point(200, 10);
+           // xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y + xpBarDimentions.Y - 5);
+
+            abilityDimentions = new Point(50, 50);
+            //abilityPosition = new Vector2(BottomRight.X - 400, BottomRight.Y - 80);
+            abilityOffset = 5;
+
+            ultimateBarDimentions = new Point(4 * (abilityDimentions.X + abilityOffset) - abilityOffset, 10);
+            //ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - ultimateBarDimentions.Y + 5);
+
+            powerUpBackgroundDimensions = new Point(800, 70);
+            //powerUpBackgroundPosition = new Vector2(BottomLeft.X + Camera.CameraView.Width / 2 - powerUpBackgroundDimensions.X / 2, 20);
+
+            moneyBackgroundDimensions = new Point(100, 20);
         }
-        private void DrawIcons(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        public void Update()
+        {
+            HealthBarBackgroundPosition = new Vector2(BottomLeft.X + 130, BottomLeft.Y - 95);
+            healthBarPosition = new Vector2(HealthBarBackgroundPosition.X + 20, HealthBarBackgroundPosition.Y + 35);
+            xpBarPosition = new Vector2(healthBarPosition.X + (healthBarDimentions.X - xpBarDimentions.X), healthBarPosition.Y - xpBarDimentions.Y - 8);
+            abilityPosition = new Vector2(BottomRight.X - 350, BottomRight.Y - 75);
+            ultimateBarPosition = new Vector2(abilityPosition.X, abilityPosition.Y - (ultimateBarDimentions.Y + 5));
+            powerUpBackgroundPosition = new Vector2(HealthBarBackgroundPosition.X + HealthbarBackgroundDimensions.X + 150, BottomLeft.Y - 95);
+            moneyBackgroundPosition = new Vector2(TopLeft.X + 130, TopLeft.Y + 955);
+        }
+        public void Draw()
+        {
+            bottomLeftUIBackground();
+            healthBar();
+            powerUps();
+            overShield();
+            xpBar();
+            abilities();
+            ultimateBar();
+            money();
+        }
+        private void bottomLeftUIBackground()
+        {
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, HealthBarBackgroundPosition - Vector2.One, new Rectangle(0, 0, HealthbarBackgroundDimensions.X + 2, HealthbarBackgroundDimensions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, HealthBarBackgroundPosition, new Rectangle(0, 0, HealthbarBackgroundDimensions.X, HealthbarBackgroundDimensions.Y), new Color(30, 30, 30, 255));
+        }
+        private void healthBar()
+        {
+            float healthPercentage = character.RemainingHealth / character.TotalHealth; 
+            int foregroundWidth = (int)(healthPercentage * healthBarDimentions.X); 
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, healthBarDimentions.X, healthBarDimentions.Y), new Color(30, 30, 30, 200));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, foregroundWidth, healthBarDimentions.Y), new Color(105, 187, 60));
+            string text = $"{character.RemainingHealth} / {character.TotalHealth}";
+            drawText(new Vector2(healthBarPosition.X + healthBarDimentions.X / 2 - ContentManager.Instance.Font.MeasureString(text).X / 2, healthBarPosition.Y + 3), text);
+        }
+        private void xpBar()
+        {
+            float xpPercentage = character.XP / character.xpToLevelUp; 
+            int foregroundWidth = (int)(xpPercentage * xpBarDimentions.X);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, xpBarDimentions.X, xpBarDimentions.Y), new Color(30, 30, 30, 200));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, foregroundWidth, xpBarDimentions.Y), new Color(178, 102, 255));
+            string text = $"Lv: {character.Level}";
+            drawText(new Vector2(xpBarPosition.X - 50, xpBarPosition.Y - 5), text);
+        }
+        private void ultimateBar()
+        {
+            float ultimatePercentage = character.RemainingUltimateMeter / character.UltimateMeterMax;
+            int foregroundWidth = (int)(ultimatePercentage * ultimateBarDimentions.X);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(ultimateBarPosition.X - 1, ultimateBarPosition.Y - 1), new Rectangle(0, 0, ultimateBarDimentions.X + 2, ultimateBarDimentions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, ultimateBarPosition, new Rectangle(0, 0, ultimateBarDimentions.X, ultimateBarDimentions.Y), new Color(30, 30, 30, 255));
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, ultimateBarPosition, new Rectangle(0, 0, foregroundWidth, ultimateBarDimentions.Y), Color.Gold);
+        }
+        private void overShield()
+        {
+            float overShieldPercentage = character.Overshield / character.MaxOvershield;
+            int foregroundWidth = (int)(overShieldPercentage * character.OvershieldBarWidth);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, healthBarPosition, new Rectangle(0, 0, foregroundWidth, healthBarDimentions.Y), new Color(153, 255, 255));
+        }
+        private void abilities()
         {
             int i = 0;
-            iconPosition = new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 + 15, cameraCorner.Y + Camera.Viewport.Height - 10);
-            //spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(cameraCorner.X + Camera.Viewport.Width / 2 - offset * 3, cameraCorner.Y + Camera.Viewport.Height - offset * 2), new Rectangle(0, 0, offset * 3, offset), new Color(30, 30, 30, 255));
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(iconPosition.X - 137, iconPosition.Y - 58), new Rectangle(0, 0, 235, 60), new Color(20, 20, 20, 210));
-            Vector2 dimentions = new Vector2(Portraits[CharacterPortrait.HashashinBase].Width * portraitScale, Portraits[CharacterPortrait.HashashinBase].Height * portraitScale);
-
-            if (!character.InUltimateForm)
+            if(character.InUltimateForm)
             {
-                //Draws the portrait 
-                spriteBatch.Draw(Portraits[CharacterPortrait.HashashinBase], new Vector2(iconPosition.X - 130, iconPosition.Y - offset + 4), default, Color.White, 0f, Vector2.Zero, portraitScale, SpriteEffects.None, 1f);
-                foreach (var item in AbilityIcons)
+                foreach (var icon in ContentManager.Instance.CharacterAbilityIcons[character.Name])
                 {
-                    if (item.Key != AnimationType.UltimateAbility1 && item.Key != AnimationType.UltimateAbility2 && item.Key != AnimationType.UltimateAbility3)
+                    if(icon.Key != AnimationType.Ability1 && icon.Key != AnimationType.Ability2 && icon.Key != AnimationType.Ability3 && icon.Key != AnimationType.Dodge)
                     {
-                        //Draws the ability Icon
-                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(iconPosition.X - 75 + i * offset, iconPosition.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-                        //Draws the cooldown for the ability
-                        if(character.CooldownManager.AnimationCooldown.ContainsKey(item.Key))
+                        Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
+                        iconBackground(position);
+                        SpriteBatch.Draw(icon.Value.Texture, position, icon.Value.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Value.Scale, SpriteEffects.None, 0);
+                        
+                        if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
                         {
-                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[item.Key] / character.CooldownManager.MaxAnimationCooldown[item.Key]; // Calculate the percentage of remaining cooldown
-                            int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
-                            Vector2 cooldownPosition = new Vector2(iconPosition.X - 75 + i * offset, iconPosition.Y - offset) + new Vector2(0, 50 - foregroundHeight);
-                            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
+                            int foregroundHeight = (int)(cooldownPercentage * abilityDimentions.X); 
+                            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0));
                         }
                         i++;
                     }
@@ -76,84 +156,61 @@ namespace FightingGame
             }
             else
             {
-                //Draws the portrait 
-                spriteBatch.Draw(Portraits[CharacterPortrait.HashashinElemental], new Vector2(iconPosition.X - 130, iconPosition.Y - offset + 4), default, Color.White, 0f, Vector2.Zero, portraitScale, SpriteEffects.None, 1f);
-
-                foreach (var item in AbilityIcons)
+                foreach (var icon in ContentManager.Instance.CharacterAbilityIcons[character.Name])
                 {
-                    if (item.Key == AnimationType.UltimateAbility1 || item.Key == AnimationType.UltimateAbility2 || item.Key == AnimationType.UltimateAbility3)
+                    if (icon.Key != AnimationType.UltimateAbility1 && icon.Key != AnimationType.UltimateAbility2 && icon.Key != AnimationType.UltimateAbility3 && icon.Key != AnimationType.UltimateDodge)
                     {
-                        spriteBatch.Draw(ContentManager.Instance.EntitySpriteSheets[character.Name], new Vector2(iconPosition.X - 75 + i * offset, iconPosition.Y - offset), AbilityIcons[item.Key], Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-                        //Draws the cooldown for the ability
-                        if (character.CooldownManager.AnimationCooldown.ContainsKey(item.Key))
+                        Vector2 position = new Vector2(abilityPosition.X + i * (abilityDimentions.X + abilityOffset), abilityPosition.Y);
+                        iconBackground(position);
+                        SpriteBatch.Draw(icon.Value.Texture, position, icon.Value.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Value.Scale, SpriteEffects.None, 0);
+                        if (character.CooldownManager.AnimationCooldown.ContainsKey(icon.Key))
                         {
-                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[item.Key] / character.CooldownManager.MaxAnimationCooldown[item.Key]; // Calculate the percentage of remaining cooldown
-                            int foregroundHeight = (int)(cooldownPercentage * 50); // Calculate the height of the foreground cooldown bar
-                            Vector2 cooldownPosition = new Vector2(iconPosition.X - 75 + i * offset, iconPosition.Y - offset) + new Vector2(0, 50 - foregroundHeight);
-                            spriteBatch.Draw(ContentManager.Instance.Pixel, cooldownPosition, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0), 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                            float cooldownPercentage = (float)character.CooldownManager.AnimationCooldown[icon.Key] / character.CooldownManager.MaxAnimationCooldown[icon.Key]; 
+                            int foregroundHeight = (int)(cooldownPercentage * abilityDimentions.X); 
+                            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, 50, foregroundHeight), new Color(75, 75, 75, 0));
                         }
                         i++;
                     }
                 }
             }
         }
-        private void DrawXpBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        private void iconBackground(Vector2 position)
         {
-            xpBarPosition = new Vector2(cameraCorner.X, cameraCorner.Y);
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(xpBarPosition.X, xpBarPosition.Y + 5), new Rectangle(0, 0, Camera.CameraView.Width, 20), new Color(30, 30, 30, 255));
-            float xpPercentage = character.XP / character.xpToLevelUp; // Calculate the percentage of XP progress
-            int foregroundWidth = (int)(xpPercentage * Camera.CameraView.Width); // Calculate the width of the foreground XP bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(xpBarPosition.X + 5, xpBarPosition.Y + 7), new Rectangle(0, 0, foregroundWidth, 15), Color.MediumPurple);
-
-            // Draw XP progress text
-            string xpText = $"{character.XP} / {(int)character.xpToLevelUp}";
-            Vector2 xpTextPosition = new Vector2(xpBarPosition.X + Camera.CameraView.Width / 2 - ContentManager.Instance.Font.MeasureString(xpText).X / 2, xpBarPosition.Y + 7);
-            spriteBatch.DrawString(ContentManager.Instance.Font, xpText, xpTextPosition, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(position.X - 1, position.Y - 1), new Rectangle(0, 0, abilityDimentions.X + 2, abilityDimentions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, position, new Rectangle(0, 0, abilityDimentions.X, abilityDimentions.Y), new Color(30, 30, 30, 255));
         }
-        private void DrawHealthBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
+        private void powerUps()
         {
-            healthBarPosition = new Vector2(cameraCorner.X, cameraCorner.Y + 35);
-
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X, healthBarPosition.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float healthPercentage = (float)character.RemainingHealth / character.TotalHealth; // Calculate the percentage of remaining health
-            int foregroundWidth = (int)(healthPercentage * 300); // Calculate the width of the foreground health bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(healthBarPosition.X + 5, healthBarPosition.Y + 5), new Rectangle(0, 0, foregroundWidth, 20), Color.Green);
-
-            // Draw health progress text
-            string healthText = $"{character.RemainingHealth} / {character.TotalHealth}";
-            Vector2 healthTextPosition = new Vector2(healthBarPosition.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(healthText).X / 2, healthBarPosition.Y + 7); 
-            spriteBatch.DrawString(ContentManager.Instance.Font, healthText, healthTextPosition, Color.White);
-        }
-        private void DrawStaminaBar(SpriteBatch spriteBatch, Vector2 cameraCorner)
-        {
-            staminaBarPosition = new Vector2(cameraCorner.X + 320, cameraCorner.Y + 35);
-
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(staminaBarPosition.X, staminaBarPosition.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float staminaPercentage = (float)character.RemainingStamina / character.TotalStamina; // Calculate the percentage of remaining stamina
-            int staminaForegroundWidth = (int)(staminaPercentage * 300); // Calculate the width of the foreground stamina bar
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(staminaBarPosition.X + 5, staminaBarPosition.Y + 5), new Rectangle(0, 0, staminaForegroundWidth, 20), Color.Gray);
-
-            // Draw stamina progress text
-            string staminaText = $"{character.RemainingStamina} / {character.TotalStamina}";
-            Vector2 staminaTextPosition = new Vector2(staminaBarPosition.X + 310 / 2 - ContentManager.Instance.Font.MeasureString(staminaText).X / 2, staminaBarPosition.Y + 7); 
-            spriteBatch.DrawString(ContentManager.Instance.Font, staminaText, staminaTextPosition, Color.White);
-        }
-        private void DrawUltimateMeter(SpriteBatch spriteBatch, Vector2 cameraCorner)
-        {
-            Color baseColor = character.MeterColor;
-            ultimateMeterPosition = new Vector2(cameraCorner.X + 640, cameraCorner.Y + 35);
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(ultimateMeterPosition.X, ultimateMeterPosition.Y), new Rectangle(0, 0, 310, 30), new Color(30, 30, 30, 255));
-            float meterPercentage = (float)character.RemainingUltimateMeter / character.UltimateMeterMax; // Calculate the percentage of remaining stamina
-            int meterForegroundWidth = (int)(meterPercentage * 300); // Calculate the width of the foreground stamina bar
-
-            if (meterForegroundWidth == 300)
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, powerUpBackgroundPosition - Vector2.One, new Rectangle(0, 0, powerUpBackgroundDimensions.X + 2, powerUpBackgroundDimensions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, powerUpBackgroundPosition, new Rectangle(0, 0, powerUpBackgroundDimensions.X, powerUpBackgroundDimensions.Y), new Color(30, 30, 30, 255));
+            int i = 0;
+            foreach (var item in PowerUps.Instance.PowerUpIcons)
             {
-                baseColor = Color.Red;
+                Icon icon = item.Value;
+                Vector2 position = new Vector2(powerUpBackgroundPosition.X + i * 35, powerUpBackgroundPosition.Y + 5);
+                SpriteBatch.Draw(icon.Texture, position, icon.SourceRectangle, Color.White, 0, Vector2.Zero, icon.Scale, SpriteEffects.None, 0);
+                if(icon.Ammount > 1)
+                {
+                    drawText(new Vector2(position.X + icon.Dimensions.X - 10, position.Y + icon.Dimensions.Y - 5), $"x{icon.Ammount}");
+                }
+                i++;
             }
-
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Vector2(ultimateMeterPosition.X + 5, ultimateMeterPosition.Y + 5), new Rectangle(0, 0, meterForegroundWidth, 20), baseColor);
-
-
         }
+        private void money()
+        {
+            var coin = ContentManager.Instance.EnemyDrops[IconType.Coin];
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition - Vector2.One, new Rectangle(0, 0, moneyBackgroundDimensions.X + 2, moneyBackgroundDimensions.Y + 2), Color.White);
+            SpriteBatch.Draw(ContentManager.Instance.Pixel, moneyBackgroundPosition, new Rectangle(0, 0, moneyBackgroundDimensions.X, moneyBackgroundDimensions.Y), new Color(30, 30, 30, 255));
+            SpriteBatch.Draw(coin.Icon.Texture, moneyBackgroundPosition, coin.Icon.SourceRectangle, Color.White, 0, Vector2.Zero, coin.Icon.Scale, SpriteEffects.None, 0);
+            string coinsText = $"{GameObjects.Instance.SelectedCharacter.Coins}";
+            Vector2 textDimensions = ContentManager.Instance.Font.MeasureString(coinsText);
+            Vector2 adjustedPosition = moneyBackgroundPosition + new Vector2(90 - textDimensions.X, 2);
+            drawText(adjustedPosition, coinsText);
+        }
+        private void drawText(Vector2 position, string text)
+        { 
+            SpriteBatch.DrawString(ContentManager.Instance.Font, text, position, Color.White);
+        }
+        
     }
 }

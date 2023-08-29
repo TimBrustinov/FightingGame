@@ -11,6 +11,7 @@ namespace FightingGame
         StartMenuScreen,
         CharacterSelectionScreen,
         GameScreen,
+        CardSelectionScreen,
     }
     public enum ClickResult
     {
@@ -110,5 +111,67 @@ namespace FightingGame
     {
         CultistFireBall,
         BringerOfDeathPortalSummon,
+        LightningStrike,
+    }
+
+    public enum PowerUpType
+    {
+        HealthRegenAmmountIncrease,
+        HealthRegenRateIncrease,
+        MaxHealthIncrease,
+        BaseDamageIncrease,
+        Bleed,
+        LifeSteal,
+        Overshield,
+        SpeedIncrease,
+        CriticalChanceIncrease,
+        CriticalDamageIncrease,
+        GoldDropIncrease,
+        LightningStrike,
+    }
+    public enum IconType
+    {
+        //character icons
+        HashashinAbility1,
+        HashashinAbility2,
+        HashashinAbility3,
+        HashashinDodge,
+        HashashinUltimateAbility1,
+        HashashinUltimateAbility2,
+        HashashinUltimateAbility3,
+        HashashinUltimateDodge,
+
+        //card icons
+        SwifthealMedalion,
+        GlintweaveOvershield,
+        LifedrainTempestKatana,
+        ElixirofEternal,
+        DraconicVitalityWing,
+        BloodspillerScythe,
+        SoaringSwiftnessPlume,
+        SerratedClaw,
+        VeilstrikeCritblade,
+        DirestrikeCritblade,
+        RichMerchantRing,
+        StormcasterBow,
+
+        //drops icons
+        LegendaryScroll,
+        RareScroll,
+        CommonScroll,
+        Coin,
+
+        //chest icons
+        LegendaryChest,
+        RareChest,
+        NormalChest,
+
+    }
+    public enum Rarity
+    {
+        None,
+        Common,
+        Rare, 
+        Legendary,
     }
 }

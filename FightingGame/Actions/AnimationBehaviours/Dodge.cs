@@ -11,24 +11,23 @@ namespace FightingGame
     {
         Entity entity;
         float dodgeSpeed;
-        public int StaminaDrain;
-        public Dodge(AnimationType animationType, float dodgeSpeed, int staminaDrain) : base(animationType)
+        float cooldown;
+        public Dodge(AnimationType animationType, float dodgeSpeed, float cooldown) : base(animationType)
         {
             this.dodgeSpeed = dodgeSpeed;
-            StaminaDrain = staminaDrain;
+            this.cooldown = cooldown;
         }
 
         public override void OnStateEnter(Animator animator)
         {
             entity = animator.Entity;
-            if(entity.RemainingStamina - StaminaDrain <= 0)
+            if (!entity.CooldownManager.AnimationCooldown.ContainsKey(AnimationType))
             {
-                animator.SetAnimation(AnimationType.Stand);
+                entity.CooldownManager.AddCooldown(AnimationType, cooldown);
             }
             else
             {
-                entity.RemainingStamina -= StaminaDrain;
-                entity.staminaTimer = 0;
+                entity.CooldownManager.AnimationCooldown[AnimationType] = cooldown;
             }
         }
         public override void OnStateUpdate(Animator animator)
@@ -47,7 +46,7 @@ namespace FightingGame
 
         public override AnimationBehaviour Clone()
         {
-            return new Dodge(this.AnimationType, this.dodgeSpeed, this.StaminaDrain);
+            return new Dodge(AnimationType, dodgeSpeed, cooldown);
         }
     }
 }

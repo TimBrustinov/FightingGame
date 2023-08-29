@@ -13,7 +13,7 @@ namespace FightingGame
         private int enemySpawnAmmountMax = 3;
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
-        private int bossSpawnRate = 40000;
+        private int bossSpawnRate = 4000;
         private double bossSpawnTimer;
 
         public int enemyPoolIndex;
@@ -21,17 +21,17 @@ namespace FightingGame
         public List<Enemy> ReservePool;
         private Random random;
 
-
+        private int num = 0;
         private Dictionary<int, List<Enemy>> EnemyWaves;
         private Dictionary<int, List<Enemy>> BossWaves;
         private int currentWave = 0;
-
+         
         #region Enemy Presets
-        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 30, 0.5f, 1.3f, false, 0);
+        public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 100, 0.5f, 1.3f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
-        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 50, 0.8f, 1f, false, 0);
-        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 40, 0.5f, 1.2f, false, 0);
-        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, true, 50, 0.5f, 1f, true, 0);
+        Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 200, 0.8f, 1f, false, 0);
+        Enemy NecromancerPreset = new Enemy(EntityName.Necromancer, false, 200, 0.5f, 1.2f, false, 0);
+        Enemy BringerOfDeathPreset = new Enemy(EntityName.BringerOfDeath, true, 600, 0.5f, 1f, true, 0);
         Enemy RangedCultistPreset = new Enemy(EntityName.RangedCultist, false, 30, 0.5f, 1.5f, true, 0);
         Enemy AssassinCultistPreset = new Enemy(EntityName.AssassinCultist, false, 20, 1.5f, 1.4f, true, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, ContentManager.Instance.EntitySpriteSheets[EntityName.GhostWarrior], 150, 0.8f, 1.5f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.GhostWarrior]);
@@ -52,19 +52,25 @@ namespace FightingGame
         {
             Camera = camera;
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if (enemySpawnTimer >= enemySpawnRate)
-            {
-                SpawnEnemies();
-                enemySpawnTimer = 0;
-            }
 
-            bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-            if (bossSpawnTimer >= bossSpawnRate)
+            if (enemyPoolIndex <= 3)
             {
-                int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
-                SpawnBoss(BossWaves[currentWave][randomNumber]);
-                bossSpawnTimer = 0;
+                if (enemySpawnTimer >= enemySpawnRate)
+                {
+                    SpawnEnemies();
+                    enemySpawnTimer = 0;
+                }
+
+                bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+                if (bossSpawnTimer >= bossSpawnRate)
+                {
+                    int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
+                    SpawnBoss(BossWaves[currentWave][randomNumber]);
+                    bossSpawnTimer = 0;
+                }
             }
+           
+            
             for (int i = 0; i < enemyPoolIndex; i++)
             {
                 if (EnemyPool[i].IsBoss && EnemyPool[i].IsDead)
@@ -115,10 +121,13 @@ namespace FightingGame
                 }
                 else
                 {
-                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count); 
-                    var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
+                    int randomEnemy = random.Next(0, EnemyWaves[currentWave].Count);
+                    var newEnemy = EnemyWaves[currentWave][randomEnemy].Clone();
+                    //var newEnemy = new Enemy(EnemyWaves[currentWave][randomEnemy]);
                     newEnemy.SetBounds(Tilemap.HitBox);
                     newEnemy.Spawn(GetSpawnLocation());
+                    newEnemy.NUM = num;
+                    num++;
                     EnemyPool.Add(newEnemy);
                 }
             }

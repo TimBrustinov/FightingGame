@@ -22,16 +22,25 @@ namespace FightingGame
         public Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>> EntityAnimationBehaviours;
         public Dictionary<EntityName, Dictionary<AnimationType, Animation>> EntityAnimations;
 
-        public Dictionary<EntityName, Dictionary<AnimationType, Rectangle>> CharacterAbilityIcons;
+        public Dictionary<EntityName, Dictionary<AnimationType, Icon>> CharacterAbilityIcons;
         public Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>> CharacterPortraits;
+
+        public Dictionary<ProjectileType, Projectile> Projectiles;
+        public Dictionary<PowerUpType, Card> PowerUpCards;
+        public Dictionary<IconType, Drop> EnemyDrops;
+        public Dictionary<IconType, Chest> Chests; 
         private ContentManager()
         {
-            CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Rectangle>>();
+            CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Icon>>();
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
             EntityAnimationBehaviours = new Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>>();
             CharacterPortraits = new Dictionary<EntityName, Dictionary<CharacterPortrait, Texture2D>>();
             EntityAnimations = new Dictionary<EntityName, Dictionary<AnimationType, Animation>>();
+            PowerUpCards = new Dictionary<PowerUpType, Card>();
+            EnemyDrops = new Dictionary<IconType, Drop>();
+            Chests = new Dictionary<IconType, Chest>();
+            Projectiles = new Dictionary<ProjectileType, Projectile>();
         }
 
         public static ContentManager Instance { get; } = new ContentManager();
@@ -41,23 +50,88 @@ namespace FightingGame
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
+            
+
+            #region Drops
+            EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.3f)));
+            EnemyDrops.Add(IconType.RareScroll, new Drop(Rarity.Rare, new Icon(IconType.RareScroll, content.Load<Texture2D>("Drops/quest_06"), 1.3f)));
+            EnemyDrops.Add(IconType.LegendaryScroll, new Drop(Rarity.Legendary, new Icon(IconType.LegendaryScroll, content.Load<Texture2D>("Drops/quest_03"), 1.3f)));
+            EnemyDrops.Add(IconType.Coin, new Drop(Rarity.None, new Icon(IconType.Coin, content.Load<Texture2D>("Drops/material_125"), 1.3f)));
+            #endregion
+
+            #region Chests
+            var legendaryChestTexture = content.Load<Texture2D>("Chests/Chest02");
+            List<FrameHelper> legendaryChestOpen = new List<FrameHelper>();
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(12, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(55, 34, 44, 25), new Rectangle(62, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(112, 24, 26, 35), new Rectangle(112, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(162, 5, 26, 54), new Rectangle(162, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(212, 4, 26, 55), new Rectangle(212, 35, 26, 24)));
+            legendaryChestOpen.Add(new FrameHelper(new Rectangle(262, 25, 26, 34), new Rectangle(262, 35, 26, 24)));
+            Chest legendaryChest = new Chest(new Icon(IconType.LegendaryChest, legendaryChestTexture, new Rectangle(12, 35, 26, 25), 1.6f), new Animation(legendaryChestTexture, 0.2f, legendaryChestOpen));
+            Chests.Add(IconType.LegendaryChest, legendaryChest);
+
+
+            var commonChestTexture = content.Load<Texture2D>("Chests/Chest07");
+            List<FrameHelper> commonChestOpen = new List<FrameHelper>();
+            commonChestOpen.Add(new FrameHelper(new Rectangle(12, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(51, 37, 48, 24), new Rectangle(62, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(112, 26, 27, 35), new Rectangle(112, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(162, 2, 26, 59), new Rectangle(162, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(212, 2, 26, 59), new Rectangle(212, 37, 26, 24)));
+            commonChestOpen.Add(new FrameHelper(new Rectangle(262, 27, 26, 34), new Rectangle(262, 37, 26, 24)));
+            Chest normalChest = new Chest(new Icon(IconType.NormalChest, commonChestTexture, new Rectangle(12, 37, 26, 24), 1.6f), new Animation(commonChestTexture, 0.2f, commonChestOpen));
+            Chests.Add(IconType.NormalChest, normalChest);
+
+            var rareChestTexture = content.Load<Texture2D>("Chests/Chest09");
+            List<FrameHelper> rareChestOpen = new List<FrameHelper>();
+            rareChestOpen.Add(new FrameHelper(new Rectangle(11, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(51, 33, 47, 28), new Rectangle(61, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(111, 26, 25, 35), new Rectangle(111, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(161, 3, 25, 58), new Rectangle(161, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(211, 5, 25, 56), new Rectangle(211, 34, 25, 27)));
+            rareChestOpen.Add(new FrameHelper(new Rectangle(261, 27, 25, 34), new Rectangle(261, 34, 25, 27)));
+            Chest rareChest = new Chest(new Icon(IconType.RareChest, rareChestTexture, new Rectangle(11, 34, 25, 27), 1.6f), new Animation(rareChestTexture, 0.2f, rareChestOpen));
+            Chests.Add(IconType.RareChest, rareChest);
+
+            //Chests.Add(IconType.NormalChest, new Chest(new Icon(IconType.NormalChest, content.Load<Texture2D>("Chests/Chest02"), new Rectangle( ), 1f), new Animation ))
+            #endregion
+
+            #region Power Up Cards
+            PowerUpCards.Add(PowerUpType.HealthRegenAmmountIncrease, new Card(content.Load<Texture2D>("Cards/Elixir_of_Eternal_Renewal_Card"), Rarity.Common, Color.White, PowerUps.Instance.HealthRegenAmmountIncrease, new Icon(IconType.ElixirofEternal, content.Load<Texture2D>("CardIcons/drops_64"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.HealthRegenRateIncrease, new Card(content.Load<Texture2D>("Cards/Swiftheal_Medallion_Card"), Rarity.Common, Color.White, PowerUps.Instance.HealthRegenRateIncrease, new Icon(IconType.SwifthealMedalion, content.Load<Texture2D>("CardIcons/accessory_84"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Bleed, new Card(content.Load<Texture2D>("Cards/Bloodspiller_Scythe_Card"), Rarity.Rare, Color.White, PowerUps.Instance.Bleed, new Icon(IconType.BloodspillerScythe, content.Load<Texture2D>("CardIcons/scythe"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.Overshield, new Card(content.Load<Texture2D>("Cards/Glintweave_Overshield_Card"), Rarity.Common, Color.White, PowerUps.Instance.Overshield, new Icon(IconType.GlintweaveOvershield, content.Load<Texture2D>("CardIcons/shield_15"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LifeSteal, new Card(content.Load<Texture2D>("Cards/Lifedrain_Tempest_Katana_Card"), Rarity.Rare, Color.White, PowerUps.Instance.LifesSteal, new Icon(IconType.LifedrainTempestKatana, content.Load<Texture2D>("CardIcons/weapon_311"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.MaxHealthIncrease, new Card(content.Load<Texture2D>("Cards/Draconic_Vitality_Wing_Card"), Rarity.Common, Color.White, PowerUps.Instance.MaxHealthIncrease, new Icon(IconType.DraconicVitalityWing, content.Load<Texture2D>("CardIcons/drops_32"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.SpeedIncrease, new Card(content.Load<Texture2D>("Cards/Soaring_Swiftness_Plume_Card"), Rarity.Common, Color.White, PowerUps.Instance.SpeedIncrease, new Icon(IconType.SoaringSwiftnessPlume, content.Load<Texture2D>("CardIcons/drops_25"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.BaseDamageIncrease, new Card(content.Load<Texture2D>("Cards/Ravager's_Blade_Card"), Rarity.Common, Color.White, PowerUps.Instance.BaseDamageIncrease, new Icon(IconType.SerratedClaw, content.Load<Texture2D>("CardIcons/weapon_07"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), Rarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.GoldDropIncrease, new Card(content.Load<Texture2D>("Cards/Rich_Merchant_Ring_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.RichMerchantRing, content.Load<Texture2D>("CardIcons/ring_168"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Common, Color.White, PowerUps.Instance.LightningStrike, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
+
+            #endregion
 
             #region Hashashin
             Texture2D HashashinTexture = content.Load<Texture2D>("HashashinFullSpritesheet");
             EntitySpriteSheets.Add(EntityName.Hashashin, HashashinTexture);
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
-            Dictionary<AnimationType, Rectangle> HashashinAbilityIcons = new Dictionary<AnimationType, Rectangle>()
-            { 
-                [AnimationType.Ability1] = new Rectangle(988, 597, 50, 50),
-                [AnimationType.Ability2] = new Rectangle(5677, 1106, 50, 50),
-                [AnimationType.Ability3] = new Rectangle(1300, 1236, 50, 50),
-                [AnimationType.UltimateAbility1] = new Rectangle(690, 2361, 50, 50),
-                [AnimationType.UltimateAbility2] = new Rectangle(4836, 2743, 50, 50),
-                [AnimationType.UltimateAbility3] = new Rectangle(1601, 2884, 50, 50),
+            Dictionary<AnimationType, Icon> HashashinAbilityIcons = new Dictionary<AnimationType, Icon>()
+            {
+                [AnimationType.Ability1] = new Icon(IconType.HashashinAbility1, HashashinTexture, new Rectangle(988, 597, 50, 50), 1f),
+                [AnimationType.Ability2] = new Icon(IconType.HashashinAbility2, HashashinTexture, new Rectangle(5677, 1106, 50, 50), 1f),
+                [AnimationType.Ability3] = new Icon(IconType.HashashinAbility3, HashashinTexture, new Rectangle(1300, 1236, 50, 50), 0.9f),
+                [AnimationType.Dodge] = new Icon(IconType.HashashinDodge, HashashinTexture, new Rectangle(982, 728, 50, 50), 1f),
+
+                [AnimationType.UltimateAbility1] = new Icon(IconType.HashashinUltimateAbility1, HashashinTexture, new Rectangle(1853, 2748, 52, 50), new Vector2(0.95f, 1f)),
+                [AnimationType.UltimateAbility2] = new Icon(IconType.HashashinUltimateAbility2, HashashinTexture, new Rectangle(4495, 2686, 64, 62), new Vector2(0.78f, 0.78f)),
+                [AnimationType.UltimateAbility3] = new Icon(IconType.HashashinUltimateAbility3, HashashinTexture, new Rectangle(2154, 2859, 84, 67), new Vector2(0.6f, 0.7f)),
+                [AnimationType.UltimateDodge] = new Icon(IconType.HashashinUltimateDodge, HashashinTexture, new Rectangle(1618, 1235, 50, 50), 1f),
             };
             Dictionary<CharacterPortrait, Texture2D> HashashinPortraits = new Dictionary<CharacterPortrait, Texture2D>()
-            { 
+            {
                 [CharacterPortrait.HashashinBase] = content.Load<Texture2D>("wind_hashashin"),
                 [CharacterPortrait.HashashinElemental] = content.Load<Texture2D>("wind_elemental"),
             };
@@ -76,7 +150,7 @@ namespace FightingGame
 
             List<FrameHelper> HashashinBasicAttack = new List<FrameHelper>();
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(135, 858, 48, 37), new Rectangle(145, 858, 38, 25), canHit));
-            HashashinBasicAttack.Add(new FrameHelper(new Rectangle(424, 858, 28, 37),  new Rectangle(435, 858, 23, 19), canHit));
+            HashashinBasicAttack.Add(new FrameHelper(new Rectangle(424, 858, 28, 37), new Rectangle(435, 858, 23, 19), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(691, 858, 58, 37), new Rectangle(690, 859, 61, 30), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(978, 858, 45, 37), new Rectangle(970, 867, 35, 20), canHit));
             HashashinBasicAttack.Add(new FrameHelper(new Rectangle(1273, 858, 40, 37), new Rectangle(1270, 863, 21, 19), canHit));
@@ -145,7 +219,7 @@ namespace FightingGame
             HashashinAbility3.Add(new FrameHelper(new Rectangle(7938, 1244, 42, 34)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8212, 1243, 39, 36)));
             HashashinAbility3.Add(new FrameHelper(new Rectangle(8478, 1243, 39, 36)));
-            Hashashin.Add(AnimationType.Ability3, new Animation(HashashinTexture, 0.1f, HashashinAbility3));
+            Hashashin.Add(AnimationType.Ability3, new Animation(HashashinTexture, 0.06f, HashashinAbility3));
 
 
             //List<FrameHelper> HashashinAbility3 = new List<FrameHelper>();
@@ -310,43 +384,23 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> HashashinAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 15),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 7, 0, 0, true),
-                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 10, 0, 2, true),
-                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 5, 0, 3, true),
-                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 7, 0, 2, false),
-                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 6, 0, 0, false),
+                [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 2),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 1, 0, 0, true),
+                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 1.5f, 0, 2, true),
+                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 1, 0, 3, true),
+                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 2f, 0, 2, false),
+                [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 1.0f, 0, 0, false),
                 [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand),
                 [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun),
-                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 7, 0, 0, true),
-                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 5, 0, 1, true),
-                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 10, 0, 3, true),
-                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 5, 0, 4, true),
-                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 12),
+                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 2.0f, 0, 0, true),
+                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 1.5f, 0, 1, true),
+                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 2.2f, 0, 3, true),
+                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 1.7f, 0, 4, true),
+                [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 1),
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
-            //Dictionary<AnimationType, EntityAction> HashashinAbilites = new Dictionary<AnimationType, EntityAction>()
-            //{
-            //    [AnimationType.BasicAttack] = new Ability(AnimationType.BasicAttack, HashashinBasicAttack, !CanBeCanceled, 0.07f, 0, default, 5, true),
-            //    [AnimationType.Stand] = new Stand(AnimationType.Stand, HashashinStand, CanBeCanceled, 0.13f),
-            //    [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, HashashinDodge, !CanBeCanceled, 0.1f, 15, 5),
-            //    [AnimationType.Ability1] = new Ability(AnimationType.Ability1, HashashinAbility1, !CanBeCanceled, 0.115f, 2, default, 7, true),
-            //    [AnimationType.Ability2] = new Ability(AnimationType.Ability2, HashashinAbility2, !CanBeCanceled, 0.1f, 2, default, 5, true),
-            //    [AnimationType.Ability3] = new Ability(AnimationType.Ability3, HashashinAbility3, !CanBeCanceled, 0.065f, 3, default, 8, false),
-            //    [AnimationType.UltimateTransform] = new Ability(AnimationType.UltimateTransform, HashashinUltimateTransformation, !CanBeCanceled, 0.1f, 60, 0, 5, false),
-            //    [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand, HashashinUltimateStand, CanBeCanceled, 0.1f),
-            //    [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun, HashashinUltimateRun, CanBeCanceled, 0.1f),
-            //    [AnimationType.UltimateAbility1] = new Ability(AnimationType.UltimateAbility1, HashashinUltimateAbility1, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateAbility2] = new Ability(AnimationType.UltimateAbility2, HashashinUltimateAbility2, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateAbility3] = new Ability(AnimationType.UltimateAbility3, HashashinUltimateAbility3, !CanBeCanceled, 0.08f, 3, default, 8, true),
-            //    [AnimationType.UltimateBasicAttack] = new Ability(AnimationType.UltimateBasicAttack, HashashinUltimateBasicAttack, !CanBeCanceled, 0.08f, 0, default, 8, true),
-            //    [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, HashashinUltimateDodge, !CanBeCanceled, 0.1f, 15, 5),
-            //    [AnimationType.UndoTransform] = new Ability(AnimationType.UndoTransform, HashashinUndoTransform, !CanBeCanceled, 0.1f, 5, 0, 0, false),
-            //    [AnimationType.Run] = new Run(AnimationType.Run, HashashinRun, CanBeCanceled, 0.13f),
-            //};
 
-            //EntityActions.Add(EntityName.Hashashin, HashashinAbilites);
             EntityAnimations.Add(EntityName.Hashashin, Hashashin);
             EntityAnimationBehaviours.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
@@ -604,7 +658,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
-                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f), new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
+                [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, ProjectileType.BringerOfDeathPortalSummon, new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -829,7 +883,7 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Death] = new Death(AnimationType.Death),
-                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f), new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
+                [AnimationType.BasicAttack] = new EnemyRangedAttack(AnimationType.BasicAttack, ProjectileType.CultistFireBall, new Vector2(187, 145), new Rectangle(182, 133, 38, 35), 2, 5, 400, 5, false),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
@@ -928,6 +982,32 @@ namespace FightingGame
             EntityAnimationBehaviours.Add(EntityName.AssassinCultist, AssassinCultistBehaviours);
             EntityAnimations.Add(EntityName.AssassinCultist, AssassinCultist);
             #endregion
+
+            #region Projectiles
+            Projectiles.Add(ProjectileType.CultistFireBall, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f));
+            Projectiles.Add(ProjectileType.BringerOfDeathPortalSummon, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f));
+
+            Texture2D LightningStrikeTexture = content.Load<Texture2D>("CLOUD LIGHTNING ATTACK-Sheet");
+            List<FrameHelper> LightningStrike = new List<FrameHelper>();
+            LightningStrike.Add(new FrameHelper(new Rectangle(170, 19, 33, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(271, 15, 89, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(403, 18, 84, 14)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(522, 17, 98, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(653, 17, 96, 198), new Rectangle(653, 17, 92, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(787, 18, 84, 196), new Rectangle(787, 18, 84, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(906, 17, 98, 198), new Rectangle(906, 17, 98, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1037, 17, 100, 199), new Rectangle(1037, 17, 92, 18)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1169, 18, 90, 195), new Rectangle(1171, 18, 84, 15)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1290, 17, 98, 196), new Rectangle(1290, 17, 98, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1521, 17, 92, 16)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1546, 15, 95, 198), new Rectangle(1546, 15, 95, 22)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1683, 17, 85, 17)));
+            LightningStrike.Add(new FrameHelper(new Rectangle(1808, 15, 93, 197), new Rectangle(1808, 15, 93, 24)));
+            Projectiles.Add(ProjectileType.LightningStrike, new StationaryProjectile(ProjectileType.LightningStrike, 50, LightningStrikeTexture, LightningStrike, 0.1f, 0.8f));
+
+            #endregion
+
+            
         }
     }
 }

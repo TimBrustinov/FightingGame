@@ -16,8 +16,8 @@ namespace FightingGame
         public Camera Camera;
 
         private Matrix Transform;
-        public override Screenum ScreenType { get; protected set; }
-        public override bool IsActive { get; set; }
+        public override Screenum ScreenType { get; protected set; } = Screenum.GameScreen;
+        public override bool IsActive { get; set; } = true;
         public override bool CanBeDrawnUnder { get; set; }
 
         Character Hashashin;
@@ -40,8 +40,7 @@ namespace FightingGame
         AnimationType currentAnimation = AnimationType.Stand;
         
         UIManager CharacterUIManager;
-        EnemyManager EnemyManager;
-        ProjectileManager ProjectileManager;
+        ChestManager ChestManager;
 
         #region DrawableObjects
         DrawableObject Tilemap;
@@ -52,13 +51,13 @@ namespace FightingGame
             Graphics = graphics;
             Tilemap = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920 * 1.8f, 1920 * 1.8f), Color.White);
             Globals.Tilemap = Tilemap.HitBox;
-            Hashashin = new Character(EntityName.Hashashin, ContentManager.Instance.EntitySpriteSheets[EntityName.Hashashin], 100, 4, 1.3f, ContentManager.Instance.EntityAnimationBehaviours[EntityName.Hashashin]);
+            Hashashin = new Character(EntityName.Hashashin, 100, 12, 4, 1.3f);
             Hashashin.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
             graphics.PreferredBackBufferWidth = 1920;
-            graphics.PreferredBackBufferHeight = 1000;
+            graphics.PreferredBackBufferHeight = 1080;
             graphics.ApplyChanges();
 
             //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -69,15 +68,21 @@ namespace FightingGame
         }
         public override void Initialize()
         {
+            //Graphics.IsFullScreen = true;
             SelectedCharacter = Hashashin;
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
-            EnemyManager = new EnemyManager(Tilemap);
-            ProjectileManager = new ProjectileManager();
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
-            GameObjects.Instance.EnemyManager = EnemyManager;
+            GameObjects.Instance.EnemyManager = new EnemyManager(Tilemap);
             GameObjects.Instance.SelectedCharacter = SelectedCharacter;
-            GameObjects.Instance.ProjectileManager = ProjectileManager;
+            GameObjects.Instance.ProjectileManager = new ProjectileManager();
+            GameObjects.Instance.DropManager = new DropManager();
+            
+            ChestManager = new ChestManager();
+            for (int i = 0; i < ChestManager.maxChests; i++)
+            {
+                ChestManager.SpawnChest();
+            }
         }
         public override Screenum Update(MouseState ms)
         {
@@ -99,6 +104,10 @@ namespace FightingGame
                             break;
                         }
                     }
+                    if(key == Keys.Q)
+                    {
+                        SelectedCharacter.TakeDamage(1, Color.White);
+                    }
                 }
             }
             if(SelectedCharacter.RemainingHealth <= 0)
@@ -108,20 +117,31 @@ namespace FightingGame
 
             SelectedCharacter.Update(currentAnimation, InputManager.Direction);
             Camera.Update(SelectedCharacter.Position, Tilemap.HitBox);
-            EnemyManager.Update(SelectedCharacter, Camera);
-            ProjectileManager.UpdateEnemyProjectiles();
-            return Screenum.GameScreen;
+            DamageNumberManager.Instance.Update();
+            GameObjects.Instance.Update();
+            ChestManager.Update();
+            CharacterUIManager.Update(); 
+            
+            if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
+            {
+                return Screenum.CardSelectionScreen;
+            }
+            else
+            {
+                return Screenum.GameScreen;
+            } 
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
             Transform = Camera.GetTransformMatrix();
-            spriteBatch.Begin(transformMatrix: Transform);
+            spriteBatch.Begin(transformMatrix: Transform , samplerState: SamplerState.PointClamp);
 
             Tilemap.Draw(spriteBatch);
+            ChestManager.Draw();
             SelectedCharacter.Draw();
-            EnemyManager.Draw();
-            ProjectileManager.DrawEnemyProjectiles();
-            CharacterUIManager.Draw(spriteBatch, Camera.Corner);
+            DamageNumberManager.Instance.Draw();
+            GameObjects.Instance.Draw();
+            CharacterUIManager.Draw();
 
             spriteBatch.End();
         }
