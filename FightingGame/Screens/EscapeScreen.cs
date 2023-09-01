@@ -38,19 +38,12 @@ namespace FightingGame
             SizeIncreaseFactor = ButtonScale + 0.05f;
             buttonScales = new float[] { ButtonScale, ButtonScale, ButtonScale };
             buttons = new List<Button>();
-            Vector2 screenCenter = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2, Globals.GraphicsDevice.Viewport.Height / 2);
-
-            int spacing = 10; 
-            int totalHeight = (rectHeight + spacing) * 3 - spacing;
-            Vector2 startPosition = new Vector2(screenCenter.X - rectWidth / 2, screenCenter.Y - totalHeight / 2);
-
-            ResumeButton = new Button(ContentManager.Instance.Pixel, startPosition, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale);
+            
+            ResumeButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale, "Resume");
             buttons.Add(ResumeButton);
-            startPosition.Y += rectHeight + spacing;
-            ReturnToMainMenuButton = new Button(ContentManager.Instance.Pixel, startPosition, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale);
+            ReturnToMainMenuButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale, "Return To Main Menu");
             buttons.Add(ReturnToMainMenuButton);
-            startPosition.Y += rectHeight + spacing; 
-            QuitToDesktopButton = new Button(ContentManager.Instance.Pixel, startPosition, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale);
+            QuitToDesktopButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale, "Quit To Desktop");
             buttons.Add(QuitToDesktopButton);
         }
 
@@ -60,8 +53,20 @@ namespace FightingGame
         }
         public override void Initialize()
         {
-            
+            // Calculate the total height of all buttons and the spacing between them
+            int totalButtonHeight = buttons.Count * rectHeight;
+            int verticalSpacing = 10; // Adjust this value to control the spacing between buttons
+
+            // Calculate the starting Y position to center the buttons vertically
+            int startY = (Globals.GraphicsDevice.Viewport.Height - totalButtonHeight - (buttons.Count - 1) * verticalSpacing) / 2;
+
+            // Set the positions for each button
+            for (int i = 0; i < buttons.Count; i++)
+            {
+                buttons[i].Position = new Vector2((Globals.GraphicsDevice.Viewport.Width /* - buttons[i].Dimentions.X*/) / 2, startY + i * (buttons[i].Dimentions.Y + verticalSpacing));
+            }
         }
+
         public override Screenum Update(MouseState ms)
         {
             KeyboardState ks = Keyboard.GetState();
@@ -71,17 +76,17 @@ namespace FightingGame
                 isLeftKeyPressed = true;
                 selectedButtonIndex = (selectedButtonIndex - 1 + 3) % 3;
             }
-            else if (ks.IsKeyUp(Keys.S))
+            else if (ks.IsKeyUp(Keys.W))
             {
                 isLeftKeyPressed = false;
             }
 
-            if (ks.IsKeyDown(Keys.D) && !isRightKeyPressed)
+            if (ks.IsKeyDown(Keys.S) && !isRightKeyPressed)
             {
                 isRightKeyPressed = true;
                 selectedButtonIndex = (selectedButtonIndex + 1) % 3;
             }
-            else if (ks.IsKeyUp(Keys.D))
+            else if (ks.IsKeyUp(Keys.S))
             {
                 isRightKeyPressed = false;
             }
@@ -93,11 +98,14 @@ namespace FightingGame
 
                 if (selectedButtonIndex == 0)
                 {
-                    // Handle action for the first button
+                    ScreenManager<Screenum>.Instance.GoBack();
+                    return Screenum.GameScreen;
                 }
                 else if (selectedButtonIndex == 1)
                 {
-                    // Handle action for the second button
+                    ScreenManager<Screenum>.Instance.GoBack();
+                    ScreenManager<Screenum>.Instance.GoBack();
+                    return Screenum.StartMenuScreen;
                 }
                 else if (selectedButtonIndex == 2)
                 {
@@ -105,8 +113,8 @@ namespace FightingGame
                 }
 
                 // Return to the previous screen or perform other actions as needed
-                ScreenManager<Screenum>.Instance.GoBack();
-                return Screenum.GameScreen;
+                //ScreenManager<Screenum>.Instance.GoBack();
+                //return Screenum.GameScreen;
             }
             else if (ks.IsKeyUp(Keys.Enter) || ks.IsKeyUp(Keys.Space))
             {

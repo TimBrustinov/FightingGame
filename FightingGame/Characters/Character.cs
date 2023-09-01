@@ -174,5 +174,12 @@ namespace FightingGame
             }
         }
 
+        public void Reset()
+        {
+            PowerUps.Clear();
+            Position = new Vector2(500, 350);
+
+        }
+
     }
 }
