@@ -122,7 +122,12 @@ namespace FightingGame
             ChestManager.Update();
             CharacterUIManager.Update(); 
             
-            if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
+
+            if(keysPressed.Contains(Keys.P))
+            {
+                return Screenum.EscapeScreen;
+            }
+            else if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
             {
                 return Screenum.CardSelectionScreen;
             }
@@ -145,48 +150,6 @@ namespace FightingGame
 
 
             spriteBatch.End();
-        }
-        public SideHit SideIntersected(Rectangle objectA, Rectangle objectB, out int offset)
-        {
-            int left = Math.Abs(objectA.Left - objectB.Right);
-            int right = Math.Abs(objectA.Right - objectB.Left);
-            int bottom = Math.Abs(objectA.Bottom - objectB.Top);
-            int top = Math.Abs(objectA.Top - objectB.Bottom);
-
-            int minVal = Min(left, right, top, bottom);
-            if (left == minVal)
-            {
-                offset = left;
-                return SideHit.Left;
-            }
-            else if (right == minVal)
-            {
-                offset = right;
-                return SideHit.Right;
-            }
-            else if (top == minVal)
-            {
-                offset = top;
-                return SideHit.Top;
-            }
-            else
-            {
-                offset = bottom;
-                return SideHit.Bottom;
-            }
-        }
-        private int Min(int a, int b, int c, int d)
-        {
-            int[] array = new int[] { a, b, c, d };
-            int tempMin = a;
-            for (int i = 0; i < array.Length; i++)
-            {
-                if (array[i] < tempMin)
-                {
-                    tempMin = array[i];
-                }
-            }
-            return tempMin;
         }
     }
 }

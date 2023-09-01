@@ -23,7 +23,6 @@ namespace FightingGame
 
         private float CardScale = 0.5f;
         private Point CardDimentions;
-        private Vector2 MiddleCardPosition;
 
 
         private float SizeIncreaseFactor; // 10% increase
@@ -42,7 +41,6 @@ namespace FightingGame
             
             cardScales = new float[] { CardScale, CardScale, CardScale };
             Position = new Vector2(500, 500);
-            MiddleCardPosition = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2 - CardDimentions.X, 500);
             DisplayCards = new List<Card>();
             Cards = new Dictionary<Rarity, List<Card>>();
 
@@ -98,9 +96,18 @@ namespace FightingGame
                     DisplayCards.Add(chooseRandomCard());
                 }
             }
-            DisplayCards[1].Position = MiddleCardPosition;
-            DisplayCards[2].Position = MiddleCardPosition + new Vector2(CardDimentions.X + 100, 0);
-            DisplayCards[0].Position = MiddleCardPosition + new Vector2(CardDimentions.X - 100, 0);
+            Vector2 screenCenter = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2, Globals.GraphicsDevice.Viewport.Height / 2);
+
+            // Set the position of the center card
+            DisplayCards[1].Position = screenCenter;
+
+            // Calculate the horizontal offset for the side cards
+            float cardSpacing = 300; // You can adjust this value as needed
+            float totalWidth = DisplayCards[1].Dimentions.X + 2 * cardSpacing;
+
+            // Set the positions of the left and right cards relative to the center card
+            DisplayCards[0].Position = new Vector2(screenCenter.X - totalWidth / 2, screenCenter.Y);
+            DisplayCards[2].Position = new Vector2(screenCenter.X + totalWidth / 2, screenCenter.Y);
         }
         private Card chooseRandomCard()
         {
@@ -134,10 +141,6 @@ namespace FightingGame
 
             return chosenCard;
         }
-
-        
-
-
         public override Screenum Update(MouseState ms)
         {
             KeyboardState ks = Keyboard.GetState();
