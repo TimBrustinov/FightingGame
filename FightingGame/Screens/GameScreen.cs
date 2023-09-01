@@ -143,7 +143,6 @@ namespace FightingGame
             GameObjects.Instance.Draw();
             CharacterUIManager.Draw();
 
-            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(0, 0, Graphics.GraphicsDevice.Viewport.Width, Graphics.GraphicsDevice.Viewport.Height), new Color(30, 30, 30, 160));
 
             spriteBatch.End();
         }

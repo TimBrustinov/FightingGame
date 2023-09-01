@@ -22,6 +22,10 @@ namespace FightingGame
         List<Card> DisplayCards;
 
         private float CardScale = 0.5f;
+        private Point CardDimentions;
+        private Vector2 MiddleCardPosition;
+
+
         private float SizeIncreaseFactor; // 10% increase
         private float[] cardScales; // Initial scales for each card
         private int selectedCardIndex = 0;
@@ -33,9 +37,12 @@ namespace FightingGame
 
         public CardSelectionScreen()
         {
+            CardDimentions = new Point((int)(ContentManager.Instance.PowerUpCards[PowerUpType.CriticalChanceIncrease].Dimentions.X * CardScale), (int)(ContentManager.Instance.PowerUpCards[PowerUpType.CriticalChanceIncrease].Dimentions.Y * CardScale));
             SizeIncreaseFactor = CardScale + 0.05f;
+            
             cardScales = new float[] { CardScale, CardScale, CardScale };
             Position = new Vector2(500, 500);
+            MiddleCardPosition = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2 - CardDimentions.X, 500);
             DisplayCards = new List<Card>();
             Cards = new Dictionary<Rarity, List<Card>>();
 
@@ -91,7 +98,9 @@ namespace FightingGame
                     DisplayCards.Add(chooseRandomCard());
                 }
             }
-            
+            DisplayCards[1].Position = MiddleCardPosition;
+            DisplayCards[2].Position = MiddleCardPosition + new Vector2(CardDimentions.X + 100, 0);
+            DisplayCards[0].Position = MiddleCardPosition + new Vector2(CardDimentions.X - 100, 0);
         }
         private Card chooseRandomCard()
         {
@@ -195,11 +204,13 @@ namespace FightingGame
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            float spacing = 100 + DisplayCards[0].Dimentions.X;
+            spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(0, 0, Globals.GraphicsDevice.Viewport.Width, Globals.GraphicsDevice.Viewport.Height), new Color(30, 30, 30, 160));
+
+           // float spacing = 100 + DisplayCards[0].Dimentions.X;
             //spriteBatch.Draw(ContentManager.Instance.Pixel, new Rectangle(0, 0, 1920, 1080), Color.Gray);
             for (int i = 0; i < DisplayCards.Count; i++)
             {
-                DisplayCards[i].Position = new Vector2(Position.X + i * spacing, Position.Y);
+                //DisplayCards[i].Position = new Vector2(Position.X + i * spacing, Position.Y);
                 DisplayCards[i].Draw(spriteBatch);
             }
             spriteBatch.End();

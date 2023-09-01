@@ -48,6 +48,7 @@ namespace FightingGame
             ContentManager.Instance.Pixel.SetData(new[] { Color.White });
             //CaptainFalcon = new Character();
             Globals.SpriteBatch = spriteBatch;
+            Globals.GraphicsDevice = graphics.GraphicsDevice;
             ContentManager.Instance.LoadContent(Content);
             #region Start Menu
             PlayGame = Content.Load<Texture2D>("button_play-game");
