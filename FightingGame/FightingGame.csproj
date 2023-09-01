@@ -16,7 +16,9 @@
     <None Remove="Content\Bloodspiller_Scythe_1692047646868.png" />
     <None Remove="Content\Bloodspiller_Scythe_Card.png" />
     <None Remove="Content\CardIcons\drops_06.png" />
+    <None Remove="Content\CardIcons\weapon_275.png" />
     <None Remove="Content\Cards\drops_25.png" />
+    <None Remove="Content\Cards\Explosive_Shuriken_Card.png" />
     <None Remove="Content\Cards\Serrated_Claw_Card.png" />
     <None Remove="Content\Cards\Soaring_Swiftness_Plume_Card.png" />
     <None Remove="Content\Cards\Stormcaster_Bow_Card.png" />
@@ -27,6 +29,7 @@
     <None Remove="Content\Draconic_Vitality_Wing_Card.png" />
     <None Remove="Content\drops_32.png" />
     <None Remove="Content\drops_64.png" />
+    <None Remove="Content\Effects\vfx_explosion-Sheet.png" />
     <None Remove="Content\Elixir_of_Eternal_Renewal_Card.png" />
     <None Remove="Content\Glintweave_Overshield_Card.png" />
     <None Remove="Content\Large Red Potion.png" />

@@ -29,12 +29,14 @@ namespace FightingGame
             Damage = animator.Entity.BaseDamage * DamageCoefficent;
             animator.Entity.IsAttacking = true;
             animator.Entity.CurrentAbility = this;
+            base.OnStateEnter(animator);
         }
         public override void OnStateUpdate(Animator animator) { }
         public override void OnStateExit(Animator animator) 
         {
             animator.Entity.IsAttacking = false;
             HasHit = false;
+            base.OnStateExit(animator);
         }
     }
 }

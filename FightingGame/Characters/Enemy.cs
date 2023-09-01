@@ -20,6 +20,7 @@ namespace FightingGame
         private Vector2 direction;
         public bool leftFacingSprite;
         private Random random = new Random();
+        private bool addedToHitEnemies;
         public Enemy(EntityName name, bool isBoss, float health, float speed, float scale, bool leftFacingSprite, int waveNum) : base(name)
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
@@ -51,6 +52,11 @@ namespace FightingGame
             direction = Vector2.Normalize(character.Position - Position);
             if (character.WeaponHitBox.Intersects(HitBox) && character.CurrentAbility != null)
             {
+                if(!addedToHitEnemies)
+                {
+                    GameObjects.Instance.EnemyManager.HitEnemies.Add(this);
+                    addedToHitEnemies = true;
+                }
                 if (character.HasFrameChanged)
                 {
                     HasBeenHit = false;
@@ -64,6 +70,8 @@ namespace FightingGame
             }
             else
             {
+                GameObjects.Instance.EnemyManager.HitEnemies.Remove(this);
+                addedToHitEnemies = false;
                 HasBeenHit = false;
             }
 
@@ -166,4 +174,4 @@ namespace FightingGame
             return new Enemy(Name, IsBoss, TotalHealth, Speed, EntityScale, leftFacingSprite, WaveNum);
         }
     }
-}  
+}   

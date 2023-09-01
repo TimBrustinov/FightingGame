@@ -13,13 +13,20 @@ namespace FightingGame
     public abstract class AnimationBehaviour
     {
         public AnimationType AnimationType;
+        public bool IsDone { get; private set; }
         public AnimationBehaviour(AnimationType animationType)
         {
             AnimationType = animationType;
         }
-        public abstract void OnStateEnter(Animator animator);
+        public virtual void OnStateEnter(Animator animator)
+        {
+            IsDone = false;
+        }
         public abstract void OnStateUpdate(Animator animator);
-        public abstract void OnStateExit(Animator animator);
+        public virtual void OnStateExit(Animator animator)
+        {
+            IsDone = true;
+        }
         public abstract AnimationBehaviour Clone();
 
     }

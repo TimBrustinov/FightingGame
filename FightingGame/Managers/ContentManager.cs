@@ -110,7 +110,6 @@ namespace FightingGame
             PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
             PowerUpCards.Add(PowerUpType.GoldDropIncrease, new Card(content.Load<Texture2D>("Cards/Rich_Merchant_Ring_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.RichMerchantRing, content.Load<Texture2D>("CardIcons/ring_168"), 1.7f)));
             PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Common, Color.White, PowerUps.Instance.LightningStrike, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
-
             #endregion
 
             #region Hashashin
@@ -987,7 +986,7 @@ namespace FightingGame
             Projectiles.Add(ProjectileType.CultistFireBall, new MovingProjectile(ProjectileType.CultistFireBall, 5, rangedCultistSprite, CultistFireball, CultistFireBallImpact, 0.1f, 1f));
             Projectiles.Add(ProjectileType.BringerOfDeathPortalSummon, new StationaryProjectile(ProjectileType.BringerOfDeathPortalSummon, 5, BringerOfDeathTexture, BringerOfDeathPortalSummon, 0.1f, 1.3f));
 
-            Texture2D LightningStrikeTexture = content.Load<Texture2D>("CLOUD LIGHTNING ATTACK-Sheet");
+            Texture2D LightningStrikeTexture = content.Load<Texture2D>("Effects/CLOUD LIGHTNING ATTACK-Sheet");
             List<FrameHelper> LightningStrike = new List<FrameHelper>();
             LightningStrike.Add(new FrameHelper(new Rectangle(170, 19, 33, 14)));
             LightningStrike.Add(new FrameHelper(new Rectangle(271, 15, 89, 14)));
@@ -1007,7 +1006,7 @@ namespace FightingGame
 
             #endregion
 
-            
+
         }
     }
 }

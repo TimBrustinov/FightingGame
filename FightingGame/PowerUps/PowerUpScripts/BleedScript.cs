@@ -36,9 +36,9 @@ namespace FightingGame
 
         public override void Update()
         {
-            foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
+            foreach (var enemy in GameObjects.Instance.EnemyManager.HitEnemies)
             {
-                if (enemy.HasBeenHit && !bleedingEnemies.ContainsKey(enemy))
+                if (!bleedingEnemies.ContainsKey(enemy))
                 {
                     bleedingEnemies.Add(enemy, new Bleed(bleedTime, 0));
                 }

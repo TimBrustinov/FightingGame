@@ -27,7 +27,6 @@ namespace FightingGame
                 PowerUpIcons.Add(icon.Type, icon);
             }
         }
-
         public void MaxHealthIncrease()
         {
             SelectedCharacter.TotalHealth += 5;
@@ -109,12 +108,11 @@ namespace FightingGame
             if (!SelectedCharacter.PowerUps.ContainsKey(PowerUpType.LightningStrike))
             {
                 SelectedCharacter.PowerUps.Add(PowerUpType.LightningStrike, new LightningStrikeScript(PowerUpType.LightningStrike));
+                Multipliers.Instance.LightningDamageMultiplier = 10;
             }
             else
             {
-                var lightningStrike = (LightningStrikeScript)SelectedCharacter.PowerUps[PowerUpType.LightningStrike];
-                lightningStrike.DamageCoefficent *= 2;
-                
+                Multipliers.Instance.LightningDamageMultiplier *= 2;
             }
         }
     }

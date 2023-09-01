@@ -19,6 +19,7 @@ namespace FightingGame
         public int enemyPoolIndex;
         public List<Enemy> EnemyPool;
         public List<Enemy> ReservePool;
+        public List<Enemy> HitEnemies;
         private Random random;
 
         private int num = 0;
@@ -42,9 +43,11 @@ namespace FightingGame
             Tilemap = tilemap;
             ReservePool = new List<Enemy>();
             EnemyPool = new List<Enemy>();
+            HitEnemies = new List<Enemy>();
             EnemyWaves = new Dictionary<int, List<Enemy>>();
             BossWaves = new Dictionary<int, List<Enemy>>();
             random = new Random();
+         
             CreateEnemyWaves();
         }
 
