@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace FightingGame
 {
@@ -12,6 +13,7 @@ namespace FightingGame
         CharacterSelectionScreen,
         GameScreen,
         CardSelectionScreen,
+        EscapeScreen,
     }
     public enum ClickResult
     {
@@ -29,7 +31,6 @@ namespace FightingGame
         StageTile,
         DungeonUIBackground
     }
-   
     [Flags] public enum AnimationType
     {
         None,
@@ -106,14 +107,12 @@ namespace FightingGame
         Bottom,
         None,
     }
-
     public enum ProjectileType
     {
         CultistFireBall,
         BringerOfDeathPortalSummon,
         LightningStrike,
     }
-
     public enum PowerUpType
     {
         HealthRegenAmmountIncrease,

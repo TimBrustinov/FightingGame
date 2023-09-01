@@ -1006,8 +1006,6 @@ namespace FightingGame
             Projectiles.Add(ProjectileType.LightningStrike, new StationaryProjectile(ProjectileType.LightningStrike, 50, LightningStrikeTexture, LightningStrike, 0.1f, 0.8f));
 
             #endregion
-
-            
         }
     }
 }
