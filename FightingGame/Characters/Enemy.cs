@@ -169,9 +169,16 @@ namespace FightingGame
             }
             DamageNumberManager.Instance.AddDamageNumber(damage, Position - new Vector2(0, 30), damageColor);
         }
+        public void Reset()
+        {
+            RemainingHealth = TotalHealth;
+            IsDead = false;
+            overrideAnimation = false;
+        }
         public Enemy Clone()
         {
             return new Enemy(Name, IsBoss, TotalHealth, Speed, EntityScale, leftFacingSprite, WaveNum);
         }
+
     }
 }   

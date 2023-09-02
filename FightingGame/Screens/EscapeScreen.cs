@@ -111,10 +111,6 @@ namespace FightingGame
                 {
                     // Handle action for the third button
                 }
-
-                // Return to the previous screen or perform other actions as needed
-                //ScreenManager<Screenum>.Instance.GoBack();
-                //return Screenum.GameScreen;
             }
             else if (ks.IsKeyUp(Keys.Enter) || ks.IsKeyUp(Keys.Space))
             {

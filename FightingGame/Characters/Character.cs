@@ -178,7 +178,7 @@ namespace FightingGame
         {
             PowerUps.Clear();
             Position = new Vector2(500, 350);
-
+            PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
         }
 
     }

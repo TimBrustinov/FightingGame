@@ -145,13 +145,7 @@ namespace FightingGame
                 Globals.SpriteBatch.Draw(ContentManager.Instance.Shadow, new Rectangle(HitBox.X, HitBox.Y + HitBox.Height - 2, HitBox.Width, 10), new Color(255, 255, 255, 100));
             }
         }
-        public void Reset()
-        {
-            RemainingHealth = TotalHealth;
-            IsDead = false;
-            overrideAnimation = false;
-        }
-
+      
         public void SetBounds(Rectangle mapSize)
         {
             minPosition = new Vector2(mapSize.X + Dimentions.X / 2, mapSize.Y + Dimentions.Y / 2);

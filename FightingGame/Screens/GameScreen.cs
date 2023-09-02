@@ -70,6 +70,7 @@ namespace FightingGame
         {
             //Graphics.IsFullScreen = true;
             SelectedCharacter = Hashashin;
+            SelectedCharacter.Reset();
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
@@ -83,6 +84,7 @@ namespace FightingGame
             {
                 ChestManager.SpawnChest();
             }
+
         }
         public override Screenum Update(MouseState ms)
         {
