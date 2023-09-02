@@ -17,6 +17,7 @@ namespace FightingGame
         public Texture2D Shadow;
         public SpriteFont Font;
 
+        public Dictionary<EntityName, Character> Characters;
         public Dictionary<EntityName, Rectangle> EntityTextures;
         public Dictionary<EntityName, Texture2D> EntitySpriteSheets;
         public Dictionary<EntityName, Dictionary<AnimationType, AnimationBehaviour>> EntityAnimationBehaviours;
@@ -31,6 +32,7 @@ namespace FightingGame
         public Dictionary<IconType, Chest> Chests; 
         private ContentManager()
         {
+            Characters = new Dictionary<EntityName, Character>();
             CharacterAbilityIcons = new Dictionary<EntityName, Dictionary<AnimationType, Icon>>();
             EntityTextures = new Dictionary<EntityName, Rectangle>();
             EntitySpriteSheets = new Dictionary<EntityName, Texture2D>();
@@ -404,6 +406,7 @@ namespace FightingGame
             EntityAnimationBehaviours.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
             CharacterPortraits.Add(EntityName.Hashashin, HashashinPortraits);
+            Characters.Add(EntityName.Hashashin, new Character(EntityName.Hashashin, 100, 12, 4, 1.3f));
             #endregion
 
             #region Skeleton

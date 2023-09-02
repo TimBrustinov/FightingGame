@@ -114,7 +114,7 @@ namespace FightingGame
             int foregroundWidth = (int)(xpPercentage * xpBarDimentions.X);
             SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, xpBarDimentions.X, xpBarDimentions.Y), new Color(30, 30, 30, 200));
             SpriteBatch.Draw(ContentManager.Instance.Pixel, xpBarPosition, new Rectangle(0, 0, foregroundWidth, xpBarDimentions.Y), new Color(178, 102, 255));
-            string text = $"Lv: {character.Level}";
+            string text = $"Lv:{character.Level}";
             drawText(new Vector2(xpBarPosition.X - 50, xpBarPosition.Y - 5), text);
         }
         private void ultimateBar()

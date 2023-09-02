@@ -20,7 +20,6 @@ namespace FightingGame
         public override bool IsActive { get; set; } = true;
         public override bool CanBeDrawnUnder { get; set; }
 
-        Character Hashashin;
         Character SelectedCharacter;
 
         Dictionary<Keys, AnimationType> KeysToAnimation = new Dictionary<Keys, AnimationType>()
@@ -51,8 +50,6 @@ namespace FightingGame
             Graphics = graphics;
             Tilemap = new DrawableObject(textures[Texture.GameScreenBackground], new Vector2(0, 0), new Vector2(1920 * 1.8f, 1920 * 1.8f), Color.White);
             Globals.Tilemap = Tilemap.HitBox;
-            Hashashin = new Character(EntityName.Hashashin, 100, 12, 4, 1.3f);
-            Hashashin.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
@@ -69,7 +66,8 @@ namespace FightingGame
         public override void Initialize()
         {
             //Graphics.IsFullScreen = true;
-            SelectedCharacter = Hashashin;
+            SelectedCharacter = ContentManager.Instance.Characters[EntityName.Hashashin];
+            SelectedCharacter.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
             SelectedCharacter.Reset();
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
@@ -78,7 +76,8 @@ namespace FightingGame
             GameObjects.Instance.SelectedCharacter = SelectedCharacter;
             GameObjects.Instance.ProjectileManager = new ProjectileManager();
             GameObjects.Instance.DropManager = new DropManager();
-            
+            PowerUps.Instance.Reset();
+
             ChestManager = new ChestManager();
             for (int i = 0; i < ChestManager.maxChests; i++)
             {

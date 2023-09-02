@@ -10,6 +10,8 @@ namespace FightingGame
     {
         private Character SelectedCharacter => GameObjects.Instance.SelectedCharacter;
         public Dictionary<IconType, Icon> PowerUpIcons = new Dictionary<IconType, Icon>();
+
+
         private PowerUps()
         {
 
@@ -26,6 +28,10 @@ namespace FightingGame
             {
                 PowerUpIcons.Add(icon.Type, icon);
             }
+        }
+        public void Reset()
+        {
+            PowerUpIcons.Clear();
         }
         public void MaxHealthIncrease()
         {

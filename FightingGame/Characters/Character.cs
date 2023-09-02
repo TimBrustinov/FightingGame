@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
+using System.Xml.Linq;
+using System.Runtime.InteropServices;
 
 namespace FightingGame
 {
@@ -29,6 +32,12 @@ namespace FightingGame
         public float Overshield;
         public float Coins;
 
+        #region base values
+        private float baseMaxHealth;
+        private float baseSpeed;
+        private float originalBaseDamage;
+        #endregion
+
         public bool InUltimateForm = false;
         private Dictionary<AnimationType, AnimationType> UltimateAblities = new Dictionary<AnimationType, AnimationType>()
         {
@@ -42,17 +51,23 @@ namespace FightingGame
             [AnimationType.Dodge] = AnimationType.UltimateDodge,
             [AnimationType.Stand] = AnimationType.UltimateStand,
         };
+
         public Dictionary<PowerUpType, PowerUpScript> PowerUps = new Dictionary<PowerUpType, PowerUpScript>();
         public Character(EntityName name, int health, int baseDamage, float speed, float scale) : base(name) 
         {
             Rectangle characterRectangle = ContentManager.Instance.EntityTextures[name];
             EntityScale = scale;
             BaseDamage = baseDamage;
+            originalBaseDamage = baseDamage;
+
             Position = new Vector2(500, 350);
             Dimentions = new Vector2(characterRectangle.Width, characterRectangle.Height) * EntityScale;
             Speed = speed;
+            baseSpeed = speed;
             TotalHealth = health;
+            baseMaxHealth = TotalHealth;
             RemainingHealth = TotalHealth;
+
             UltimateMeterMax = 10;
             RemainingUltimateMeter = 0;
             ultimateFillRate = UltimateMeterMax / 5;
@@ -69,8 +84,8 @@ namespace FightingGame
             PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
             //PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
             //PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
-
         }
+       
         public override void Update(AnimationType animation, Vector2 direction)
         {
             IsFacingLeft = InputManager.IsMovingLeft;
@@ -176,9 +191,23 @@ namespace FightingGame
 
         public void Reset()
         {
-            PowerUps.Clear();
+            BaseDamage = originalBaseDamage;
             Position = new Vector2(500, 350);
+            Speed = baseSpeed;
+            TotalHealth = baseMaxHealth;
+            RemainingHealth = TotalHealth;
+            RemainingUltimateMeter = 0;
+            MeterColor = Color.Gold;
+            XP = 0;
+            Level = 1;
+            xpToLevelUp = 15;
+            HealthRegen = 1;
+            MaxOvershield = 0;
+            Coins = 0;
+
+            PowerUps.Clear();
             PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
+
         }
 
     }

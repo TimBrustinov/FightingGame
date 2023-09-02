@@ -26,8 +26,10 @@ namespace FightingGame
             Globals.SpriteBatch.Draw(Texture, Position, new Rectangle(0, 0, (int)Dimentions.X, (int)Dimentions.Y), Color, 0, origin, Scale, SpriteEffects.None, 0);
             Vector2 stringSize = ContentManager.Instance.Font.MeasureString(buttonText);
             Globals.SpriteBatch.DrawString(ContentManager.Instance.Font, buttonText, new Vector2(Position.X - stringSize.X / 2, Position.Y - stringSize.Y / 2), Color.White);
+            Console.WriteLine($"{new Vector2((int)(Position.X - stringSize.X / 2), (int)(Position.Y - stringSize.Y / 2))}");
+    
         }
 
-        
+
     }
 }

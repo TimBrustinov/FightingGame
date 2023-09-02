@@ -17,15 +17,19 @@ namespace FightingGame.Screens
 
         public int buttonSpacing = 100;
 
-        #region DrawableObjects
-        DrawableObject PlayGame;
-        DrawableObject QuitGame;
-        #endregion
+        Button PlayGameButton;
+        Button QuitToDesktopButton;
+        Button Settings;
+
+        int buttonWidth = 200;
+        int buttonHeight = 40;
+        private float ButtonScale = 1f;
 
         public StartMenuScreen(Dictionary<Texture, Texture2D> textures, GraphicsDeviceManager graphics)
         {
-            PlayGame = new DrawableObject(textures[Texture.PlayGame], new Vector2(graphics.PreferredBackBufferWidth / 2 - 150, 320));
-            QuitGame = new DrawableObject(textures[Texture.QuitGame], new Vector2(PlayGame.Position.X, PlayGame.Position.Y + buttonSpacing));
+            PlayGameButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(buttonWidth, buttonHeight), Color.Black, ButtonScale, "Play Game");
+            //PlayGameButton.Position = new Vector2(Globals.GraphicsDevice.Viewport.Width / 2, Globals.GraphicsDevice.Viewport.Height);
+
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
@@ -35,11 +39,10 @@ namespace FightingGame.Screens
         }
         public override void Initialize()
         {
-
         }
         public override Screenum Update(MouseState ms)
         {
-            if(PlayGame.GetMouseAction(ms) == ClickResult.LeftClicked)
+            if(PlayGameButton.GetMouseAction(ms) == ClickResult.LeftClicked)
             {
                 return Screenum.GameScreen;
             }
@@ -48,8 +51,7 @@ namespace FightingGame.Screens
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            PlayGame.Draw(spriteBatch);
-            QuitGame.Draw(spriteBatch);
+            PlayGameButton.Draw();
             spriteBatch.DrawString(ContentManager.Instance.Font, "Most handsome supporter: Beezer", new Vector2(0, 980), Color.White);
             spriteBatch.End();
         }
