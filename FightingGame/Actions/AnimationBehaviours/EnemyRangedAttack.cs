@@ -14,6 +14,7 @@ namespace FightingGame
         Vector2 projectileAttachmentPoint;
         Rectangle projectileTriggerFrame;
         float projectileSpeed;
+        bool addedProjectile;
 
         public EnemyRangedAttack(AnimationType animationType, ProjectileType projectileType, Vector2 projectileAttachmentPoint, Rectangle projectileTriggerFrame, float projectileSpeed, float damage, int attackRange, int cooldown, bool canMove) : base(animationType, damage, attackRange, cooldown, canMove)
         {
@@ -22,6 +23,7 @@ namespace FightingGame
             this.projectileTriggerFrame = projectileTriggerFrame;
             this.projectileSpeed = projectileSpeed;
             IsRanged = true;
+            addedProjectile = false;
         }
         public override void OnStateEnter(Animator animator)
         {
@@ -35,7 +37,7 @@ namespace FightingGame
         }
         public override void OnStateUpdate(Animator animator)
         {
-            if(animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame)
+            if(animator.CurrentAnimation.PreviousFrame.SourceRectangle == projectileTriggerFrame && !addedProjectile)
             {
                 Vector2 relativePosition = Vector2.Zero;
                 if(animator.Entity.IsFacingLeft)
@@ -51,6 +53,7 @@ namespace FightingGame
 
                 Vector2 projectileDirection = Vector2.Normalize(GameObjects.Instance.SelectedCharacter.Position - attachmentPointRelative);
                 GameObjects.Instance.ProjectileManager.AddEnemyProjectile(projectileType, attachmentPointRelative, projectileDirection, projectileSpeed, (int)Damage);
+                addedProjectile = true;
             }
         }
         public override void OnStateExit(Animator animator)
@@ -58,6 +61,7 @@ namespace FightingGame
             animator.Entity.IsAttacking = false;
             animator.SetAnimation(AnimationType.Stand);
             base.OnStateExit(animator);
+            addedProjectile = false;
         }
         public override AnimationBehaviour Clone()
         {

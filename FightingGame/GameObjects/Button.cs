@@ -17,6 +17,7 @@ namespace FightingGame
         {
             Scale = scale;
             origin = new Vector2(dimentions.X / 2, dimentions.Y / 2);
+            HitBox = new Rectangle((int)(position.X - dimentions.X / 2), (int)(position.Y - dimentions.Y / 2), (int)dimentions.X, (int)dimentions.Y);
             this.buttonText = buttonText;
         }
 

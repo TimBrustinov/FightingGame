@@ -38,7 +38,7 @@ namespace FightingGame
             SizeIncreaseFactor = ButtonScale + 0.05f;
             buttonScales = new float[] { ButtonScale, ButtonScale, ButtonScale };
             buttons = new List<Button>();
-            
+
             ResumeButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale, "Resume");
             buttons.Add(ResumeButton);
             ReturnToMainMenuButton = new Button(ContentManager.Instance.Pixel, Vector2.Zero, new Vector2(rectWidth, rectHeight), new Color(30, 30, 30, 255), ButtonScale, "Return To Main Menu");
@@ -109,7 +109,7 @@ namespace FightingGame
                 }
                 else if (selectedButtonIndex == 2)
                 {
-                    // Handle action for the third button
+                    Environment.Exit(0); // You can also use Application.Exit() if it's a Windows Forms application
                 }
             }
             else if (ks.IsKeyUp(Keys.Enter) || ks.IsKeyUp(Keys.Space))

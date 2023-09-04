@@ -15,6 +15,7 @@
     <None Remove="Content\Blade_of_Frenzied_Might_Card.png" />
     <None Remove="Content\Bloodspiller_Scythe_1692047646868.png" />
     <None Remove="Content\Bloodspiller_Scythe_Card.png" />
+    <None Remove="Content\Bringer-of-Death-SpritSheet.png" />
     <None Remove="Content\CardIcons\drops_06.png" />
     <None Remove="Content\CardIcons\weapon_275.png" />
     <None Remove="Content\Cards\drops_25.png" />
@@ -26,12 +27,17 @@
     <None Remove="Content\Chests\Chest02.png" />
     <None Remove="Content\Chests\Chest12.png" />
     <None Remove="Content\Corrupted Sword.png" />
+    <None Remove="Content\Cultist_Assassin_Sheet.png" />
+    <None Remove="Content\Cultist_Sheet.png" />
     <None Remove="Content\Draconic_Vitality_Wing_Card.png" />
     <None Remove="Content\drops_32.png" />
     <None Remove="Content\drops_64.png" />
     <None Remove="Content\Effects\vfx_explosion-Sheet.png" />
     <None Remove="Content\Elixir_of_Eternal_Renewal_Card.png" />
+    <None Remove="Content\GhostWarrior.png" />
+    <None Remove="Content\GhostWarrior2.png" />
     <None Remove="Content\Glintweave_Overshield_Card.png" />
+    <None Remove="Content\HashashinFullSpritesheet.png" />
     <None Remove="Content\Large Red Potion.png" />
     <None Remove="Content\Lifedrain_Tempest_Katana_Card.png" />
     <None Remove="Content\Nature Boots.png" />
@@ -39,8 +45,10 @@
     <None Remove="Content\scythe.png" />
     <None Remove="Content\Serenity%27s_Resurgence_Vial_Card.png" />
     <None Remove="Content\shield_15.png" />
+    <None Remove="Content\Skeleton.png" />
     <None Remove="Content\Swiftheal_Medallion_Card.png" />
     <None Remove="Content\weapon_311.png" />
+    <None Remove="Content\wind_elemental.png" />
     <None Remove="Content\Zephyr_Stride_Boots_Card.png" />
     <None Remove="Icon.ico" />
     <None Remove="Icon.bmp" />

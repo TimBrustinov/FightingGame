@@ -51,11 +51,6 @@ namespace FightingGame
             Globals.GraphicsDevice = graphics.GraphicsDevice;
             ContentManager.Instance.LoadContent(Content);
             #region Start Menu
-            PlayGame = Content.Load<Texture2D>("button_play-game");
-            startMenuTextures.Add(Texture.PlayGame, PlayGame);
-
-            QuitGame = Content.Load<Texture2D>("button_quit-game");
-            startMenuTextures.Add(Texture.QuitGame, QuitGame);
             #endregion
 
             #region Game Screen
@@ -63,23 +58,25 @@ namespace FightingGame
             gameScreenTextures.Add(Texture.GameScreenBackground, GameScreenBackground);
 
             #endregion
-            StartMenuScreen startMenuScreen = new StartMenuScreen(startMenuTextures, graphics);
+            StartMenuScreen startMenuScreen = new StartMenuScreen(graphics);
             GameScreen gameScreen = new GameScreen(gameScreenTextures, graphics);
             CardSelectionScreen cardSelectionScreen = new CardSelectionScreen();
             EscapeScreen escapeScreen = new EscapeScreen();
+            CharacterSelectScreen characterSelectScreen = new CharacterSelectScreen();
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.StartMenuScreen, startMenuScreen);
             ScreenManager<Screenum>.Instance.ActivateScreen(startMenuScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.GameScreen, gameScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.CardSelectionScreen, cardSelectionScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.EscapeScreen, escapeScreen);
+            ScreenManager<Screenum>.Instance.AddScreen(Screenum.CharacterSelectScreen, characterSelectScreen);
 
             // TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
             Globals.Update(gameTime);
             ScreenManager<Screenum>.Instance.Update(graphics);
             base.Update(gameTime);

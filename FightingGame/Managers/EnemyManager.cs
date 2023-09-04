@@ -13,7 +13,7 @@ namespace FightingGame
         private int enemySpawnAmmountMax = 3;
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
-        private int bossSpawnRate = 4000;
+        private int bossSpawnRate = 40000;
         private double bossSpawnTimer;
 
         public int enemyPoolIndex;
@@ -26,7 +26,7 @@ namespace FightingGame
         private Dictionary<int, List<Enemy>> EnemyWaves;
         private Dictionary<int, List<Enemy>> BossWaves;
         private int currentWave = 0;
-         
+
         #region Enemy Presets
         public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 100, 0.5f, 1.3f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
@@ -47,7 +47,7 @@ namespace FightingGame
             EnemyWaves = new Dictionary<int, List<Enemy>>();
             BossWaves = new Dictionary<int, List<Enemy>>();
             random = new Random();
-         
+
             CreateEnemyWaves();
         }
 
@@ -56,24 +56,20 @@ namespace FightingGame
             Camera = camera;
             enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (enemyPoolIndex <= 3)
+            if (enemySpawnTimer >= enemySpawnRate)
             {
-                if (enemySpawnTimer >= enemySpawnRate)
-                {
-                    SpawnEnemies();
-                    enemySpawnTimer = 0;
-                }
-
-                bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
-                if (bossSpawnTimer >= bossSpawnRate)
-                {
-                    int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
-                    SpawnBoss(BossWaves[currentWave][randomNumber]);
-                    bossSpawnTimer = 0;
-                }
+                SpawnEnemies();
+                enemySpawnTimer = 0;
             }
-           
-            
+
+            bossSpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
+            if (bossSpawnTimer >= bossSpawnRate)
+            {
+                int randomNumber = new Random().Next(0, BossWaves[currentWave].Count);
+                SpawnBoss(BossWaves[currentWave][randomNumber]);
+                bossSpawnTimer = 0;
+            }
+
             for (int i = 0; i < enemyPoolIndex; i++)
             {
                 if (EnemyPool[i].IsBoss && EnemyPool[i].IsDead)
@@ -115,7 +111,7 @@ namespace FightingGame
             for (int i = 0; i < RandomAmmountOfEnemies; i++)
             {
                 var enemyFromReserve = GetEnemyFromReserve();
-                if(enemyFromReserve != null)
+                if (enemyFromReserve != null)
                 {
                     enemyFromReserve.Reset();
                     enemyFromReserve.Spawn(GetSpawnLocation());
@@ -187,10 +183,10 @@ namespace FightingGame
             //wave1Bosses.Add(GhostWarrior2Preset);
 
             List<Enemy> wave1Enemies = new List<Enemy>();
-            //wave1Enemies.Add(SkeletonPreset);
-            //wave1Enemies.Add(RangedCultistPreset);
+            wave1Enemies.Add(SkeletonPreset);
+            wave1Enemies.Add(RangedCultistPreset);
             //wave1Enemies.Add(BringerOfDeathPreset);
-            //wave1Enemies.Add(AssassinCultistPreset);
+            wave1Enemies.Add(AssassinCultistPreset);
             wave1Enemies.Add(NecromancerPreset);
             wave1Enemies.Add(GhostWarrior2Preset);
 
@@ -202,11 +198,11 @@ namespace FightingGame
 
         public Enemy GetEnemyFromReserve()
         {
-            if(ReservePool.Count > 0)
+            if (ReservePool.Count > 0)
             {
                 for (int i = 0; i < ReservePool.Count; i++)
                 {
-                    if(ReservePool[i].WaveNum == currentWave)
+                    if (ReservePool[i].WaveNum == currentWave)
                     {
                         return ReservePool[i];
                     }

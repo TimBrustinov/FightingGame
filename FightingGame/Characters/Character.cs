@@ -81,7 +81,6 @@ namespace FightingGame
             HealthRegen = 1;
             MaxOvershield = 0;
             Coins = 0;
-            PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
             //PowerUps.Add(PowerUpType.LifeSteal, new LifeStealScript(PowerUpType.LifeSteal));
             //PowerUps.Add(PowerUpType.Bleed, new BleedScript(PowerUpType.Bleed));
         }

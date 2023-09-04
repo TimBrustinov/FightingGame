@@ -13,6 +13,7 @@ namespace FightingGame
         public Texture2D Texture { get; set; }
         public virtual Vector2 Position { get; set; }
         public Vector2 Dimentions { get; set; }
+        public Rectangle HitBox { get; set; }
         public Color Color { get; set; }
 
         public DrawableObjectBase(Texture2D texture, Vector2 position, Vector2 dimentions, Color color)
@@ -21,6 +22,7 @@ namespace FightingGame
             Position = position;
             Dimentions = dimentions;
             Color = color;
+            HitBox = new Rectangle((int)Position.X, (int)Position.Y, (int)Dimentions.X, (int)Dimentions.Y);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -31,13 +33,13 @@ namespace FightingGame
         {
             spriteBatch.Draw(Texture, Position, sourceRectangle, Color);
         }
-        public virtual Rectangle HitBox
-        {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, (int)Dimentions.X, (int)Dimentions.Y);
-            }
-        }
+        //public virtual Rectangle HitBox
+        //{
+        //    get
+        //    {
+        //        return new Rectangle((int)Position.X, (int)Position.Y, (int)Dimentions.X, (int)Dimentions.Y);
+        //    }
+        //}
 
         public ClickResult GetMouseAction(MouseState ms)
         {

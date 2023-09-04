@@ -53,6 +53,7 @@ namespace FightingGame
         }
         public override void PreferedScreenSize(GraphicsDeviceManager graphics)
         {
+            //graphics.IsFullScreen = true;
             graphics.PreferredBackBufferWidth = 1920;
             graphics.PreferredBackBufferHeight = 1080;
             graphics.ApplyChanges();
@@ -69,6 +70,8 @@ namespace FightingGame
             SelectedCharacter = ContentManager.Instance.Characters[EntityName.Hashashin];
             SelectedCharacter.SetBounds(new Rectangle(Tilemap.HitBox.X + 64, Tilemap.HitBox.Y + 64, Tilemap.HitBox.Width - 64, Tilemap.HitBox.Height - 64));
             SelectedCharacter.Reset();
+            //SelectedCharacter.PowerUps.Add(PowerUpType.HealthRegenRateIncrease, new HealthRegenScript(PowerUpType.HealthRegenRateIncrease));
+
             Camera = new Camera(Graphics.GraphicsDevice.Viewport);
             Globals.Camera = Camera;
             CharacterUIManager = new UIManager(SelectedCharacter, Camera);
@@ -124,7 +127,7 @@ namespace FightingGame
             CharacterUIManager.Update(); 
             
 
-            if(keysPressed.Contains(Keys.P))
+            if(keysPressed.Contains(Keys.Escape))
             {
                 return Screenum.EscapeScreen;
             }

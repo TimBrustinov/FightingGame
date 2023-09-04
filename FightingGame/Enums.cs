@@ -14,6 +14,7 @@ namespace FightingGame
         GameScreen,
         CardSelectionScreen,
         EscapeScreen,
+        CharacterSelectScreen,
     }
     public enum ClickResult
     {

@@ -14,6 +14,8 @@ namespace FightingGame
     public class ContentManager
     {
         public Texture2D Pixel;
+        public Texture2D StartMenuBackground;
+        public Texture2D CharacterSelectBackground;
         public Texture2D Shadow;
         public SpriteFont Font;
 
@@ -52,7 +54,8 @@ namespace FightingGame
             bool canHit = true;
             Font = content.Load<SpriteFont>("Font");
             Shadow = content.Load<Texture2D>("SHADOW");
-            
+            StartMenuBackground = content.Load<Texture2D>("DungeonBackground");
+            CharacterSelectBackground = content.Load<Texture2D>("CharacterSelectBackground");
 
             #region Drops
             EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.3f)));
@@ -111,11 +114,11 @@ namespace FightingGame
             PowerUpCards.Add(PowerUpType.CriticalChanceIncrease, new Card(content.Load<Texture2D>("Cards/Veilstrike_Critblade_Card"), Rarity.Rare, Color.White, PowerUps.Instance.CriticalChanceIncrease, new Icon(IconType.VeilstrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_245"), 1.7f)));
             PowerUpCards.Add(PowerUpType.CriticalDamageIncrease, new Card(content.Load<Texture2D>("Cards/Direstrike_Critblade_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.CriticalDamageIncrease, new Icon(IconType.DirestrikeCritblade, content.Load<Texture2D>("CardIcons/weapon_244"), 1.7f)));
             PowerUpCards.Add(PowerUpType.GoldDropIncrease, new Card(content.Load<Texture2D>("Cards/Rich_Merchant_Ring_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.GoldDropIncrease, new Icon(IconType.RichMerchantRing, content.Load<Texture2D>("CardIcons/ring_168"), 1.7f)));
-            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Common, Color.White, PowerUps.Instance.LightningStrike, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
+            PowerUpCards.Add(PowerUpType.LightningStrike, new Card(content.Load<Texture2D>("Cards/Stormcaster_Bow_Card"), Rarity.Legendary, Color.White, PowerUps.Instance.LightningStrike, new Icon(IconType.StormcasterBow, content.Load<Texture2D>("CardIcons/weapon_226"), 1.7f)));
             #endregion
 
             #region Hashashin
-            Texture2D HashashinTexture = content.Load<Texture2D>("HashashinFullSpritesheet");
+            Texture2D HashashinTexture = content.Load<Texture2D>("Characters/HashashinFullSpritesheet");
             EntitySpriteSheets.Add(EntityName.Hashashin, HashashinTexture);
             EntityTextures.Add(EntityName.Hashashin, new Rectangle(132, 90, 34, 37));
 
@@ -134,7 +137,6 @@ namespace FightingGame
             Dictionary<CharacterPortrait, Texture2D> HashashinPortraits = new Dictionary<CharacterPortrait, Texture2D>()
             {
                 [CharacterPortrait.HashashinBase] = content.Load<Texture2D>("wind_hashashin"),
-                [CharacterPortrait.HashashinElemental] = content.Load<Texture2D>("wind_elemental"),
             };
             Dictionary<AnimationType, Animation> Hashashin = new Dictionary<AnimationType, Animation>();
 
@@ -386,17 +388,17 @@ namespace FightingGame
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
                 [AnimationType.Dodge] = new Dodge(AnimationType.Dodge, 5, 2),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 1, 0, 0, true),
-                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 1.5f, 0, 2, true),
-                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 1, 0, 3, true),
-                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 2f, 0, 2, false),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 1, 0, 0, true, AnimationType.Stand),
+                [AnimationType.Ability1] = new MeleeAttack(AnimationType.Ability1, 1.5f, 0, 2, true, AnimationType.Stand),
+                [AnimationType.Ability2] = new MeleeAttack(AnimationType.Ability2, 1, 0, 3, true, AnimationType.Stand),
+                [AnimationType.Ability3] = new MeleeAttack(AnimationType.Ability3, 2f, 0, 2, false, AnimationType.Stand),
                 [AnimationType.UltimateTransform] = new UltimateTransform(AnimationType.UltimateTransform, 1.0f, 0, 0, false),
                 [AnimationType.UltimateStand] = new Stand(AnimationType.UltimateStand),
                 [AnimationType.UltimateRun] = new Run(AnimationType.UltimateRun),
-                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 2.0f, 0, 0, true),
-                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 1.5f, 0, 1, true),
-                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 2.2f, 0, 3, true),
-                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 1.7f, 0, 4, true),
+                [AnimationType.UltimateBasicAttack] = new MeleeAttack(AnimationType.UltimateBasicAttack, 2.0f, 0, 0, true, AnimationType.UltimateStand),
+                [AnimationType.UltimateAbility1] = new MeleeAttack(AnimationType.UltimateAbility1, 1.5f, 0, 1, true, AnimationType.UltimateStand),
+                [AnimationType.UltimateAbility2] = new MeleeAttack(AnimationType.UltimateAbility2, 2.2f, 0, 3, true, AnimationType.UltimateStand),
+                [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 1.7f, 0, 4, true, AnimationType.UltimateStand),
                 [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 1),
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
@@ -410,7 +412,7 @@ namespace FightingGame
             #endregion
 
             #region Skeleton
-            EntitySpriteSheets.Add(EntityName.Skeleton, content.Load<Texture2D>("Skeleton"));
+            EntitySpriteSheets.Add(EntityName.Skeleton, content.Load<Texture2D>("Enemies/Skeleton"));
             EntityTextures.Add(EntityName.Skeleton, new Rectangle(17, 70, 15, 21));
             Dictionary<AnimationType, Animation> Skeleton = new Dictionary<AnimationType, Animation>();
 
@@ -468,7 +470,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> SkeletonAbilites = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 50, 0, false),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 50, 0, false, AnimationType.Stand),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -477,7 +479,7 @@ namespace FightingGame
             #endregion
 
             #region Necromancer
-            var NecromancerSpritesheet = content.Load<Texture2D>("NecromancerFullSpritesheet");
+            var NecromancerSpritesheet = content.Load<Texture2D>("Enemies/NecromancerFullSpritesheet");
             EntitySpriteSheets.Add(EntityName.Necromancer, NecromancerSpritesheet);
             EntityTextures.Add(EntityName.Necromancer, new Rectangle(38, 17, 28, 49));
 
@@ -564,7 +566,7 @@ namespace FightingGame
 
             Dictionary<AnimationType, AnimationBehaviour> NecromancerBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 60, 0, false),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 60, 0, false, AnimationType.Stand),
                 [AnimationType.Ability1] = new NecromancerSummon(AnimationType.Ability1, 0, 600, 20, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Run] = new Run(AnimationType.Run),
@@ -576,7 +578,7 @@ namespace FightingGame
             #endregion
 
             #region BringerOfDeath
-            var BringerOfDeathTexture = content.Load<Texture2D>("Bringer-of-Death-SpritSheet");
+            var BringerOfDeathTexture = content.Load<Texture2D>("Enemies/Bringer-of-Death-SpritSheet");
             EntitySpriteSheets.Add(EntityName.BringerOfDeath, BringerOfDeathTexture);
             EntityTextures.Add(EntityName.BringerOfDeath, new Rectangle(86, 38, 40, 54));
 
@@ -659,7 +661,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> BringerofDeathBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 5, 80, 0, false, AnimationType.Stand),
                 [AnimationType.Ability1] = new BringerOfDeathRangedAttack(AnimationType.Ability1, ProjectileType.BringerOfDeathPortalSummon, new Rectangle(913, 466, 52, 91), 0, 5, 500, 5, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
@@ -735,7 +737,7 @@ namespace FightingGame
             #endregion
 
             #region Ghost Warrior 2
-            var GhostWarrior2Spritesheet = content.Load<Texture2D>("GhostWarrior2");
+            var GhostWarrior2Spritesheet = content.Load<Texture2D>("Enemies/GhostWarrior2");
             EntitySpriteSheets.Add(EntityName.GhostWarrior2, GhostWarrior2Spritesheet);
             EntityTextures.Add(EntityName.GhostWarrior2, new Rectangle(49, 130, 77, 56));
 
@@ -810,7 +812,7 @@ namespace FightingGame
             Dictionary<AnimationType, AnimationBehaviour> GhostWarrior2Behaviours = new Dictionary<AnimationType, AnimationBehaviour>()
             {
                 [AnimationType.Run] = new Run(AnimationType.Run),
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 70, 0, false),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 10, 70, 0, false, AnimationType.Stand),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
@@ -821,7 +823,7 @@ namespace FightingGame
             #endregion
 
             #region RangedCultist
-            Texture2D rangedCultistSprite = content.Load<Texture2D>("Cultist_Sheet");
+            Texture2D rangedCultistSprite = content.Load<Texture2D>("Enemies/Cultist_Sheet");
             EntitySpriteSheets.Add(EntityName.RangedCultist, rangedCultistSprite);
             EntityTextures.Add(EntityName.RangedCultist, new Rectangle(59, 47, 23, 37));
 
@@ -894,7 +896,7 @@ namespace FightingGame
             #endregion
 
             #region AssassinCultist
-            var AssassinCultistSpriteSheet = content.Load<Texture2D>("Cultist_Assassin_Sheet");
+            var AssassinCultistSpriteSheet = content.Load<Texture2D>("Enemies/Cultist_Assassin_Sheet");
             EntitySpriteSheets.Add(EntityName.AssassinCultist, AssassinCultistSpriteSheet);
             EntityTextures.Add(EntityName.AssassinCultist, new Rectangle(16, 8, 31, 30));
 
@@ -974,7 +976,7 @@ namespace FightingGame
 
             Dictionary<AnimationType, AnimationBehaviour> AssassinCultistBehaviours = new Dictionary<AnimationType, AnimationBehaviour>()
             {
-                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 20, 90, 0, true),
+                [AnimationType.BasicAttack] = new MeleeAttack(AnimationType.BasicAttack, 20, 90, 0, true, AnimationType.Stand),
                 [AnimationType.Ability1] = new AssassinCultistAmbush(AnimationType.Ability1, 20, 200, 10, false),
                 [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Run] = new Run(AnimationType.Run),
