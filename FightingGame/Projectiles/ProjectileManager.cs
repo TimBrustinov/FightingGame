@@ -61,9 +61,10 @@ namespace FightingGame
                 {
                     EnemyProjectiles[i].Update();
 
-                    if (EnemyProjectiles[i].Hitbox.Intersects(GameObjects.Instance.SelectedCharacter.HitBox))
+                    if (EnemyProjectiles[i].Hitbox.Intersects(GameObjects.Instance.SelectedCharacter.HitBox) && !EnemyProjectiles[i].HasHit)
                     {
                         EnemyProjectiles[i].HasHit = true;
+                        GameObjects.Instance.SelectedCharacter.TakeDamage(EnemyProjectiles[i].Damage, Color.White);
                     }
                 }
                 else if(!EnemyProjectiles[i].IsActive)

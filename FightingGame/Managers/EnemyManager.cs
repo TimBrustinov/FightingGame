@@ -14,6 +14,8 @@ namespace FightingGame
         private int enemySpawnRate = 5000;
         private double enemySpawnTimer;
         private int bossSpawnRate = 40000;
+        private double ScaleTimer;
+        private int ScaleRate = 120;
         private double bossSpawnTimer;
 
         public int enemyPoolIndex;
@@ -28,6 +30,7 @@ namespace FightingGame
         private int currentWave = 0;
 
         #region Enemy Presets
+        private List<Enemy> presets;
         public Enemy SkeletonPreset = new Enemy(EntityName.Skeleton, false, 100, 0.5f, 1.3f, false, 0);
         //Enemy GhostWarriorPreset = new Enemy(EntityName.GhostWarrior, true, 100, 0.6f, 1.7f, false, 0);
         Enemy GhostWarrior2Preset = new Enemy(EntityName.GhostWarrior2, false, 200, 0.8f, 1f, false, 0);
@@ -48,14 +51,34 @@ namespace FightingGame
             BossWaves = new Dictionary<int, List<Enemy>>();
             random = new Random();
 
+            presets = new List<Enemy>();
+            presets.Add(SkeletonPreset);
+            presets.Add(GhostWarrior2Preset);
+            presets.Add(NecromancerPreset);
+            presets.Add(BringerOfDeathPreset);
+            presets.Add(RangedCultistPreset);
             CreateEnemyWaves();
         }
 
         public void Update(Character SelectedCharacter, Camera camera)
         {
             Camera = camera;
-            enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
 
+            ScaleTimer += Globals.GameTime.ElapsedGameTime.TotalSeconds;
+            if(ScaleTimer >= ScaleRate)
+            {
+                foreach (var enemy in EnemyPool)
+                {
+                    enemy.BaseDamage++;
+                }
+                foreach (var enemy in presets)
+                {
+                    enemy.BaseDamage++;
+                }
+
+            }
+
+            enemySpawnTimer += Globals.GameTime.ElapsedGameTime.TotalMilliseconds;
             if (enemySpawnTimer >= enemySpawnRate)
             {
                 SpawnEnemies();
@@ -78,7 +101,7 @@ namespace FightingGame
                     bossSpawnTimer = 0;
                     enemyPoolIndex--;
                 }
-                else if (EnemyPool[i].IsDead || CheckEnemyDistanceToPlayer(EnemyPool[i], SelectedCharacter))
+                else if (EnemyPool[i].IsDead /*|| CheckEnemyDistanceToPlayer(EnemyPool[i], SelectedCharacter)*/)
                 {
                     ReservePool.Add(EnemyPool[i]);
                     SelectedCharacter.XP += EnemyPool[i].XPAmmount;
@@ -186,7 +209,7 @@ namespace FightingGame
             wave1Enemies.Add(SkeletonPreset);
             wave1Enemies.Add(RangedCultistPreset);
             //wave1Enemies.Add(BringerOfDeathPreset);
-            wave1Enemies.Add(AssassinCultistPreset);
+            //wave1Enemies.Add(AssassinCultistPreset);
             wave1Enemies.Add(NecromancerPreset);
             wave1Enemies.Add(GhostWarrior2Preset);
 

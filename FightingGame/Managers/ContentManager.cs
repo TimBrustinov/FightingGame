@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Content = Microsoft.Xna.Framework.Content.ContentManager;
@@ -18,6 +19,7 @@ namespace FightingGame
         public Texture2D CharacterSelectBackground;
         public Texture2D Shadow;
         public SpriteFont Font;
+        public Icon GameOverText;
 
         public Dictionary<EntityName, Character> Characters;
         public Dictionary<EntityName, Rectangle> EntityTextures;
@@ -56,6 +58,7 @@ namespace FightingGame
             Shadow = content.Load<Texture2D>("SHADOW");
             StartMenuBackground = content.Load<Texture2D>("DungeonBackground");
             CharacterSelectBackground = content.Load<Texture2D>("CharacterSelectBackground");
+            GameOverText = new Icon(IconType.GameOverText, content.Load<Texture2D>("GameOverText"), 1.2f);
 
             #region Drops
             EnemyDrops.Add(IconType.CommonScroll, new Drop(Rarity.Common, new Icon(IconType.CommonScroll, content.Load<Texture2D>("Drops/quest_04"), 1.3f)));
@@ -371,6 +374,27 @@ namespace FightingGame
             HashashinUltimateAbility3.Add(new FrameHelper(new Rectangle(6168, 2886, 50, 54)));
             Hashashin.Add(AnimationType.UltimateAbility3, new Animation(HashashinTexture, 0.1f, HashashinUltimateAbility3));
 
+            List<FrameHelper> HashashinDeath = new List<FrameHelper>();
+            HashashinDeath.Add(new FrameHelper(new Rectangle(132, 1626, 34, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(422, 1626, 30, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(710, 1626, 27, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(997, 1626, 28, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(1285, 1626, 28, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(1537, 1626, 28, 37)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(1854, 1625, 34, 38)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(2134, 1627, 42, 36)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(2422, 1627, 42, 36)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(2710, 1627, 42, 36)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(2998, 1627, 42, 36)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(3233, 1627, 95, 36)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(3538, 1624, 78, 39)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(3839, 1622, 65, 41)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(4166, 1623, 26, 40)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(4467, 1622, 39, 41)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(4755, 1616, 79, 47)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(5043, 1617, 91, 46)));
+            HashashinDeath.Add(new FrameHelper(new Rectangle(5331, 1649, 13, 14)));
+            Hashashin.Add(AnimationType.Death, new Animation(HashashinTexture, 0.1f, HashashinDeath));
 
             List<FrameHelper> HashashinStand = new List<FrameHelper>();
             HashashinStand.Add(new FrameHelper(new Rectangle(132, 90, 34, 37)));
@@ -401,6 +425,7 @@ namespace FightingGame
                 [AnimationType.UltimateAbility3] = new MeleeAttack(AnimationType.UltimateAbility3, 1.7f, 0, 4, true, AnimationType.UltimateStand),
                 [AnimationType.UltimateDodge] = new Dodge(AnimationType.UltimateDodge, 6, 1),
                 [AnimationType.UndoTransform] = new UndoTransform(AnimationType.UndoTransform),
+                [AnimationType.Death] = new Death(AnimationType.Death),
                 [AnimationType.Stand] = new Stand(AnimationType.Stand),
             };
 
@@ -408,7 +433,7 @@ namespace FightingGame
             EntityAnimationBehaviours.Add(EntityName.Hashashin, HashashinAbilites);
             CharacterAbilityIcons.Add(EntityName.Hashashin, HashashinAbilityIcons);
             CharacterPortraits.Add(EntityName.Hashashin, HashashinPortraits);
-            Characters.Add(EntityName.Hashashin, new Character(EntityName.Hashashin, 100, 12, 4, 1.3f));
+            Characters.Add(EntityName.Hashashin, new Character(EntityName.Hashashin, 300, 12, 4, 1.3f));
             #endregion
 
             #region Skeleton

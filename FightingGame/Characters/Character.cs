@@ -17,7 +17,7 @@ namespace FightingGame
     {
         public float XP;
         public int Level;
-
+        public bool HasLeveledUp;
         public float xpToLevelUp;
 
         public float UltimateMeterMax;
@@ -89,6 +89,22 @@ namespace FightingGame
         {
             IsFacingLeft = InputManager.IsMovingLeft;
 
+            foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
+            {
+                if (enemy.WeaponHitBox.Intersects(HitBox) && enemy.CurrentAbility != null)
+                {
+                    if(enemy.CurrentAbility.HasHit == false)
+                    {
+                        TakeDamage(enemy.CurrentAbility.Damage, Color.White);
+                        enemy.CurrentAbility.HasHit = true;
+                    }
+                }
+                else if(enemy.CurrentAbility != null) 
+                {
+                    enemy.CurrentAbility.HasHit = false;
+                }
+            }
+
             if (!InUltimateForm && animation == AnimationType.UndoTransform)
             {
                 animation = Direction != Vector2.Zero ? AnimationType.Run : AnimationType.Stand;
@@ -135,6 +151,7 @@ namespace FightingGame
             if (XP >= xpToLevelUp)
             {
                 LevelUp();
+                HasLeveledUp = true;
             }
 
             base.Update(animation, direction);

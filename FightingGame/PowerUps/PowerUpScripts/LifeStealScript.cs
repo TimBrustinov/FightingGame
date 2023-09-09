@@ -16,11 +16,12 @@ namespace FightingGame
 
         public override void Update()
         {
-            foreach (var enemy in GameObjects.Instance.EnemyManager.HitEnemies)
+            foreach (var enemy in GameObjects.Instance.EnemyManager.EnemyPool)
             {
                 if (enemy.HasBeenHit)
                 {
                     GameObjects.Instance.SelectedCharacter.RemainingHealth += HealthPerHit;
+                    GameObjects.Instance.SelectedCharacter.RemainingHealth = (float)Math.Round(GameObjects.Instance.SelectedCharacter.RemainingHealth, 2);
                     if (GameObjects.Instance.SelectedCharacter.RemainingHealth > GameObjects.Instance.SelectedCharacter.TotalHealth)
                     {
                         GameObjects.Instance.SelectedCharacter.RemainingHealth = GameObjects.Instance.SelectedCharacter.TotalHealth;

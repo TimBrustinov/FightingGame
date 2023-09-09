@@ -63,12 +63,14 @@ namespace FightingGame
             CardSelectionScreen cardSelectionScreen = new CardSelectionScreen();
             EscapeScreen escapeScreen = new EscapeScreen();
             CharacterSelectScreen characterSelectScreen = new CharacterSelectScreen();
+            GameOverScreen gameOverScreen = new GameOverScreen(graphics);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.StartMenuScreen, startMenuScreen);
             ScreenManager<Screenum>.Instance.ActivateScreen(startMenuScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.GameScreen, gameScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.CardSelectionScreen, cardSelectionScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.EscapeScreen, escapeScreen);
             ScreenManager<Screenum>.Instance.AddScreen(Screenum.CharacterSelectScreen, characterSelectScreen);
+            ScreenManager<Screenum>.Instance.AddScreen(Screenum.GameOverScreen, gameOverScreen);
 
             // TODO: use this.Content to load your game content here
         }

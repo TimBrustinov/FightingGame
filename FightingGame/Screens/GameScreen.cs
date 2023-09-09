@@ -131,8 +131,13 @@ namespace FightingGame
             {
                 return Screenum.EscapeScreen;
             }
-            else if (keysPressed.Contains(Keys.O) || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
+            else if(SelectedCharacter.RemainingHealth <= 0)
             {
+                return Screenum.GameOverScreen;
+            }
+            else if (SelectedCharacter.HasLeveledUp || GameObjects.Instance.DropManager.SelectedRarity != Rarity.None)
+            {
+                SelectedCharacter.HasLeveledUp = false;
                 return Screenum.CardSelectionScreen;
             }
             else
@@ -147,7 +152,10 @@ namespace FightingGame
 
             Tilemap.Draw(spriteBatch);
             ChestManager.Draw();
-            SelectedCharacter.Draw();
+            if(SelectedCharacter.RemainingHealth > 0)
+            {
+                SelectedCharacter.Draw();
+            }
             DamageNumberManager.Instance.Draw();
             GameObjects.Instance.Draw();
             CharacterUIManager.Draw();

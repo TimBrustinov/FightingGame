@@ -15,6 +15,7 @@ namespace FightingGame
         CardSelectionScreen,
         EscapeScreen,
         CharacterSelectScreen,
+        GameOverScreen,
     }
     public enum ClickResult
     {
@@ -131,6 +132,8 @@ namespace FightingGame
     }
     public enum IconType
     {
+        GameOverText,
+
         //character icons
         HashashinAbility1,
         HashashinAbility2,

@@ -34,6 +34,7 @@ namespace FightingGame
             IsBoss = isBoss;
             this.leftFacingSprite = leftFacingSprite;
             WaveNum = waveNum;
+            BaseDamage = 1;
         }
         public Enemy(Enemy enemy) : base(enemy.Name)
         {
@@ -46,6 +47,7 @@ namespace FightingGame
             RemainingHealth = TotalHealth;
             this.leftFacingSprite = enemy.leftFacingSprite;
             WaveNum = enemy.WaveNum;
+            BaseDamage = enemy.BaseDamage;
         }
         public void Update(Character character)
         {
